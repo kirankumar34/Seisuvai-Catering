@@ -81,6 +81,7 @@ img {
     transition: var(--transition);
     border: none;
     font-size: 1rem;
+    white-space: nowrap;
 }
 
 .btn-primary {
@@ -136,16 +137,16 @@ img {
 
 .logo {
     font-family: 'Cinzel', serif;
-    font-size: 2rem;
+    font-size: 1.6rem;
     font-weight: 700;
     background: var(--gold-gradient);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
     text-shadow: 0 0 0 transparent;
-    /* Reset */
+    white-space: nowrap;
 }
 
 .logo span {
@@ -157,7 +158,8 @@ img {
 
 .nav {
     display: flex;
-    gap: 2.5rem;
+    gap: 1.5rem;
+    align-items: center;
 }
 
 .nav a {
@@ -165,6 +167,7 @@ img {
     font-weight: 500;
     font-size: 1rem;
     opacity: 0.8;
+    white-space: nowrap;
 }
 
 .nav a:hover {
@@ -203,7 +206,7 @@ img {
 }
 
 .hero-content h1 {
-    font-size: 4.5rem;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
     color: var(--white);
     line-height: 1.1;
     margin-bottom: 1.5rem;
@@ -216,17 +219,25 @@ img {
 
 .hero-content p {
     color: var(--text-gray);
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 1.5vw, 1.25rem);
     margin-bottom: 2.5rem;
     max-width: 500px;
 }
 
+.hero-btns {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
 .hero-image {
     position: relative;
+    width: 100%;
 }
 
 .hero-image img {
     width: 100%;
+    height: auto;
     border-radius: 30px;
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
     transform: rotate(3deg);
@@ -333,8 +344,9 @@ img {
     box-shadow: var(--card-shadow);
     transition: var(--transition);
     border: 1px solid rgba(197, 160, 40, 0.1);
-    display: block;
-    /* For filtering */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .menu-card.hide {
@@ -363,11 +375,18 @@ img {
 
 .menu-content {
     padding: 2rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .menu-content h3 {
     font-size: 1.4rem;
     margin-bottom: 0.5rem;
+    min-height: 3.5rem;
+    /* Ensure consistent height for titles */
+    display: flex;
+    align-items: center;
 }
 
 .package-price {
@@ -433,7 +452,8 @@ img {
 .menu-footer {
     display: flex;
     gap: 1rem;
-    margin-top: 1.5rem;
+    margin-top: auto;
+    align-items: center;
 }
 
 .menu-footer .btn {
@@ -442,6 +462,11 @@ img {
     font-size: 0.85rem;
     text-align: center;
     white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    /* Consistent height for both buttons */
 }
 
 /* Why Choose Us */
@@ -668,6 +693,261 @@ img {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* --- Luxury Glassmorphic Menu Modal --- */
+.glass-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 10000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.glass-modal-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.glass-modal-container {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    width: 100%;
+    max-width: 950px;
+    max-height: 90vh;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5),
+        inset 0 0 30px rgba(255, 255, 255, 0.05);
+    overflow-y: auto;
+    position: relative;
+    transform: scale(0.9) translateY(20px);
+    transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 215, 0, 0.3) transparent;
+}
+
+.glass-modal-overlay.active .glass-modal-container {
+    transform: scale(1) translateY(0);
+}
+
+.glass-modal-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.glass-modal-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 215, 0, 0.2);
+    border-radius: 10px;
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 10;
+}
+
+.modal-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+/* Modal Layout */
+.glass-modal-header {
+    padding: 3.5rem 2.5rem 2rem;
+    text-align: center;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.05), transparent);
+}
+
+.glass-modal-header h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.glass-modal-header p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+
+.modal-hero-showcase {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    margin-bottom: 2rem;
+    padding: 0 2.5rem;
+}
+
+.modal-hero-showcase img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-hero-showcase::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent);
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.glass-menu-panel {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 24px;
+    margin: 0 2.5rem 2.5rem;
+    padding: 3rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.02);
+}
+
+.glass-menu-section {
+    margin-bottom: 2.5rem;
+}
+
+.glass-menu-section:last-child {
+    margin-bottom: 0;
+}
+
+.glass-menu-section h4 {
+    font-family: 'Cinzel', serif;
+    color: var(--primary);
+    font-size: 1.2rem;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+    display: inline-block;
+}
+
+.glass-menu-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.2rem;
+}
+
+.glass-menu-item {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.glass-menu-item::before {
+    content: '•';
+    color: var(--primary);
+    font-weight: bold;
+}
+
+.glass-modal-footer {
+    padding: 2.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-price-display {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.modal-price-note {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 2rem;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.btn-glass-primary {
+    padding: 0.8rem 2.5rem;
+    background: var(--primary);
+    color: #4a3c00;
+    border-radius: 50px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-glass-outline {
+    padding: 0.8rem 2.5rem;
+    background: transparent;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-glass-outline:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: white;
+}
+
+@media (max-width: 768px) {
+    .glass-modal-header h2 {
+        font-size: 1.8rem;
+    }
+
+    .glass-menu-panel {
+        padding: 1.5rem;
+        margin: 0 1rem 1rem;
+    }
+
+    .glass-menu-items {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-actions {
+        flex-direction: column;
+        width: 100%;
+        padding: 0 1rem;
+    }
+
+    .btn-glass-primary,
+    .btn-glass-outline {
+        width: 100%;
     }
 }
 
@@ -1482,14 +1762,220 @@ footer {
     font-size: 0.8rem;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
+/* =========================================
+   RESPONSIVE MEDIA QUERIES
+   ========================================= */
+
+/* Tablet & Smaller Desktop (Max Width: 1024px) */
+@media (max-width: 1024px) {
+    .container {
+        padding: 0 2rem;
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    /* Hero Section */
+    .hero .container {
+        grid-template-columns: 1fr;
+        padding-top: 6rem;
+        gap: 3rem;
+        text-align: center;
     }
+
+    /* Remove specific ordering to keep text first, then image */
+    .hero-image {
+        max-width: 80%;
+        margin: 0 auto;
+    }
+
+    .hero-content p {
+        margin: 0 auto 2rem;
+    }
+
+    .hero-btns {
+        justify-content: center;
+    }
+
+    /* Grids */
+    .highlights-grid,
+    .menu-grid,
+    .events-card-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+
+    /* CTA Section */
+    .cta-content h2 {
+        font-size: 3rem;
+    }
+}
+
+/* Mobile Devices (Max Width: 768px) */
+@media (max-width: 768px) {
+
+    /* Header & Navigation */
+    .mobile-toggle {
+        display: block;
+        font-size: 1.8rem;
+        color: var(--primary);
+        cursor: pointer;
+        z-index: 1001;
+    }
+
+    .nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        height: 100vh;
+        background: rgba(94, 11, 21, 0.98);
+        backdrop-filter: blur(10px);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: 0.3s ease-in-out;
+        z-index: 1000;
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .nav.active {
+        right: 0;
+    }
+
+    .nav a {
+        font-size: 1.5rem;
+        margin: 1.5rem 0;
+    }
+
+    .header .btn {
+        display: none;
+        /* Hide CTA button in header on mobile to save space */
+    }
+
+    /* Grids to Single Column */
+    .highlights-grid,
+    .menu-grid,
+    .features-grid,
+    .cta-grid,
+    .booking-wrapper,
+    .events-card-grid,
+    .food-strip-grid,
+    .gallery-grid,
+    .assurance-grid,
+    .event-flow {
+        grid-template-columns: 1fr;
+    }
+
+    /* Hero Type adjustments */
+    /* H1 handled by clamp() globally */
+
+    /* CTA Section stacking */
+    .cta-image {
+        min-height: 400px;
+        order: -1;
+    }
+
+    .cta-content {
+        padding: 4rem 2rem;
+        text-align: center;
+    }
+
+    .cta-text-wrapper {
+        margin: 0 auto;
+    }
+
+    /* Booking Form stacking */
+    .booking-wrapper {
+        gap: 2rem;
+    }
+
+    .booking-image {
+        height: 300px;
+    }
+
+    .booking-form {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full {
+        grid-column: span 1;
+    }
+
+    /* Footer */
+    .footer-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+
+    .footer-links ul {
+        margin-bottom: 2rem;
+    }
+
+    /* Custom Menu Page Response */
+    .form-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .menu-selection-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Live Counters Response */
+    .stall-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Glass Modal */
+    .glass-modal-container {
+        width: 95%;
+        margin: 1rem;
+        max-height: 85vh;
+    }
+
+    .glass-modal-header h2 {
+        font-size: 1.8rem;
+    }
+
+    .modal-hero-showcase {
+        height: 200px;
+        padding: 0 1rem;
+    }
+}
+
+/* Extra Small Mobile (Max Width: 480px) */
+@media (max-width: 480px) {
+    .logo {
+        font-size: 1.2rem;
+    }
+
+    .hero-content h1 {
+        font-size: 2.2rem;
+    }
+
+    .section-header h2 {
+        font-size: 2rem;
+    }
+
+    .btn {
+        width: 100%;
+        text-align: center;
+        display: block;
+        margin-bottom: 10px;
+        /* Space for stacked buttons */
+    }
+
+    .menu-footer {
+        flex-direction: column;
+    }
+
+    .highlight-card {
+        padding: 2rem 1rem;
+    }
+}
+
+/* Mobile Toggle Button Initial State */
+.mobile-toggle {
+    display: none;
 }

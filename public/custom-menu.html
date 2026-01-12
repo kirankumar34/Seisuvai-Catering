@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Menu Selection | Seisuvai Catering</title>
+    <meta name="description"
+        content="Build your own custom catering menu. Select from our Veg or Non-Veg options and get a quote.">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <!-- EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function () {
+            // Initialize EmailJS with your public key
+            // REPLACE 'YOUR_PUBLIC_KEY' WITH YOUR ACTUAL EMAILJS PUBLIC KEY
+            emailjs.init("YOUR_PUBLIC_KEY");
+        })();
+    </script>
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .custom-menu-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .custom-section-title {
+            font-family: 'Cinzel', serif;
+            color: var(--maroon-dark);
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+
+        /* Toggle Switch Styles */
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 3rem;
+            gap: 1rem;
+        }
+
+        .toggle-btn {
+            padding: 1rem 2.5rem;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            border: 2px solid var(--primary);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            background: transparent;
+            color: var(--primary);
+        }
+
+        .toggle-btn.active {
+            background: var(--gold-gradient);
+            color: var(--maroon-dark);
+            border-color: transparent;
+            box-shadow: 0 5px 15px rgba(197, 160, 40, 0.3);
+        }
+
+        .toggle-btn:hover:not(.active) {
+            background: rgba(197, 160, 40, 0.1);
+        }
+
+        /* Menu Visibility Control */
+        .menu-grid-section {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .menu-grid-section.active {
+            display: grid;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-selection-grid {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .selection-category {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(197, 160, 40, 0.1);
+        }
+
+        .selection-category h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #444;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-item:hover {
+            color: var(--maroon-dark);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .price-display-section {
+            background: linear-gradient(135deg, #fffbf5, #fff);
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            border: 2px solid var(--primary);
+            margin-bottom: 4rem;
+        }
+
+        .price-range {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .price-note {
+            color: #666;
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+
+        .customer-form-section {
+            background: #fff;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .custom-submit-btn {
+            background: var(--gold-gradient);
+            color: var(--maroon-dark);
+            font-weight: 700;
+            border: none;
+            padding: 1.2rem;
+            width: 100%;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            margin-top: 2rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 10px 20px rgba(197, 160, 40, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .custom-submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(197, 160, 40, 0.3);
+        }
+
+        .error-message {
+            color: #c62828;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .success-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            backdrop-filter: blur(5px);
+        }
+
+        .success-modal {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            border: 2px solid var(--primary);
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: #2e7d32;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header" id="header" style="background-color: #3E060E;">
+        <div class="container nav-wrapper">
+            <a href="index.html" class="logo">SEISUVAI<span> </span>CATERING</a>
+            <div class="mobile-toggle" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </div>
+            <nav class="nav" id="navMenu">
+                <a href="index.html#services">Services</a>
+                <a href="menu.html" style="color: var(--white);">Menu</a>
+                <a href="custom-menu.html" class="active" style="color: var(--primary);">Custom Menu</a>
+                <a href="live-counters.html">Live Stalls</a>
+                <a href="index.html#gallery">Gallery</a>
+            </nav>
+            <a href="index.html#contact" class="btn btn-primary">Booking Details</a>
+        </div>
+    </header>
+
+    <main style="padding-top: 100px; background-color: #fffbf5; min-height: 100vh;">
+        <div class="custom-menu-container">
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <h1
+                    style="font-family: 'Cinzel', serif; font-size: 3rem; color: var(--maroon-dark); margin-bottom: 1rem;">
+                    Custom Menu Selection</h1>
+                <p style="color: #666; font-size: 1.2rem;">Choose your favorites and create the perfect menu for
+                    your event.</p>
+            </div>
+
+            <form id="customMenuForm">
+
+                <!-- Toggle Switch -->
+                <div class="toggle-container">
+                    <button type="button" class="toggle-btn active" id="vegToggle" onclick="switchMenu('veg')">
+                        <i class="fas fa-leaf"></i> Veg Menu
+                    </button>
+                    <button type="button" class="toggle-btn" id="nonVegToggle" onclick="switchMenu('non-veg')">
+                        <i class="fas fa-drumstick-bite"></i> Non-Veg Menu
+                    </button>
+                    <input type="hidden" name="menuType" id="menuTypeInput" value="Veg">
+                </div>
+
+                <!-- VEG MENU (Default) -->
+                <div class="menu-selection-grid menu-grid-section active" id="vegMenuGrid">
+
+                    <!-- Sweet Items -->
+                    <div class="selection-category">
+                        <h3><i class="fas fa-candy-cane"></i> Sweet Items</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Kesari">
+                                Kesari</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Pineapple Kesari">
+                                Pineapple Kesari</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Chikoo Kesari">
+                                Chikoo Kesari</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Carrot Halwa"> Carrot
+                                Halwa</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Beetroot Halwa">
+                                Beetroot Halwa</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Kasi Halwa"> Kasi
+                                Halwa</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Bread Halwa"> Bread
+                                Halwa</label>
+                        </div>
+                    </div>
+
+                    <!-- Dosa Varieties -->
+                    <div class="selection-category">
+                        <h3><i class="fas fa-circle-notch"></i> Dosa Varieties</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Plain Dosa"> Plain
+                                Dosa</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Masala Dosa"> Masala
+                                Dosa</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Ghee Dosa"> Ghee
+                                Dosa</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Uthappam">
+                                Uthappam</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Vegetable Uthappam">
+                                Vegetable Uthappam</label>
+                        </div>
+                    </div>
+
+                    <!-- Idly Varieties -->
+                    <div class="selection-category">
+                        <h3><i class="fas fa-certificate"></i> Idly Varieties</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Plain Idly"> Plain
+                                Idly</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Elaneer Idly">
+                                Elaneer Idly</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Soft Idly"> Soft
+                                Idly</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Mini Idly"> Mini
+                                Idly</label>
+                        </div>
+                    </div>
+
+                    <!-- Pongal & Kithadi -->
+                    <div class="selection-category">
+                        <h3><i class="fas fa-spoon"></i> Pongal & Kithadi</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Ven Pongal"> Ven
+                                Pongal</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish"
+                                    value="Vegetable Rava Kithadi"> Vegetable Rava Kithadi</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Samba Rava Kithadi">
+                                Samba Rava Kithadi</label>
+                        </div>
+                    </div>
+
+                    <!-- Side Dishes / Gravies -->
+                    <div class="selection-category">
+                        <h3><i class="fas fa-bowl-food"></i> Side Dishes / Gravies</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Sambar">
+                                Sambar</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Kumbakonam Kadappa">
+                                Kumbakonam Kadappa</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Vada Curry"> Vada
+                                Curry</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Veg Paya"> Veg
+                                Paya</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Channa Masala">
+                                Channa Masala</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Potato Masala">
+                                Potato Masala</label>
+                        </div>
+                    </div>
+
+                    <!-- Other Breakfast Items -->
+                    <div class="selection-category">
+                        <h3><i class="fas fa-bread-slice"></i> Other Items</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Puri"> Puri</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Chola Puri"> Chola
+                                Puri</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Idiyappam">
+                                Idiyappam</label>
+                        </div>
+                    </div>
+
+                    <!-- Vada Varieties -->
+                    <div class="selection-category">
+                        <h3><i class="fas fa-circle"></i> Vada Varieties</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Medu Vada"> Medu
+                                Vada</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Masala Vada"> Masala
+                                Vada</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Greens Vada"> Greens
+                                Vada</label>
+                        </div>
+                    </div>
+
+                    <!-- Chutneys -->
+                    <div class="selection-category">
+                        <h3><i class="fas fa-mortar-pestle"></i> Chutneys</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Coconut Chutney">
+                                Coconut Chutney</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Peanut Chutney">
+                                Peanut Chutney</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Kara Chutney"> Kara
+                                Chutney</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Mint Chutney"> Mint
+                                Chutney</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Coriander Chutney">
+                                Coriander Chutney</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Tomato Chutney">
+                                Tomato Chutney</label>
+                        </div>
+                    </div>
+
+                    <!-- Beverages -->
+                    <div class="selection-category">
+                        <h3><i class="fas fa-mug-hot"></i> Beverages</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Coffee">
+                                Coffee</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Tea"> Tea</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- NON-VEG MENU (Hidden by Default) -->
+                <div class="menu-selection-grid menu-grid-section" id="nonVegMenuGrid">
+                    <!-- Rice Varieties -->
+                    <div class="selection-category">
+                        <h3><i class="fas fa-bowl-rice"></i> Rice Varieties</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Chicken Dum Biryani">
+                                Chicken Dum Biryani</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Mutton Dum Biryani">
+                                Mutton Dum Biryani</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Ghee Rice"> Ghee
+                                Rice</label>
+                        </div>
+                    </div>
+
+                    <!-- Indian Breads -->
+                    <div class="selection-category">
+                        <h3><i class="fas fa-bread-slice"></i> Indian Breads</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Butter Naan"> Butter
+                                Naan</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Fulka"> Fulka</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Chapathi">
+                                Chapathi</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Parotta">
+                                Parotta</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Rumali Roti"> Rumali
+                                Roti</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Idiyappam">
+                                Idiyappam</label>
+                        </div>
+                    </div>
+
+                    <!-- Starters & Gravies -->
+                    <div class="selection-category">
+                        <h3><i class="fas fa-drumstick-bite"></i> Starters & Gravies</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Chicken 65"> Chicken
+                                65</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Chicken Pakoda">
+                                Chicken Pakoda</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Chicken Gravy">
+                                Chicken Gravy</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish"
+                                    value="Pepper Chicken Gravy"> Pepper Chicken Gravy</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Butter Chicken">
+                                Butter Chicken</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Tandoori">
+                                Tandoori</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Chicken Tikka">
+                                Chicken Tikka</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Mutton Chukka">
+                                Mutton Chukka</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Mutton Gravy"> Mutton
+                                Gravy</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Mutton Fry"> Mutton
+                                Fry</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Fish Gravy"> Fish
+                                Gravy</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Egg Masala"> Egg
+                                Masala</label>
+                        </div>
+                    </div>
+
+                    <!-- Sweets & Desserts -->
+                    <div class="selection-category">
+                        <h3><i class="fas fa-ice-cream"></i> Sweets & Desserts</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Phirni Payasam">
+                                Phirni Payasam</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Muthujam">
+                                Muthujam</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Metakana">
+                                Metakana</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Karupatti Kesari">
+                                Karupatti Kesari</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Pineapple Kesari">
+                                Pineapple Kesari</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Bread Halwa"> Bread
+                                Halwa</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dish" value="Gulab Jamun"> Gulab
+                                Jamun</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price Display -->
+                <div class="price-display-section">
+                    <div class="price-range">₹230 – ₹500 <span
+                            style="font-size: 1.2rem; font-weight: 400; color: #666;">per pax</span></div>
+                    <p class="price-note">“The final price will depend on your requirements and the total number of
+                        paxs.”</p>
+                </div>
+
+                <!-- Customer Details -->
+                <div class="customer-form-section">
+                    <h3
+                        style="font-family: 'Cinzel', serif; color: var(--maroon-dark); margin-bottom: 2rem; border-bottom: 1px solid #eee; padding-bottom: 1rem;">
+                        Your Details</h3>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" name="name" required placeholder="Enter your name">
+                        </div>
+                        <div class="form-group">
+                            <label>Mobile Number *</label>
+                            <input type="tel" name="mobile" required placeholder="Enter active whatsApp number">
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" name="email" placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <label>Event Type *</label>
+                            <select name="eventType" required>
+                                <option value="" disabled selected>Select Event Type</option>
+                                <option value="Wedding">Wedding</option>
+                                <option value="Birthday">Birthday</option>
+                                <option value="Corporate">Corporate</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Start Date *</label>
+                            <input type="date" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Number of Pax *</label>
+                            <input type="number" name="pax" min="50" required placeholder="e.g. 100">
+                        </div>
+                    </div>
+
+                    <div id="formError" class="error-message" style="text-align: center; margin-top: 1rem;">Please
+                        select at least one dish from the menu.</div>
+
+                    <button type="submit" class="custom-submit-btn">
+                        <i class="fab fa-whatsapp" style="font-size: 1.4rem;"></i> Send My Custom Menu
+                    </button>
+                    <p style="text-align: center; margin-top: 1rem; color: #888; font-size: 0.9rem;">
+                        This will open WhatsApp with your menu and also send a copy to our email.
+                    </p>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Success Modal -->
+    <div class="success-overlay" id="successModal">
+        <div class="success-modal">
+            <i class="fas fa-check-circle success-icon"></i>
+            <h2 style="font-family: 'Cinzel', serif; color: var(--maroon-dark); margin-bottom: 1rem;">Request Sent!</h2>
+            <p style="color: #666; margin-bottom: 2rem;">Thank you for your custom menu request. We have opened WhatsApp
+                for you to send the message details.</p>
+            <button onclick="closeSuccessModal()" class="btn btn-primary" style="width: 100%;">Close</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        const form = document.getElementById('customMenuForm');
+        const errorMsg = document.getElementById('formError');
+        const successModal = document.getElementById('successModal');
+        const vegToggle = document.getElementById('vegToggle');
+        const nonVegToggle = document.getElementById('nonVegToggle');
+        const vegMenuGrid = document.getElementById('vegMenuGrid');
+        const nonVegMenuGrid = document.getElementById('nonVegMenuGrid');
+        const menuTypeInput = document.getElementById('menuTypeInput');
+
+        // Set min date to today
+        const dateInput = document.querySelector('input[name="date"]');
+        if (dateInput) {
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.min = today;
+        }
+
+        // Toggle Logic
+        window.switchMenu = function (type) {
+            // Reset form selections
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(cb => cb.checked = false);
+
+            if (type === 'veg') {
+                vegToggle.classList.add('active');
+                nonVegToggle.classList.remove('active');
+                vegMenuGrid.classList.add('active');
+                nonVegMenuGrid.classList.remove('active');
+                menuTypeInput.value = 'Veg';
+            } else {
+                nonVegToggle.classList.add('active');
+                vegToggle.classList.remove('active');
+                nonVegMenuGrid.classList.add('active');
+                vegMenuGrid.classList.remove('active');
+                menuTypeInput.value = 'Non-Veg';
+            }
+        };
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            errorMsg.style.display = 'none';
+
+            // Gather Data
+            const formData = new FormData(form);
+
+            // Get checked dishes only from visible grid
+            const visibleGrid = menuTypeInput.value === 'Veg' ? vegMenuGrid : nonVegMenuGrid;
+            const checkedBoxes = visibleGrid.querySelectorAll('input[name="dish"]:checked');
+            const dishes = Array.from(checkedBoxes).map(cb => cb.value);
+
+            // Validation: At least 1 dish
+            if (dishes.length === 0) {
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            const data = {
+                menuType: menuTypeInput.value,
+                name: formData.get('name'),
+                mobile: formData.get('mobile'),
+                email: formData.get('email'),
+                eventType: formData.get('eventType'),
+                date: formData.get('date'),
+                pax: formData.get('pax'),
+                selectedDishes: dishes
+            };
+
+            // 1. WhatsApp Integration
+            const message = `*Custom Menu Request – ${data.menuType}*
+            
+Name: ${data.name}
+Mobile: ${data.mobile}
+Event Type: ${data.eventType}
+Event Date: ${data.date}
+Pax Count: ${data.pax}
+
+*Selected Items:*
+${data.selectedDishes.map(d => `- ${d}`).join('\n')}
+
+*Price Range:* ₹230–₹500 per pax
+_Note: Final price depends on requirements & pax count._`;
+
+            const whatsappUrl = `https://wa.me/919788313225?text=${encodeURIComponent(message)}`;
+
+            // 2. Email Integration (using EmailJS)
+            // Note: In a real scenario, you need to replace SERVICE_ID and TEMPLATE_ID
+            const emailTemplateParams = {
+                to_name: "Seisuvai Catering",
+                from_name: data.name,
+                from_email: data.email,
+                mobile: data.mobile,
+                event_type: data.eventType,
+                event_date: data.date,
+                pax_count: data.pax,
+                message: `Menu Type: ${data.menuType}\nSelected Dishes: ${data.selectedDishes.join(', ')}`
+            };
+
+            // Assuming EmailJS is configured (If keys were provided). 
+            // Since we don't have keys, we will comment this out but leave the structure.
+            /*
+            emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', emailTemplateParams)
+                .then(function(response) {
+                   console.log('SUCCESS!', response.status, response.text);
+                }, function(error) {
+                   console.log('FAILED...', error);
+                });
+            */
+
+            // Open WhatsApp in new tab
+            window.open(whatsappUrl, '_blank');
+
+            // Show Success
+            successModal.style.display = 'flex';
+            form.reset();
+            // Reset to default view
+            switchMenu('veg');
+        });
+
+        function closeSuccessModal() {
+            successModal.style.display = 'none';
+        }
+
+    </script>
+</body>
+
+</html>

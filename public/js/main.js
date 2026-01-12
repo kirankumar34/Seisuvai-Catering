@@ -15,6 +15,33 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // Check on load
 
+    // Mobile Menu Toggle
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const navMenu = document.getElementById('navMenu');
+
+    if (mobileBtn && navMenu) {
+        mobileBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            mobileBtn.classList.toggle('active');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navMenu.contains(e.target) && !mobileBtn.contains(e.target) && navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                mobileBtn.classList.remove('active');
+            }
+        });
+
+        // Close menu when clicking a link
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                mobileBtn.classList.remove('active');
+            });
+        });
+    }
+
     // Intersection Observer for scroll-reveal animations
     const observerOptions = {
         threshold: 0.15,
@@ -38,6 +65,210 @@ document.addEventListener('DOMContentLoaded', () => {
     // Make observer available for dynamically added elements
     window.revealObserver = observer;
 
+    // --- Dynamic Featured Menus for Home Page ---
+    const featuredMenusContainer = document.getElementById('featuredMenus');
+    if (featuredMenusContainer && typeof highlightedMenus !== 'undefined') {
+        featuredMenusContainer.innerHTML = highlightedMenus.map(menu => {
+            const packageId = packageMap[menu.menuId] || '';
+            const menuHash = menu.menuId.replace(/\s+/g, '-').toLowerCase();
+
+            return `
+                <div class="menu-card" data-reveal>
+                    <div class="menu-card-img">
+                        <img src="images/${menu.menuId.toLowerCase().includes('tiffin') ? 'menu-1-south-indian.png' :
+                    menu.menuId.toLowerCase().includes('lunch') ? 'menu-2.png' : 'dinner-5.png'}"
+                             alt="${menu.title}">
+                        <div class="card-label ${menu.tag.includes('Chosen') || menu.tag.includes('Premium') ? 'featured' : ''}">${menu.tag}</div>
+                    </div>
+                    <div class="menu-content">
+                        <h3>${menu.title}</h3>
+                        <p style="margin-bottom: 1rem; color: var(--text-gray);">${menu.description}</p>
+                        <p class="package-price">Starting from ₹${menu.startingPrice} / pax</p>
+                        <div class="menu-footer">
+                            <button class="btn btn-outline view-menu-btn" data-menu-id="${menu.menuId}">View Menu</button>
+                            <a href="#contact" class="btn btn-primary" onclick="window.setPackage('${packageId}')">Get Quote</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        // Re-observe for animation since we replaced innerHTML
+        if (window.revealObserver) {
+            featuredMenusContainer.querySelectorAll('[data-reveal]').forEach(el => {
+                window.revealObserver.observe(el);
+            });
+        }
+    }
+
+    // --- Glassmorphic Modal Logic ---
+    const injectModal = () => {
+        if (document.getElementById('glassMenuModal')) return;
+
+        const modalHtml = `
+            <div class="glass-modal-overlay" id="glassMenuModal">
+                <div class="glass-modal-container">
+                    <div class="modal-close-btn" id="closeGlassModal">
+                        <i class="fas fa-times"></i>
+                    </div>
+
+                    <div class="glass-modal-header">
+                        <h2 id="glassModalTitle">Premium Catering Menu</h2>
+                        <p id="glassModalSubtitle">Carefully curated for memorable occasions</p>
+                    </div>
+
+                    <div class="modal-hero-showcase">
+                        <img id="glassModalHero" src="images/menu-1-south-indian.png" alt="Featured Menu">
+                    </div>
+
+                    <div class="glass-menu-panel" id="glassModalBody">
+                        <!-- Dynamic sections will be injected here -->
+                    </div>
+
+                    <div class="glass-modal-footer">
+                        <div class="modal-price-display" id="glassModalPrice">₹000 – ₹000 per plate</div>
+                        <p class="modal-price-note">Final price depends on menu customization & pax count</p>
+                        <div class="modal-actions">
+                            <a href="#contact" class="btn-glass-primary" id="modalReserveBtn">Check Availability</a>
+                            <a href="#" target="_blank" class="btn-glass-outline" id="modalWhatsappBtn" style="display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none;">
+                                <i class="fab fa-whatsapp"></i> WhatsApp Enquiry
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+        const modal = document.getElementById('glassMenuModal');
+        const closeBtn = document.getElementById('closeGlassModal');
+
+        closeBtn.onclick = () => window.closeGlassModal();
+        modal.onclick = (e) => {
+            if (e.target === modal) window.closeGlassModal();
+        };
+    };
+
+    window.openMenuModal = (menuId) => {
+        injectModal();
+        const menuData = cateringMenus[menuId];
+        if (!menuData) return;
+
+        const modal = document.getElementById('glassMenuModal');
+        const titleEl = document.getElementById('glassModalTitle');
+        const subtitleEl = document.getElementById('glassModalSubtitle');
+        const bodyEl = document.getElementById('glassModalBody');
+        const priceEl = document.getElementById('glassModalPrice');
+        const heroEl = document.getElementById('glassModalHero');
+
+        titleEl.innerText = menuData.mainTitle;
+        subtitleEl.innerText = menuData.subtitle;
+        priceEl.innerText = `${menuData.price} per plate`;
+
+        // Set hero image from data or fallback
+        if (menuData.image) {
+            heroEl.src = menuData.image;
+        } else {
+            // Fallback logic if image not present (legacy support)
+            let heroImg = 'menu-1-south-indian.png';
+            if (menuId.toLowerCase().includes('lunch')) heroImg = 'menu-2.png';
+            if (menuId.toLowerCase().includes('dinner')) heroImg = 'dinner-5.png';
+            heroEl.src = `images/${heroImg}`;
+        }
+
+        // Populate sections
+        bodyEl.innerHTML = menuData.sections.map(section => `
+            <div class="glass-menu-section">
+                <h4>${section.title}</h4>
+                <div class="glass-menu-items">
+                    ${section.items.map(item => `<div class="glass-menu-item">${item}</div>`).join('')}
+                </div>
+            </div>
+        `).join('');
+
+        // Update WhatsApp link
+        const whatsappBtn = document.getElementById('modalWhatsappBtn');
+        if (whatsappBtn) {
+            const encodeMenu = encodeURIComponent(menuData.mainTitle);
+            whatsappBtn.href = `https://wa.me/919788313225?text=I'm interested in the ${encodeMenu} package.`;
+        }
+
+        const reserveBtn = document.getElementById('modalReserveBtn');
+        if (reserveBtn) {
+            reserveBtn.onclick = (e) => {
+                const path = window.location.pathname;
+                const isHomePage = path === '/' || path.endsWith('index.html') || path === '' || !path.includes('.html');
+
+                if (isHomePage) {
+                    e.preventDefault();
+                    window.closeGlassModal();
+                    if (typeof window.setPackage === 'function') {
+                        window.setPackage(packageMap[menuId]);
+                    }
+
+                    const contactSection = document.getElementById('contact');
+                    if (contactSection) {
+                        window.scrollTo({
+                            top: contactSection.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                } else {
+                    // If on menu page, navigate to index #contact
+                    sessionStorage.setItem('selectedPackage', menuId);
+                    window.location.href = 'index.html#contact';
+                }
+            };
+        }
+
+        modal.style.display = 'flex';
+        // Force reflow
+        modal.offsetHeight;
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        // Blur background content
+        const mainContent = document.querySelectorAll('header, main, section, footer');
+        mainContent.forEach(el => {
+            if (el.id !== 'glassMenuModal') el.style.filter = 'blur(5px)';
+        });
+    };
+
+    window.closeGlassModal = () => {
+        const modal = document.getElementById('glassMenuModal');
+        if (!modal) return;
+
+        modal.classList.remove('active');
+        setTimeout(() => {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+
+            // Remove blur
+            const mainContent = document.querySelectorAll('header, main, section, footer');
+            mainContent.forEach(el => el.style.filter = '');
+        }, 400);
+    };
+
+    // Attach listener to all "View Sample Menu" buttons (including home page)
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('view-menu-btn')) {
+            const menuId = e.target.getAttribute('data-menu-id');
+            if (menuId) window.openMenuModal(menuId);
+        }
+    });
+
+    // Special trigger for index.html featured buttons
+    const bindSampleButtons = () => {
+        document.querySelectorAll('.view-menu-btn').forEach(btn => {
+            btn.onclick = (e) => {
+                e.preventDefault();
+                const menuId = btn.getAttribute('data-menu-id');
+                window.openMenuModal(menuId);
+            };
+        });
+    };
+    bindSampleButtons();
+
     // Smooth scroll for navigation links with offset for sticky header
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -55,37 +286,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Menu Filtering Logic
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const menuCards = document.querySelectorAll('.menu-card');
-
-    filterButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Remove active class from all buttons
-            filterButtons.forEach(b => b.classList.remove('active'));
-            // Add active class to clicked button
-            btn.classList.add('active');
-
-            const filterValue = btn.getAttribute('data-filter');
-
-            menuCards.forEach(card => {
-                if (filterValue === 'all') {
-                    card.classList.remove('hide');
-                    if (!card.classList.contains('active')) {
-                        card.classList.add('active');
-                    }
-                } else {
-                    const category = card.getAttribute('data-category');
-                    if (category === filterValue) {
-                        card.classList.remove('hide');
-                        card.classList.add('active');
-                    } else {
-                        card.classList.add('hide');
-                    }
-                }
-            });
-        });
-    });
 
     // Booking form submission with validation
     const bookingForm = document.getElementById('bookingForm');
@@ -181,43 +381,74 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const submitBtn = document.getElementById('submitBtn');
             const originalText = submitBtn.innerText;
-            submitBtn.innerText = 'Sending...';
+            submitBtn.innerText = 'Redirecting...';
             submitBtn.disabled = true;
 
-            // Real API call
-            fetch('http://localhost:5000/api/bookings', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.success) {
-                        formStatus.innerText = 'Thank you! Your inquiry has been sent successfully. We will be in touch soon.';
-                        formStatus.classList.add('success');
-                        bookingForm.reset();
-                    } else {
-                        formStatus.innerText = result.message || 'Something went wrong. Please try again.';
-                        formStatus.classList.add('error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    formStatus.innerText = 'Unable to connect to the server. (Make sure backend is running)';
-                    formStatus.classList.add('error');
-                })
-                .finally(() => {
-                    submitBtn.innerText = originalText;
-                    submitBtn.disabled = false;
+            // Get Package Name properly
+            let packageName = "No Package Selected";
+            const packageSelect = document.getElementById('package');
+            if (packageSelect && packageSelect.value !== 'none') {
+                packageName = packageSelect.options[packageSelect.selectedIndex].text.split('(')[0].trim();
+            }
 
-                    // Clear message after 5 seconds
-                    setTimeout(() => {
-                        formStatus.className = 'form-status';
-                        formStatus.innerText = '';
-                    }, 5000);
-                });
+            // 1. WhatsApp Integration
+            const message = `*New Catering Inquiry*
+            
+Name: ${data.name}
+Phone: ${data.phone}
+Email: ${data.email}
+Date: ${data.eventDate}
+Guests: ${data.guests}
+Venue: ${data.venue}
+Package: ${packageName}
+
+*Message:*
+${data.message}`;
+
+            const whatsappUrl = `https://wa.me/919788313225?text=${encodeURIComponent(message)}`;
+
+            // 2. Email Integration (using EmailJS)
+            // Note: In a real scenario, you need to configure EmailJS
+            const emailTemplateParams = {
+                to_name: "Seisuvai Catering",
+                from_name: data.name,
+                from_email: data.email,
+                phone: data.phone,
+                event_date: data.eventDate,
+                guests: data.guests,
+                venue: data.venue,
+                package: packageName,
+                message: data.message
+            };
+
+            // Assuming EmailJS is configured (If keys were provided). 
+            /*
+            if (typeof emailjs !== 'undefined') {
+                emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', emailTemplateParams)
+                    .then(function(response) {
+                       console.log('SUCCESS!', response.status, response.text);
+                    }, function(error) {
+                       console.log('FAILED...', error);
+                    });
+            }
+            */
+
+            // Open WhatsApp
+            window.open(whatsappUrl, '_blank');
+
+            // Success UI
+            formStatus.innerText = 'Thank you! We have opened WhatsApp to send your inquiry.';
+            formStatus.classList.add('success');
+            bookingForm.reset();
+
+            submitBtn.innerText = originalText;
+            submitBtn.disabled = false;
+
+            // Clear message after 5 seconds
+            setTimeout(() => {
+                formStatus.className = 'form-status';
+                formStatus.innerText = '';
+            }, 5000);
         });
     }
 
@@ -226,200 +457,75 @@ document.addEventListener('DOMContentLoaded', () => {
         // Any resize specific logic if needed
     });
 
-    // Structured Menu Data for Professional Sheet View
-    const cateringMenus = {
-        'Tiffin Menu - Veg: Menu 1': {
-            mainTitle: 'Tiffin Menu - Veg',
-            subtitle: 'Menu 1: Economy Selection',
-            sections: [
-                { title: '🍬 Sweet', items: ['Pineapple Kesari'] },
-                { title: '🍽️ Breakfast Items', items: ['Idli', 'Medu Vada', 'Poori', 'Ven Pongal (White Pongal)'] },
-                { title: '🍛 Accompaniments', items: ['Sambar', 'Vada Curry', 'Coconut Chutney', 'Spicy Chutney'] },
-                { title: '☕ Beverage', items: ['Coffee'] },
-                { title: '🎁 Extras', items: ['Drinking Water Bottle', 'Banana Leaf', 'Paper roll', 'Service boys'] }
-            ]
-        },
-        'Tiffin Menu - Veg: Menu 2': {
-            mainTitle: 'Tiffin Menu - Veg',
-            subtitle: 'Menu 2: Standard Selection',
-            sections: [
-                { title: '🍬 Sweet', items: ['Carrot Halwa'] },
-                { title: '🍽️ Breakfast Items', items: ['Malli Idli', 'Poori', 'Medu Vada', 'Ven Pongal (White Pongal)'] },
-                { title: '🍛 Curries & Accompaniments', items: ['Vada Curry / Urulai Masala', 'Sambar', 'Coconut Chutney', 'Spicy Chutney'] },
-                { title: '☕ Beverage', items: ['Coffee'] },
-                { title: '🎁 Extras', items: ['Drinking Water Bottle', 'Banana Leaf', 'Paper roll', 'Service boys'] }
-            ]
-        },
-        'Tiffin Menu - Veg: Menu 3': {
-            mainTitle: 'Tiffin Menu - Veg',
-            subtitle: 'Menu 3: Deluxe Selection',
-            sections: [
-                { title: '🍬 Sweet', items: ['Kasi Halwa', 'Semiya Kesari'] },
-                { title: '🍽️ Breakfast Items', items: ['Plate Idli / Elaneer Idli', 'Chole Poori', 'Rava Dosa / Masala Dosa', 'Ghee Pongal', 'Medu Vada / Masala Vada'] },
-                { title: '🍛 Curries & Accompaniments', items: ['Channa Masala', 'Sambar', 'Coconut Chutney', 'Mint Chutney', 'Spicy Chutney'] },
-                { title: '☕ Beverage', items: ['Coffee / Tea'] },
-                { title: '🎁 Extras', items: ['Drinking Water Bottle', 'Banana Leaf', 'Paper roll', 'Service boys'] }
-            ]
-        },
-        'Lunch Menu - Veg: Menu 1': {
-            mainTitle: 'Lunch Menu - Veg',
-            subtitle: 'Menu 1: Economy Selection',
-            sections: [
-                { title: '🍬 Sweet', items: ['Payasam'] },
-                { title: '🍚 Rice', items: ['Plain White Rice'] },
-                { title: '🥣 Gravies', items: ['Sambar', 'Vathal Kuzhambu', 'Rasam', 'Buttermilk'] },
-                { title: '🥗 Sides', items: ['Varuval', 'Poriyal', 'Vada', 'Pickle', 'Appalam'] },
-                { title: '🥤 Beverage', items: ['Drinking Water Bottle'] },
-                { title: '🎁 Extras', items: ['Banana Leaf', 'Paper Roll', 'Service Boys'] }
-            ]
-        },
-        'Lunch Menu - Veg: Menu 2': {
-            mainTitle: 'Lunch Menu - Veg',
-            subtitle: 'Menu 2: Standard Selection',
-            sections: [
-                { title: '🍬 Sweet', items: ['Frini Payasam', 'Gulab Jamun'] },
-                { title: '🍚 Rice', items: ['Plain White Rice'] },
-                { title: '🥣 Gravies', items: ['Sambar', 'Vathal Kuzhambu', 'Tomato Rasam', 'Buttermilk'] },
-                { title: '🥗 Sides', items: ['Kootu / Varuval', 'Poriyal / Avial', 'Vada', 'Pickle', 'Appalam'] },
-                { title: '🥤 Beverage', items: ['Drinking Water Bottle'] },
-                { title: '🎁 Extras', items: ['Banana Leaf', 'Paper Roll', 'Service Boys'] }
-            ]
-        },
-        'Lunch Menu - Veg: Menu 3': {
-            mainTitle: 'Lunch Menu - Veg',
-            subtitle: 'Menu 3: Deluxe Selection',
-            sections: [
-                { title: '🍬 Sweets', items: ['Ghee Mysore Pak', 'Special Payasam'] },
-                { title: '🥘 Starter', items: ['Masala Vada / Keerai Vada'] },
-                { title: '🍚 Rice', items: ['Vegetable Pulao / Vegetable Kuska', 'Plain White Rice'] },
-                { title: '🥗 Accompaniment', items: ['Onion Raitha'] },
-                { title: '🥣 Gravies', items: ['Vegetable Sambar', 'Vathal Kuzhambu', 'Paruppu Rasam', 'Buttermilk'] },
-                { title: '🌱 Vegetables & Sides', items: ['Kootu', 'Varuval', 'Poriyal', 'Pickle', 'Appalam'] },
-                { title: '🍨 Desserts', items: ['Ice Cream'] },
-                { title: '🥤 Beverage', items: ['Drinking Water Bottle'] },
-                { title: '🎁 Extras', items: ['Banana Leaf', 'Paper Roll', 'Service Boys'] }
-            ]
-        }
-    };
-
-    // Menu Modal Logic
-    const menuModal = document.getElementById('menuModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalSubtitle = document.getElementById('modalSubtitle');
-    const modalBody = document.getElementById('modalBody');
-    const modalPrice = document.getElementById('modalPrice');
-    const closeBtn = document.querySelector('.modal-close');
-
-    if (menuModal && modalBody) {
-        document.querySelectorAll('.view-menu-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const card = btn.closest('.menu-card');
-                const title = card.querySelector('h3').innerText;
-                const price = card.querySelector('.package-price').innerText;
-                const menuData = cateringMenus[title];
-
-                if (menuData) {
-                    modalTitle.innerText = menuData.mainTitle || title;
-                    modalSubtitle.innerText = menuData.subtitle;
-                    modalPrice.innerText = price;
-
-                    let bodyHtml = '';
-                    menuData.sections.forEach(sec => {
-                        const iconHtml = sec.icon ? `<i class="fas ${sec.icon}"></i> ` : '';
-                        bodyHtml += `
-                            <div class="menu-sheet-section">
-                                <h4>${iconHtml}${sec.title}</h4>
-                                <div class="menu-sheet-grid">
-                                    ${sec.items.map(item => `<div class="menu-sheet-item">${item}</div>`).join('')}
-                                </div>
-                            </div>
-                        `;
-                    });
-                    modalBody.innerHTML = bodyHtml;
-                } else {
-                    // Fallback to simple list if data not found
-                    const fullMenu = card.querySelector('.hidden-full-menu ul').innerHTML;
-                    modalTitle.innerText = title;
-                    modalSubtitle.innerText = 'Catering Selection';
-                    modalPrice.innerText = price;
-                    modalBody.innerHTML = `
-                        <div class="menu-sheet-section">
-                            <h4><i class="fas fa-list"></i> Menu Items</h4>
-                            <div class="menu-sheet-grid">
-                                ${Array.from(card.querySelectorAll('.hidden-full-menu li')).map(li => `<div class="menu-sheet-item">${li.innerText}</div>`).join('')}
-                            </div>
-                        </div>
-                    `;
-                }
-
-                menuModal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            });
-        });
-
-        const closeModal = () => {
-            menuModal.classList.remove('active');
-            document.body.style.overflow = '';
-        };
-
-        if (closeBtn) {
-            closeBtn.addEventListener('click', closeModal);
-        }
-
-        window.addEventListener('click', (e) => {
-            if (e.target === menuModal) closeModal();
-        });
-
-        // Expose to global scope for the Get Quote button in modal
-        window.closeModal = closeModal;
-
-        // Auto-select package when clicking "Get Quote" on a menu card
-        document.querySelectorAll('.menu-card .btn-primary').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const card = btn.closest('.menu-card');
-                const title = card.querySelector('h3').innerText;
-
-                // Map card titles to package select values
-                const packageMap = {
-                    'Tiffin Menu - Veg: Menu 1': 'tiffin_veg_1',
-                    'Tiffin Menu - Veg: Menu 2': 'tiffin_veg_2',
-                    'Tiffin Menu - Veg: Menu 3': 'tiffin_veg_3',
-                    'Lunch Menu - Veg: Menu 1': 'lunch_veg_1',
-                    'Lunch Menu - Veg: Menu 2': 'lunch_veg_2',
-                    'Lunch Menu - Veg: Menu 3': 'lunch_veg_3'
-                };
-
-                const val = packageMap[title];
-                if (val && packageSelect) {
-                    packageSelect.value = val;
-                    updateQuotation(); // Trigger the live calculation
-                }
-            });
-        });
-    }
-
     // Live Quotation Logic
     const guestsInput = document.getElementById('guests');
     const packageSelect = document.getElementById('package');
     const quotationBox = document.getElementById('quotationBox');
     const quoteRange = document.getElementById('quoteRange');
 
+    // Global utility to set package from any page/element
+    window.setPackage = (packageId) => {
+        if (!packageSelect) return;
+
+        packageSelect.value = packageId;
+
+        // Trigger the live calculation
+        if (typeof updateQuotation === 'function') {
+            updateQuotation();
+        }
+
+        // Smooth scroll to booking form if we're on the same page
+        const contactSection = document.getElementById('contact');
+        if (contactSection) {
+            window.scrollTo({
+                top: contactSection.offsetTop - 80,
+                behavior: 'smooth'
+            });
+        }
+    };
+
+    // Check for session-based package selection (from menu.html)
+    const selectedPackageName = sessionStorage.getItem('selectedPackage');
+    if (selectedPackageName && packageSelect) {
+        // Find the package ID from packageMap (available globally via menu-data.js)
+        if (typeof packageMap !== 'undefined') {
+            const packageId = packageMap[selectedPackageName];
+            if (packageId) {
+                setTimeout(() => {
+                    packageSelect.value = packageId;
+                    updateQuotation();
+                    sessionStorage.removeItem('selectedPackage');
+
+                    // Scroll to form
+                    const contactSection = document.getElementById('contact');
+                    if (contactSection) {
+                        window.scrollTo({
+                            top: contactSection.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }
+                }, 500); // Small delay to ensure form is fully ready
+            }
+        }
+    }
+
     const updateQuotation = () => {
+        if (!guestsInput || !packageSelect || !quotationBox) return;
+
         const guests = parseInt(guestsInput.value) || 0;
         const selectedOption = packageSelect.options[packageSelect.selectedIndex];
 
-        if (guests > 0 && selectedOption.value !== 'none') {
+        if (guests > 0 && selectedOption && selectedOption.value !== 'none') {
             const min = parseInt(selectedOption.getAttribute('data-min'));
             const max = parseInt(selectedOption.getAttribute('data-max'));
 
             const totalMin = guests * min;
             const totalMax = guests * max;
 
-            quoteRange.innerText = `₹${totalMin.toLocaleString()} - ₹${totalMax.toLocaleString()}`;
-            quotationBox.style.display = 'block';
+            quotationBox.classList.add('active');
+            quoteRange.innerText = `₹${totalMin.toLocaleString()} - ₹${totalMax.toLocaleString()} `;
         } else {
-            quotationBox.style.display = 'none';
+            quotationBox.classList.remove('active');
         }
     };
 
@@ -440,6 +546,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fetch and display reviews
     const fetchReviews = async () => {
+        if (!reviewsGrid) return;
         try {
             const res = await fetch('http://localhost:5000/api/reviews');
             const data = await res.json();
@@ -448,7 +555,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (err) {
             console.error('Error fetching reviews:', err);
-            reviewsGrid.innerHTML = '<p style="text-align: center; color: red;">Failed to load reviews.</p>';
+            if (reviewsGrid) {
+                reviewsGrid.innerHTML = '<p style="text-align: center; color: var(--text-gray);">Live reviews are currently unavailable.</p>';
+            }
         }
     };
 
@@ -459,7 +568,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         reviewsGrid.innerHTML = reviews.map(review => `
-            <div class="review-card" data-reveal>
+        < div class="review-card" data - reveal >
                 <div class="review-stars">
                     ${Array(5).fill(0).map((_, i) => `<i class="${i < review.rating ? 'fas' : 'far'} fa-star"></i>`).join('')}
                 </div>
@@ -471,7 +580,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="review-date">${new Date(review.createdAt).toLocaleDateString()}</div>
                 </div>
-            </div>
+            </div >
         `).join('');
 
         // Observe new elements for reveal animation
@@ -552,7 +661,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         fetchReviews(); // Refresh list
                     }, 2000);
                 } else {
-                    reviewStatus.innerHTML = `<p style="color: red;">${result.message || 'Error submitting review'}</p>`;
+                    reviewStatus.innerHTML = `< p style = "color: red;" > ${result.message || 'Error submitting review'}</p > `;
                 }
             } catch (err) {
                 reviewStatus.innerHTML = '<p style="color: red;">Server error. Please try again later.</p>';
@@ -561,5 +670,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Initial load
-    fetchReviews();
+    if (typeof fetchReviews === 'function') {
+        fetchReviews();
+    }
 });

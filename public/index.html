@@ -24,15 +24,18 @@
     <!-- Header -->
     <header class="header" id="header">
         <div class="container nav-wrapper">
-            <a href="#" class="logo">SEISUVAI<span> </span>CATERING</a>
-            <nav class="nav">
-                <a href="#home">Home</a>
+            <a href="index.html" class="logo">SEISUVAI<span> </span>CATERING</a>
+            <div class="mobile-toggle" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </div>
+            <nav class="nav" id="navMenu">
                 <a href="#services">Services</a>
-                <a href="#menu">Menu</a>
+                <a href="menu.html">Menu</a>
+                <a href="custom-menu.html" style="color: var(--primary);">Custom Menu</a>
+                <a href="live-counters.html">Live Stalls</a>
                 <a href="#gallery">Gallery</a>
-                <a href="#contact">Contact</a>
             </nav>
-            <a href="#contact" class="btn btn-primary">Book Now</a>
+            <a href="#contact" class="btn btn-primary">Booking Details</a>
         </div>
     </header>
 
@@ -44,7 +47,7 @@
                 <p data-reveal>Discover a world of refined flavors and impeccable service. From intimate gatherings to
                     grand celebrations, we craft unforgettable culinary experiences.</p>
                 <div class="hero-btns" data-reveal>
-                    <a href="#menu" class="btn btn-primary">Explore Menu</a>
+                    <a href="menu.html" class="btn btn-primary">Explore Full Menu</a>
                     <a href="#contact" class="btn btn-outline" style="margin-left: 1rem;">Get Quote</a>
                 </div>
             </div>
@@ -205,272 +208,74 @@
     <section class="section menu-section" id="menu">
         <div class="container">
             <div class="section-header" data-reveal>
-                <h2>Imperial Culinary Collection</h2>
-                <p>Explore our signature catering assemblies, curated for every time of day and every scale of
-                    celebration.</p>
+                <h2 style="font-family: 'Playfair Display', serif;">Imperial Culinary Collection</h2>
+                <p>Taste the legacy of Seisuvai. From traditional South Indian feasts to modern premium dining,
+                    discover the perfect menu for your milestone celebration.</p>
             </div>
 
-            <!-- Menu Filter Toggles -->
-            <div class="menu-filters" data-reveal>
-                <button class="filter-btn active" data-filter="all">Full Collection</button>
-                <button class="filter-btn" data-filter="tiffin_veg">Tiffin Menu - Veg</button>
-                <button class="filter-btn" data-filter="lunch_veg">Lunch Menu - Veg</button>
+            <div class="menu-grid" id="featuredMenus">
+                <!-- Most Chosen -->
+                <div class="menu-card" data-reveal>
+                    <div class="menu-card-img">
+                        <img src="images/dinner-3.png" alt="Royal Dinner Banquet">
+                        <div class="card-label featured">🏆 Most Chosen</div>
+                    </div>
+                    <div class="menu-content">
+                        <h3>Royal Dinner Banquet</h3>
+                        <p style="margin-bottom: 1rem; color: var(--text-gray);">Our most sought-after royal dinner
+                            experience with multi-course delicacies.</p>
+                        <p class="package-price">Starting from ₹300 / pax</p>
+                        <div class="menu-footer">
+                            <a href="menu.html#dinner-menu---veg:-menu-3" class="btn btn-outline">View Menu</a>
+                            <a href="#contact" class="btn btn-primary" onclick="window.setPackage('dinner_veg_3')">Get
+                                Quote</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Most Popular -->
+                <div class="menu-card" data-reveal>
+                    <div class="menu-card-img">
+                        <img src="images/nizam_mutton_biryani.png" alt="Deluxe Mutton Feast">
+                        <div class="card-label">⭐ Most Popular</div>
+                    </div>
+                    <div class="menu-content">
+                        <h3>Deluxe Mutton Feast</h3>
+                        <p style="margin-bottom: 1rem; color: var(--text-gray);">Authentic Mutton Biryani prepared with
+                            traditional spices and premium ingredients.</p>
+                        <p class="package-price">Starting from ₹350 / pax</p>
+                        <div class="menu-footer">
+                            <a href="menu.html#dinner-menu---non-veg:-menu-2" class="btn btn-outline">View Menu</a>
+                            <a href="#contact" class="btn btn-primary"
+                                onclick="window.setPackage('dinner_non_veg_2')">Get Quote</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Premium -->
+                <div class="menu-card" data-reveal>
+                    <div class="menu-card-img">
+                        <img src="images/dinner-5.png" alt="Grand Dinner Banquet">
+                        <div class="card-label featured">👑 Premium</div>
+                    </div>
+                    <div class="menu-content">
+                        <h3>Grand Dinner Banquet</h3>
+                        <p style="margin-bottom: 1rem; color: var(--text-gray);">The ultimate culinary masterpiece for
+                            elite celebrations and grand royal weddings.</p>
+                        <p class="package-price">Starting from ₹500 / pax</p>
+                        <div class="menu-footer">
+                            <a href="menu.html#dinner-menu---veg:-menu-5" class="btn btn-outline">View Menu</a>
+                            <a href="#contact" class="btn btn-primary" onclick="window.setPackage('dinner_veg_5')">Get
+                                Quote</a>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="menu-grid">
-                <!-- TIFFIN VEG MENUS -->
-                <div class="menu-card" data-category="tiffin_veg" data-reveal>
-                    <div class="menu-card-img">
-                        <img src="images/menu-1-south-indian.png" alt="Tiffin Menu - Veg: Menu 1">
-                        <div class="card-label">Tiffin Economy</div>
-                    </div>
-                    <div class="menu-content">
-                        <h3>Tiffin Menu - Veg: Menu 1</h3>
-                        <p class="package-price">₹170 – ₹200 per plate</p>
-                        <p class="price-note">The final price will depend on your requirements and the total number of
-                            paxs.</p>
-                        <ul class="menu-highlights">
-                            <li><i class="fas fa-check"></i> Pineapple Kesari</li>
-                            <li><i class="fas fa-check"></i> Idli, Medu Vada & Poori</li>
-                            <li><i class="fas fa-check"></i> Ven Pongal & Vada Curry</li>
-                        </ul>
-                        <div class="menu-footer">
-                            <a href="javascript:void(0)" class="btn btn-outline view-menu-btn">View Menu</a>
-                            <a href="#contact" class="btn btn-primary">Get Quote</a>
-                        </div>
-                        <div class="hidden-full-menu">
-                            <ul>
-                                <li>Pineapple Kesari</li>
-                                <li>Idli</li>
-                                <li>Medu Vada</li>
-                                <li>Poori</li>
-                                <li>Ven Pongal (White Pongal)</li>
-                                <li>Sambar</li>
-                                <li>Vada Curry</li>
-                                <li>Coconut Chutney</li>
-                                <li>Spicy Chutney</li>
-                                <li>Coffee</li>
-                                <li>Drinking Water Bottle</li>
-                                <li>Banana Leaf</li>
-                                <li>Paper roll</li>
-                                <li>Service boys</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="menu-card" data-category="tiffin_veg" data-reveal>
-                    <div class="menu-card-img">
-                        <img src="images/menu-2-south-indian.png" alt="Tiffin Menu - Veg: Menu 2">
-                        <div class="card-label">Tiffin Standard</div>
-                    </div>
-                    <div class="menu-content">
-                        <h3>Tiffin Menu - Veg: Menu 2</h3>
-                        <p class="package-price">₹190 – ₹220 per plate</p>
-                        <p class="price-note">The final price will depend on your requirements and the total number of
-                            paxs.</p>
-                        <ul class="menu-highlights">
-                            <li><i class="fas fa-check"></i> Carrot Halwa</li>
-                            <li><i class="fas fa-check"></i> Malli Idli & Poori</li>
-                            <li><i class="fas fa-check"></i> Vada Curry / Urulai Masala</li>
-                        </ul>
-                        <div class="menu-footer">
-                            <a href="javascript:void(0)" class="btn btn-outline view-menu-btn">View Menu</a>
-                            <a href="#contact" class="btn btn-primary">Get Quote</a>
-                        </div>
-                        <div class="hidden-full-menu">
-                            <ul>
-                                <li>Carrot Halwa</li>
-                                <li>Malli Idli</li>
-                                <li>Poori</li>
-                                <li>Medu Vada</li>
-                                <li>Ven Pongal (White Pongal)</li>
-                                <li>Sambar</li>
-                                <li>Vada Curry / Urulai Masala</li>
-                                <li>Coconut Chutney</li>
-                                <li>Spicy Chutney</li>
-                                <li>Coffee</li>
-                                <li>Drinking Water Bottle</li>
-                                <li>Banana Leaf</li>
-                                <li>Paper roll</li>
-                                <li>Service boys</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="menu-card" data-category="tiffin_veg" data-reveal>
-                    <div class="menu-card-img">
-                        <img src="images/menu-3-south-indian.png" alt="Tiffin Menu - Veg: Menu 3">
-                        <div class="card-label">Tiffin Deluxe</div>
-                    </div>
-                    <div class="menu-content">
-                        <h3>Tiffin Menu - Veg: Menu 3</h3>
-                        <p class="package-price">₹200 – ₹230 per plate</p>
-                        <p class="price-note">The final price will depend on your requirements and the total number of
-                            paxs.</p>
-                        <ul class="menu-highlights">
-                            <li><i class="fas fa-check"></i> Kasi Halwa & Semiya Kesari</li>
-                            <li><i class="fas fa-check"></i> Plate Idli / Elaneer Idli</li>
-                            <li><i class="fas fa-check"></i> Rava Dosa / Masala Dosa</li>
-                        </ul>
-                        <div class="menu-footer">
-                            <a href="javascript:void(0)" class="btn btn-outline view-menu-btn">View Menu</a>
-                            <a href="#contact" class="btn btn-primary">Get Quote</a>
-                        </div>
-                        <div class="hidden-full-menu">
-                            <ul>
-                                <li>Kasi Halwa</li>
-                                <li>Semiya Kesari</li>
-                                <li>Plate Idli / Elaneer Idli</li>
-                                <li>Chole Poori</li>
-                                <li>Rava Dosa / Masala Dosa</li>
-                                <li>Ghee Pongal</li>
-                                <li>Medu Vada / Masala Vada</li>
-                                <li>Channa Masala</li>
-                                <li>Sambar</li>
-                                <li>Coconut Chutney</li>
-                                <li>Mint Chutney</li>
-                                <li>Spicy Chutney</li>
-                                <li>Coffee / Tea</li>
-                                <li>Drinking Water Bottle</li>
-                                <li>Banana Leaf</li>
-                                <li>Paper roll</li>
-                                <li>Service boys</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- LUNCH VEG MENUS -->
-                <div class="menu-card" data-category="lunch_veg" data-reveal>
-                    <div class="menu-card-img">
-                        <img src="images/menu-1.png" alt="Lunch Menu - Veg: Menu 1">
-                        <div class="card-label">Lunch Economy</div>
-                    </div>
-                    <div class="menu-content">
-                        <h3>Lunch Menu - Veg: Menu 1</h3>
-                        <p class="package-price">₹150 – ₹170 per plate</p>
-                        <p class="price-note">The final price will depend on your requirements and the total number of
-                            paxs.</p>
-                        <ul class="menu-highlights">
-                            <li><i class="fas fa-check"></i> Traditional Payasam</li>
-                            <li><i class="fas fa-check"></i> Plain White Rice & Sambar</li>
-                            <li><i class="fas fa-check"></i> Varuval & Poriyal</li>
-                        </ul>
-                        <div class="menu-footer">
-                            <a href="javascript:void(0)" class="btn btn-outline view-menu-btn">View Menu</a>
-                            <a href="#contact" class="btn btn-primary">Get Quote</a>
-                        </div>
-                        <div class="hidden-full-menu">
-                            <ul>
-                                <li>Payasam</li>
-                                <li>Plain White Rice</li>
-                                <li>Sambar</li>
-                                <li>Vathal Kuzhambu</li>
-                                <li>Rasam</li>
-                                <li>Buttermilk</li>
-                                <li>Varuval</li>
-                                <li>Poriyal</li>
-                                <li>Vada</li>
-                                <li>Pickle</li>
-                                <li>Appalam</li>
-                                <li>Drinking Water Bottle</li>
-                                <li>Banana Leaf</li>
-                                <li>Paper Roll</li>
-                                <li>Service Boys</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="menu-card" data-category="lunch_veg" data-reveal>
-                    <div class="menu-card-img">
-                        <img src="images/menu-2.png" alt="Lunch Menu - Veg: Menu 2">
-                        <div class="card-label">Lunch Standard</div>
-                    </div>
-                    <div class="menu-content">
-                        <h3>Lunch Menu - Veg: Menu 2</h3>
-                        <p class="package-price">₹170 – ₹200 per plate</p>
-                        <p class="price-note">The final price will depend on your requirements and the total number of
-                            paxs.</p>
-                        <ul class="menu-highlights">
-                            <li><i class="fas fa-check"></i> Frini Payasam & Gulab Jamun</li>
-                            <li><i class="fas fa-check"></i> Plain White Rice & Sambar</li>
-                            <li><i class="fas fa-check"></i> Kootu / Varuval</li>
-                        </ul>
-                        <div class="menu-footer">
-                            <a href="javascript:void(0)" class="btn btn-outline view-menu-btn">View Menu</a>
-                            <a href="#contact" class="btn btn-primary">Get Quote</a>
-                        </div>
-                        <div class="hidden-full-menu">
-                            <ul>
-                                <li>Frini Payasam</li>
-                                <li>Gulab Jamun</li>
-                                <li>Plain White Rice</li>
-                                <li>Sambar</li>
-                                <li>Vathal Kuzhambu</li>
-                                <li>Tomato Rasam</li>
-                                <li>Buttermilk</li>
-                                <li>Kootu / Varuval</li>
-                                <li>Poriyal / Avial</li>
-                                <li>Vada</li>
-                                <li>Pickle</li>
-                                <li>Appalam</li>
-                                <li>Drinking Water Bottle</li>
-                                <li>Banana Leaf</li>
-                                <li>Paper Roll</li>
-                                <li>Service Boys</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="menu-card" data-category="lunch_veg" data-reveal>
-                    <div class="menu-card-img">
-                        <img src="images/menu-3.png" alt="Lunch Menu - Veg: Menu 3">
-                        <div class="card-label">Lunch Deluxe</div>
-                    </div>
-                    <div class="menu-content">
-                        <h3>Lunch Menu - Veg: Menu 3</h3>
-                        <p class="package-price">₹250 – ₹270 per plate</p>
-                        <p class="price-note">The final price will depend on your requirements and the total number of
-                            paxs.</p>
-                        <ul class="menu-highlights">
-                            <li><i class="fas fa-check"></i> Ghee Mysore Pak & Special Payasam</li>
-                            <li><i class="fas fa-check"></i> Vegetable Pulao / Kuska</li>
-                            <li><i class="fas fa-check"></i> Masala Vada / Keerai Vada</li>
-                        </ul>
-                        <div class="menu-footer">
-                            <a href="javascript:void(0)" class="btn btn-outline view-menu-btn">View Menu</a>
-                            <a href="#contact" class="btn btn-primary">Get Quote</a>
-                        </div>
-                        <div class="hidden-full-menu">
-                            <ul>
-                                <li>Ghee Mysore Pak</li>
-                                <li>Special Payasam</li>
-                                <li>Masala Vada / Keerai Vada</li>
-                                <li>Vegetable Pulao / Vegetable Kuska</li>
-                                <li>Plain White Rice</li>
-                                <li>Onion Raitha</li>
-                                <li>Vegetable Sambar</li>
-                                <li>Vathal Kuzhambu</li>
-                                <li>Paruppu Rasam</li>
-                                <li>Buttermilk</li>
-                                <li>Kootu</li>
-                                <li>Varuval</li>
-                                <li>Poriyal</li>
-                                <li>Pickle</li>
-                                <li>Appalam</li>
-                                <li>Ice Cream</li>
-                                <li>Drinking Water Bottle</li>
-                                <li>Banana Leaf</li>
-                                <li>Paper Roll</li>
-                                <li>Service Boys</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+            <div style="text-align: center; margin-top: 5rem;" data-reveal>
+                <a href="menu.html" class="btn btn-primary" style="padding: 1.2rem 3rem; font-size: 1.1rem;">
+                    👉 View Full Menu Collection
+                </a>
             </div>
 
             <!-- Customization Note -->
@@ -478,7 +283,6 @@
                 style="text-align: center; margin-top: 4rem; color: var(--text-gray); font-style: italic;">
                 <p>All menus can be fully customized based on your guest count, budget, and specific dietary needs.</p>
             </div>
-        </div>
     </section>
 
     <!-- CTA Section -->
@@ -563,12 +367,42 @@
                                     <option value="tiffin_veg_3" data-min="200" data-max="230">Tiffin Menu - Veg: Menu 3
                                         (₹200 - ₹230)</option>
                                 </optgroup>
+
                                 <optgroup label="Lunch Menu - Veg">
                                     <option value="lunch_veg_1" data-min="150" data-max="170">Lunch Menu - Veg: Menu 1
                                         (₹150 - ₹170)</option>
                                     <option value="lunch_veg_2" data-min="170" data-max="200">Lunch Menu - Veg: Menu 2
                                         (₹170 - ₹200)</option>
                                     <option value="lunch_veg_3" data-min="250" data-max="270">Lunch Menu - Veg: Menu 3
+                                        (₹250 - ₹270)</option>
+                                </optgroup>
+                                <optgroup label="Lunch Menu - Non-Veg">
+                                    <option value="lunch_non_veg_1" data-min="230" data-max="250">Lunch Menu - Non-Veg:
+                                        Menu 1 (₹230 - ₹250)</option>
+                                    <option value="lunch_non_veg_2" data-min="350" data-max="370">Lunch Menu - Non-Veg:
+                                        Menu 2 (₹350 - ₹370)</option>
+                                </optgroup>
+                                <optgroup label="Dinner Menu - Veg">
+                                    <option value="dinner_veg_1" data-min="220" data-max="250">Dinner Menu - Veg: Menu 1
+                                        (₹220 - ₹250)</option>
+                                    <option value="dinner_veg_2" data-min="250" data-max="290">Dinner Menu - Veg: Menu 2
+                                        (₹250 - ₹290)</option>
+                                    <option value="dinner_veg_3" data-min="300" data-max="350">Dinner Menu - Veg: Menu 3
+                                        (₹300 - ₹350)</option>
+                                    <option value="dinner_veg_4" data-min="370" data-max="420">Dinner Menu - Veg: Menu 4
+                                        (₹370 - ₹420)</option>
+                                    <option value="dinner_veg_5" data-min="500" data-max="550">Dinner Menu - Veg: Menu 5
+                                        (₹500 - ₹550)</option>
+                                </optgroup>
+                                <optgroup label="Dinner Menu - Non-Veg">
+                                    <option value="dinner_non_veg_1" data-min="230" data-max="250">Dinner Menu -
+                                        Non-Veg: Menu 1 (₹230 - ₹250)</option>
+                                    <option value="dinner_non_veg_2" data-min="350" data-max="370">Dinner Menu -
+                                        Non-Veg: Menu 2 (₹350 - ₹370)</option>
+                                </optgroup>
+                                <optgroup label="Baby Shower Menu - Veg">
+                                    <option value="baby_shower_veg_1" data-min="250" data-max="270">Baby Shower Menu -
+                                        Veg: Menu 1
                                         (₹250 - ₹270)</option>
                                 </optgroup>
                             </select>
@@ -782,38 +616,9 @@
         <span>Chat with us</span>
     </a>
 
-    <!-- Menu Details Modal (Quotation Style) -->
-    <div class="menu-modal" id="menuModal">
-        <div class="modal-content">
-            <span class="modal-close">&times;</span>
-
-            <div class="menu-sheet-container">
-                <div class="menu-sheet-header">
-                    <h3 id="modalTitle">Catering Menu</h3>
-                    <p id="modalSubtitle">Premium Selection</p>
-                </div>
-
-                <div id="modalBody">
-                    <!-- Dynamic sections (Sweet, Main, etc.) will be injected here -->
-                </div>
-
-                <div class="menu-sheet-footer">
-                    <div class="menu-sheet-price" id="modalPrice">₹000 – ₹000</div>
-                    <p class="menu-sheet-note">Final price depends on menu customization and number of pax.</p>
-
-                    <div
-                        style="margin-top: 2.5rem; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
-                        <a href="#contact" class="btn btn-primary" onclick="closeModal()">Reserve This Menu</a>
-                        <button class="btn-download-pdf">
-                            <i class="fas fa-file-pdf"></i> Download Menu PDF (Coming Soon)
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Custom Script -->
+    <script src="js/menu-data.js"></script>
     <script src="js/main.js"></script>
 </body>
 
