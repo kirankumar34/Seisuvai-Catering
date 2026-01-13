@@ -27,7 +27,16 @@ app.use(express.json());
 app.use('/api/bookings', require('./routes/bookingRoutes'));
 app.use('/api/reviews', require('./routes/reviewRoutes'));
 
-// Health check endpoint
+// Serve static assets in production (and development)
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../public')));
+
+// Fallback (Temporarily disabled for Express 5 compatibility investigation)
+// app.get('(.*)', (req, res) => {
+//     res.sendFile(path.join(__dirname, '../public/index.html'));
+// });
+
+// Health check endpoint (moved or kept)
 app.use('/api/health', (req, res) => {
     res.json({ status: 'API is running' });
 });
