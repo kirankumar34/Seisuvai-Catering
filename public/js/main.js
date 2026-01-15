@@ -80,27 +80,69 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- Form Handling (Simplified for Redesign) ---
+    // --- API Configuration ---
+    const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? window.location.origin
+        : 'https://seisuvai-api.onrender.com';
+
+    // --- Form Handling ---
     const bookingForm = document.getElementById('bookingForm');
     if (bookingForm) {
-        bookingForm.addEventListener('submit', (e) => {
+        bookingForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            const submitBtn = bookingForm.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerText;
+
+            submitBtn.innerText = 'Sending...';
+            submitBtn.disabled = true;
+
             const formData = new FormData(bookingForm);
-            const data = Object.fromEntries(formData);
+            const rawData = Object.fromEntries(formData);
 
-            // Format WhatsApp Message
-            const message = `Hello Seisuvai Catering! I'd like to inquire about:
+            // Map to Enquiry Model
+            const data = {
+                name: rawData.name,
+                phone: rawData.phone,
+                email: rawData.email,
+                enquiryType: 'booking',
+                paxCount: rawData.guests,
+                message: `Event: ${rawData.eventType}, Date: ${rawData.eventDate}. ${rawData.message}`
+            };
+
+            try {
+                // 1. Send to Backend API
+                const response = await fetch(`${API_BASE_URL}/api/enquiries`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // 2. Open WhatsApp for quick chat
+                    const whatsappMsg = `Hello Seisuvai Catering! I've just submitted a booking inquiry:
 - Name: ${data.name}
-- Event: ${data.eventType}
-- Guests: ${data.guests}
-- Date: ${data.eventDate}
-- Details: ${data.message}`;
+- Event: ${rawData.eventType}
+- Guests: ${data.paxCount}
+- Date: ${rawData.eventDate}
+- Details: ${rawData.message}`;
 
-            const waLink = `https://wa.me/919788313225?text=${encodeURIComponent(message)}`;
-            window.open(waLink, '_blank');
+                    const waLink = `https://wa.me/919788313225?text=${encodeURIComponent(whatsappMsg)}`;
+                    window.open(waLink, '_blank');
 
-            alert('Enquiry sent! Opening WhatsApp for quick chat.');
-            bookingForm.reset();
+                    alert('Enquiry sent successfully! Our team will contact you soon.');
+                    bookingForm.reset();
+                } else {
+                    alert('Submission failed: ' + (result.message || 'Unknown error'));
+                }
+            } catch (err) {
+                console.error('Submission Error:', err);
+                alert('Connection error. Please try again later.');
+            } finally {
+                submitBtn.innerText = originalBtnText;
+                submitBtn.disabled = false;
+            }
         });
     }
 });

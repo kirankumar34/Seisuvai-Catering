@@ -735,9 +735,15 @@
             }
         };
 
-        form.addEventListener('submit', (e) => {
+        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? window.location.origin
+            : 'https://seisuvai-api.onrender.com';
+
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
             errorMsg.style.display = 'none';
+            const submitBtn = form.querySelector('.custom-submit-btn');
+            const originalBtnText = submitBtn.innerHTML;
 
             // Gather Data
             const formData = new FormData(form);
@@ -754,65 +760,60 @@
             }
 
             const data = {
-                menuType: menuTypeInput.value,
                 name: formData.get('name'),
-                mobile: formData.get('mobile'),
+                phone: formData.get('mobile'),
                 email: formData.get('email'),
-                eventType: formData.get('eventType'),
-                date: formData.get('date'),
-                pax: formData.get('pax'),
-                selectedDishes: dishes
+                enquiryType: 'custom_menu',
+                selectedItems: dishes,
+                paxCount: formData.get('pax'),
+                message: `Menu Type: ${menuTypeInput.value}, Event: ${formData.get('eventType')}, Date: ${formData.get('date')}`
             };
 
-            // 1. WhatsApp Integration
-            const message = `*Custom Menu Request – ${data.menuType}*
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            submitBtn.disabled = true;
+
+            try {
+                // 1. Send to Backend API
+                const response = await fetch(`${API_BASE_URL}/api/enquiries`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // 2. WhatsApp Integration
+                    const whatsappMsg = `*Custom Menu Request – ${menuTypeInput.value}*
             
 Name: ${data.name}
-Mobile: ${data.mobile}
-Event Type: ${data.eventType}
-Event Date: ${data.date}
-Pax Count: ${data.pax}
+Phone: ${data.phone}
+Event Type: ${formData.get('eventType')}
+Event Date: ${formData.get('date')}
+Pax Count: ${data.paxCount}
 
 *Selected Items:*
-${data.selectedDishes.map(d => `- ${d}`).join('\n')}
+${data.selectedItems.map(d => `- ${d}`).join('\n')}
 
 *Price Range:* ₹230–₹500 per pax
 _Note: Final price depends on requirements & pax count._`;
 
-            const whatsappUrl = `https://wa.me/919788313225?text=${encodeURIComponent(message)}`;
+                    const whatsappUrl = `https://wa.me/919788313225?text=${encodeURIComponent(whatsappMsg)}`;
+                    window.open(whatsappUrl, '_blank');
 
-            // 2. Email Integration (using EmailJS)
-            // Note: In a real scenario, you need to replace SERVICE_ID and TEMPLATE_ID
-            const emailTemplateParams = {
-                to_name: "Seisuvai Catering",
-                from_name: data.name,
-                from_email: data.email,
-                mobile: data.mobile,
-                event_type: data.eventType,
-                event_date: data.date,
-                pax_count: data.pax,
-                message: `Menu Type: ${data.menuType}\nSelected Dishes: ${data.selectedDishes.join(', ')}`
-            };
-
-            // Assuming EmailJS is configured (If keys were provided). 
-            // Since we don't have keys, we will comment this out but leave the structure.
-            /*
-            emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', emailTemplateParams)
-                .then(function(response) {
-                   console.log('SUCCESS!', response.status, response.text);
-                }, function(error) {
-                   console.log('FAILED...', error);
-                });
-            */
-
-            // Open WhatsApp in new tab
-            window.open(whatsappUrl, '_blank');
-
-            // Show Success
-            successModal.style.display = 'flex';
-            form.reset();
-            // Reset to default view
-            switchMenu('veg');
+                    successModal.style.display = 'flex';
+                    form.reset();
+                    switchMenu('veg');
+                } else {
+                    alert('Submission failed: ' + (result.message || 'Unknown error'));
+                }
+            } catch (err) {
+                console.error('Submission Error:', err);
+                alert('Connection error. Please try again later.');
+            } finally {
+                submitBtn.innerHTML = originalBtnText;
+                submitBtn.disabled = false;
+            }
         });
 
         function closeSuccessModal() {

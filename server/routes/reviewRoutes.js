@@ -1,6 +1,7 @@
 const express = require('express');
 const Review = require('../models/Review');
 const router = express.Router();
+const adminAuth = require('../middleware/adminAuth');
 
 // @route   GET /api/reviews
 // @desc    Get all reviews
@@ -30,12 +31,12 @@ router.post('/', async (req, res) => {
     }
 });
 
-// @route   PUT /api/reviews/:id
-// @desc    Update a review
-// @access  Admin (Public for demo)
-router.put('/:id', async (req, res) => {
+// @route   PUT /api/reviews/:id/approve
+// @desc    Approve a review
+// @access  Admin
+router.put('/:id/approve', adminAuth, async (req, res) => {
     try {
-        const review = await Review.findByIdAndUpdate(req.params.id, req.body, {
+        const review = await Review.findByIdAndUpdate(req.params.id, { status: 'approved' }, {
             new: true,
             runValidators: true
         });
@@ -52,8 +53,8 @@ router.put('/:id', async (req, res) => {
 
 // @route   DELETE /api/reviews/:id
 // @desc    Delete a review
-// @access  Admin (Public for demo)
-router.delete('/:id', async (req, res) => {
+// @access  Admin
+router.delete('/:id', adminAuth, async (req, res) => {
     try {
         const review = await Review.findByIdAndDelete(req.params.id);
 

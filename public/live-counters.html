@@ -679,7 +679,11 @@
             });
         });
 
-        function submitForm(type) {
+        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? window.location.origin
+            : 'https://seisuvai-api.onrender.com';
+
+        async function submitForm(type) {
             const form = document.getElementById('liveCountersForm');
             const errorMsg = document.getElementById('formError');
             const selectedCounters = Array.from(document.querySelectorAll('input[name="counter"]:checked')).map(cb => cb.value);
@@ -699,61 +703,66 @@
 
             const data = {
                 name: form.querySelector('input[name="name"]').value,
-                mobile: form.querySelector('input[name="mobile"]').value,
+                phone: form.querySelector('input[name="mobile"]').value,
                 email: form.querySelector('input[name="email"]').value,
-                eventType: form.querySelector('select[name="eventType"]').value,
-                date: form.querySelector('input[name="date"]').value,
-                pax: form.querySelector('input[name="pax"]').value,
-                counters: selectedCounters
+                enquiryType: 'live_stall',
+                selectedItems: selectedCounters,
+                paxCount: form.querySelector('input[name="pax"]').value,
+                message: `Event: ${form.querySelector('select[name="eventType"]').value}, Date: ${form.querySelector('input[name="date"]').value}`
             };
 
-            if (type === 'whatsapp') {
-                const message = `Hello Seisuvai Catering 👋
+            const submitBtn = type === 'whatsapp' ? document.querySelector('.btn-whatsapp') : document.querySelector('.btn-email');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            submitBtn.disabled = true;
+
+            try {
+                // 1. Send to Backend API
+                const response = await fetch(`${API_BASE_URL}/api/enquiries`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    if (type === 'whatsapp') {
+                        const whatsappMsg = `Hello Seisuvai Catering 👋
 
 I’m interested in Live Counters for my event.
 
 Customer Name: ${data.name}
-Mobile: ${data.mobile}
-Event Type: ${data.eventType}
-Event Date: ${data.date}
-Number of Pax: ${data.pax}
+Phone: ${data.phone}
+Event: ${form.querySelector('select[name="eventType"]').value}
+Date: ${form.querySelector('input[name="date"]').value}
+Pax: ${data.paxCount}
 
 Selected Live Counters:
-${data.counters.map(c => `- ${c}`).join('\n')}
+${data.selectedItems.map(c => `- ${c}`).join('\n')}
 
-Please share availability and pricing details.
-Thank you.`;
+Please share availability and pricing details.`;
 
-                const url = `https://wa.me/919788313225?text=${encodeURIComponent(message)}`;
-                window.open(url, '_blank');
+                        const url = `https://wa.me/919788313225?text=${encodeURIComponent(whatsappMsg)}`;
+                        window.open(url, '_blank');
 
-                document.getElementById('successText').innerText = "We have opened WhatsApp for you to send the details.";
-                document.getElementById('successModal').style.display = 'flex';
-
-            } else if (type === 'email') {
-                const emailParams = {
-                    to_name: "Seisuvai Catering",
-                    from_name: data.name,
-                    from_email: data.email,
-                    mobile: data.mobile,
-                    event_type: data.eventType,
-                    event_date: data.date,
-                    pax_count: data.pax,
-                    counters: data.counters.join(', ')
-                };
-
-                // Simulator EmailJS send
-                /*
-                emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', emailParams)
-                    .then(() => {
-                        document.getElementById('successText').innerText = "Your enquiry has been sent via email successfully.";
-                        document.getElementById('successModal').style.display = 'flex';
-                    });
-                */
-
-                // For demo purposes show success immediately
-                document.getElementById('successText').innerText = "Your enquiry has been sent successfully (Simulator).";
-                document.getElementById('successModal').style.display = 'flex';
+                        document.getElementById('successText').innerText = "Request received! We have opened WhatsApp for you to send the details.";
+                    } else {
+                        document.getElementById('successText').innerText = "Your enquiry has been sent successfully. Our team will contact you soon.";
+                    }
+                    document.getElementById('successModal').style.display = 'flex';
+                    form.reset();
+                    // Remove selected classes from cards
+                    document.querySelectorAll('.glass-card').forEach(card => card.classList.remove('selected'));
+                } else {
+                    alert('Submission failed: ' + (result.message || 'Unknown error'));
+                }
+            } catch (err) {
+                console.error('Submission Error:', err);
+                alert('Connection error. Please try again later.');
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
             }
         }
     </script>

@@ -22,6 +22,11 @@ const ReviewSchema = new mongoose.Schema({
         enum: ['Wedding', 'Corporate', 'Family Function', 'Other'],
         default: 'Other'
     },
+    status: {
+        type: String,
+        enum: ['pending', 'approved'],
+        default: 'pending'
+    },
     createdAt: {
         type: Date,
         default: Date.now

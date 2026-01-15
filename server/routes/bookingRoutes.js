@@ -2,6 +2,19 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 const Booking = require('../models/Booking');
 const router = express.Router();
+const adminAuth = require('../middleware/adminAuth');
+
+// @route   GET /api/bookings
+// @desc    Get all bookings
+// @access  Admin
+router.get('/', adminAuth, async (req, res) => {
+    try {
+        const bookings = await Booking.find().sort({ createdAt: -1 });
+        res.json({ success: true, count: bookings.length, data: bookings });
+    } catch (err) {
+        res.status(500).json({ success: false, message: 'Server Error' });
+    }
+});
 
 // @route   POST /api/bookings
 // @desc    Create a new booking

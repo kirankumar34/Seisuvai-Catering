@@ -20,12 +20,40 @@ const app = express();
 connectDB();
 
 // Middleware
-app.use(cors());
+const allowedOrigins = [
+    'http://localhost:5000',
+    'http://localhost:5500',
+    'https://seisuvai-catering.netlify.app', // Example Netlify domain
+    'https://seisuvai-admin.netlify.app'    // Example Netlify Admin domain
+];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        // allow requests with no origin
+        if (!origin) return callback(null, true);
+
+        // Allow any localhost/127.0.0.1 with any port for development
+        const isLocal = origin.startsWith('http://localhost') ||
+            origin.startsWith('http://127.0.0.1');
+
+        if (isLocal || allowedOrigins.indexOf(origin) !== -1) {
+            return callback(null, true);
+        }
+
+        const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+        return callback(new Error(msg), false);
+    },
+    credentials: true
+}));
 app.use(express.json());
 
 // Routes
+app.use('/api/admin', require('./routes/adminRoutes'));
+app.use('/api/enquiries', require('./routes/enquiryRoutes'));
 app.use('/api/bookings', require('./routes/bookingRoutes'));
 app.use('/api/reviews', require('./routes/reviewRoutes'));
+app.use('/api/custom-menu', require('./routes/customMenuRoutes'));
+app.use('/api/live-stalls', require('./routes/liveStallRoutes'));
 
 // Serve static assets in production (and development)
 const path = require('path');

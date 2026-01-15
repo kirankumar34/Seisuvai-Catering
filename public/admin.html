@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Seisuvai Catering</title>
+    <meta name="description" content="Secure Admin Dashboard for Seisuvai Catering.">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="css/admin.css">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="images/seisuvai-logo.png" type="image/x-icon">
+</head>
+
+<body>
+    <!-- Login Gate -->
+    <div id="loginGate" class="login-overlay">
+        <div class="login-card">
+            <div class="login-header">
+                <img src="images/seisuvai-logo.png" alt="Seisuvai Logo" class="login-logo">
+                <h1>Admin Access</h1>
+                <p>Please enter the passcode to continue</p>
+            </div>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <input type="password" id="passcode" name="passcode" placeholder="••••••" required
+                        autocomplete="current-password">
+                    <small id="loginError" class="error-text">Access denied. Please try again.</small>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Enter Dashboard</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard (Initially Hidden) -->
+    <div id="adminDashboard" class="admin-container" style="display: none;">
+        <!-- Mobile Header -->
+        <header class="mobile-header">
+            <button id="sidebarToggle" class="sidebar-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="mobile-logo">
+                <span class="cinzel">Seisuvai Admin</span>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-brand">
+                <img src="images/seisuvai-logo.png" alt="Logo">
+                <div class="brand-text">
+                    <span class="main">Seisuvai Admin</span>
+                    <span class="sub">The Crafted Flavour</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item active" data-target="dashboard-home">
+                        <i class="fas fa-th-large"></i>
+                        <span>Dashboard</span>
+                    </li>
+                    <li class="nav-item" data-target="bookings-section">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Bookings</span>
+                    </li>
+                    <li class="nav-item" data-target="reviews-section">
+                        <i class="fas fa-star"></i>
+                        <span>Reviews</span>
+                    </li>
+                    <li class="nav-item" data-target="custom-menu-section">
+                        <i class="fas fa-utensils"></i>
+                        <span>Custom Menus</span>
+                    </li>
+                    <li class="nav-item" data-target="live-stalls-section">
+                        <i class="fas fa-store"></i>
+                        <span>Live Stalls</span>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header for desktop -->
+            <header class="content-header">
+                <h2 id="pageTitle">Dashboard</h2>
+                <div class="user-info">
+                    <span class="date-today" id="currentDate">Wednesday, Jan 14</span>
+                    <div class="admin-avatar">A</div>
+                </div>
+            </header>
+
+            <!-- Dashboard Home Section -->
+            <section id="dashboard-home" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-maroon">
+                            <i class="fas fa-list-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Total Enquiries</h3>
+                            <p class="stat-value">0</p>
+                            <span class="stat-sub">Across all types</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon bg-gold">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Pending Followup</h3>
+                            <p class="stat-value">0</p>
+                            <span class="stat-sub">Awaiting response</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon bg-success">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Reviews Pending</h3>
+                            <p class="stat-value">0</p>
+                            <span class="stat-sub">To be approved</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon bg-info">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Today's Leads</h3>
+                            <p class="stat-value">0</p>
+                            <span class="stat-sub">Fresh enquiries</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recent-grid">
+                    <div class="recent-card wide">
+                        <div class="card-header">
+                            <h3>Upcoming Bookings</h3>
+                            <button class="btn-text">View All</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-container">
+                                <table class="admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Event Date</th>
+                                            <th>Customer</th>
+                                            <th>Type</th>
+                                            <th>Pax</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentBookingsTable">
+                                        <!-- Will be loaded via JS -->
+                                        <tr>
+                                            <td>Jan 20, 2026</td>
+                                            <td>Kiran Kumar</td>
+                                            <td>Wedding</td>
+                                            <td>350</td>
+                                            <td><span class="badge badge-success">Confirmed</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Jan 25, 2026</td>
+                                            <td>Ananya Rao</td>
+                                            <td>Birthday</td>
+                                            <td>100</td>
+                                            <td><span class="badge badge-warning">Pending</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bookings Section -->
+            <section id="bookings-section" class="content-section">
+                <div class="section-actions">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search bookings...">
+                    </div>
+                    <div class="filter-group">
+                        <select>
+                            <option>All Dates</option>
+                            <option>This Week</option>
+                            <option>This Month</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="bookings-grid" id="bookingsGrid">
+                    <!-- Cards will be injected here -->
+                </div>
+            </section>
+
+            <!-- Reviews Section -->
+            <section id="reviews-section" class="content-section">
+                <div class="reviews-list" id="reviewsList">
+                    <!-- Review cards -->
+                </div>
+            </section>
+
+            <!-- Custom Menu Section -->
+            <section id="custom-menu-section" class="content-section">
+                <div class="custom-requests-grid" id="customRequestsGrid">
+                    <!-- Custom menu cards -->
+                </div>
+            </section>
+
+            <!-- Live Stalls Section -->
+            <section id="live-stalls-section" class="content-section">
+                <div class="stalls-grid" id="stallsGrid">
+                    <!-- Stall enquiry cards -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal for details -->
+    <div id="detailsModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Request Details</h3>
+                <button class="modal-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="modalContent" class="modal-body">
+                <!-- Content injected via JS -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="modalCloseBtn">Close</button>
+                <div class="action-btns">
+                    <button class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> Reply</button>
+                    <button class="btn btn-primary"><i class="fas fa-envelope"></i> Email</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal-overlay">
+        <div class="modal-card small">
+            <div class="modal-body text-center">
+                <div class="warning-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <h3>Are you sure?</h3>
+                <p>This action cannot be undone.</p>
+                <div class="confirm-btns">
+                    <button class="btn btn-outline" id="confirmCancel">Cancel</button>
+                    <button class="btn btn-danger" id="confirmAction">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+
+</html>
