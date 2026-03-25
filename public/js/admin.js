@@ -1,455 +1,390 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // State Management
+    // --- Configuration ---
+    // --- Configuration ---
+    let API_BASE_URL = 'https://seisuvai-api.onrender.com';
+
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        // If served from the backend (port 5000), use origin
+        if (window.location.port === '5000') {
+            API_BASE_URL = window.location.origin;
+        } else {
+            // If served from Live Server or file://, assume backend is at 5000
+            API_BASE_URL = 'http://localhost:5000';
+        }
+    } else if (window.location.protocol === 'file:') {
+        // Handle direct file opening
+        API_BASE_URL = 'http://localhost:5000';
+    }
+
+    // --- State ---
     const state = {
-        isLoggedIn: false,
-        activeSection: 'dashboard-home',
-        passcode: localStorage.getItem('seisuvai_admin_passcode') || '',
-        enquiries: [], // Unified enquiries list
-        reviews: []
+        passcode: localStorage.getItem('seisuvai_admin_passcode') || null,
+        enquiries: [],
+        reviews: [],
+        activeTab: 'overview'
     };
 
-    // Elements
+    // --- Elements ---
     const loginGate = document.getElementById('loginGate');
-    const adminDashboard = document.getElementById('adminDashboard');
+    const dashboard = document.getElementById('dashboard');
     const loginForm = document.getElementById('loginForm');
     const loginError = document.getElementById('loginError');
-    const navItems = document.querySelectorAll('.nav-item');
-    const sections = document.querySelectorAll('.content-section');
-    const pageTitle = document.getElementById('pageTitle');
-    const sidebar = document.getElementById('sidebar');
-    const sidebarToggle = document.getElementById('sidebarToggle');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const currentDateEl = document.getElementById('currentDate');
+    const detailsModal = document.getElementById('detailsModal');
+    const modalContent = document.getElementById('modalContent');
+    const closeModalBtn = document.getElementById('closeModal');
 
-    // Set Date
-    const setDate = () => {
-        const now = new Date();
-        const options = { weekday: 'long', month: 'short', day: 'numeric' };
-        currentDateEl.innerText = now.toLocaleDateString('en-US', options);
-    };
-    setDate();
+    // --- Initialization ---
+    function init() {
+        setDate();
+        // Setup Modal Close
+        if (closeModalBtn) {
+            closeModalBtn.addEventListener('click', () => {
+                if (detailsModal) detailsModal.style.display = 'none';
+            });
+        }
 
-    // --- API Configuration ---
-    const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? window.location.origin
-        : 'https://seisuvai-api.onrender.com';
-
-    // Init Logic
-    const init = async () => {
         if (state.passcode) {
-            const isValid = await verifyPasscode(state.passcode);
-            if (isValid) {
-                showDashboard();
-            } else {
-                localStorage.removeItem('seisuvai_admin_passcode');
-                state.passcode = '';
-                showLogin();
-            }
+            verifySession();
         } else {
             showLogin();
         }
-    };
+    }
 
-    const showLogin = () => {
-        loginGate.style.display = 'flex';
-        adminDashboard.style.display = 'none';
-        state.isLoggedIn = false;
-    };
+    function setDate() {
+        const dateEl = document.getElementById('currentDate');
+        if (dateEl) {
+            dateEl.innerText = new Date().toLocaleDateString('en-US', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+        }
+    }
 
-    const showDashboard = () => {
-        loginGate.style.display = 'none';
-        adminDashboard.style.display = 'flex';
-        state.isLoggedIn = true;
-        initDashboard();
-    };
+    // --- Global Event Delegation (Updated) ---
+    document.addEventListener('click', async (e) => {
+        const btn = e.target.closest('[data-action]');
+        if (!btn) return;
 
-    // Login Logic
-    loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const codeInput = document.getElementById('passcode');
-        const code = codeInput.value;
+        const action = btn.dataset.action;
+        const id = btn.dataset.id;
 
-        loginError.style.display = 'none';
-        const button = loginForm.querySelector('button');
-        const originalText = button.innerText;
-        button.innerText = 'Verifying...';
-        button.disabled = true;
+        console.log(`Action triggered: ${action} on ID: ${id}`);
+
+        if (action === 'view-details') handleViewDetails(id);
+        if (action === 'reply-whatsapp') handleWhatsApp(id);
+        if (action === 'toggle-contacted') handleToggleContacted(id, btn);
+        if (action === 'approve-review') handleReviewAction(id, 'approve', btn);
+        if (action === 'delete-review') handleReviewAction(id, 'delete', btn);
+    });
+
+    // Status Change listener (dropdown)
+    document.addEventListener('change', async (e) => {
+        if (e.target.classList.contains('status-select')) {
+            const id = e.target.dataset.id;
+            const newStatus = e.target.value;
+            handleStatusChange(id, newStatus, e.target);
+        }
+    });
+
+    // --- Action Handlers --- 
+
+    async function handleToggleContacted(id, btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
         try {
-            const response = await fetch(`${API_BASE_URL}/api/admin/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ passcode: code })
+            const res = await fetch(`${API_BASE_URL}/api/enquiries/${id}/contacted`, {
+                method: 'PUT',
+                headers: { 'x-admin-passcode': state.passcode }
             });
 
-            const result = await response.json();
-
-            if (result.success) {
-                state.passcode = code;
-                localStorage.setItem('seisuvai_admin_passcode', code);
-                showDashboard();
+            if (res.ok) {
+                await fetchEnquiries(); // Refresh UI
             } else {
-                loginGate.classList.add('shake');
-                loginError.style.display = 'block';
-                loginError.innerText = result.message || 'Invalid passcode';
-                setTimeout(() => loginGate.classList.remove('shake'), 500);
+                alert('Failed to update contacted status');
             }
         } catch (err) {
-            loginError.style.display = 'block';
-            loginError.innerText = 'Connection error. Check backend.';
+            console.error(err);
+            alert('Network Error');
         } finally {
-            button.innerText = originalText;
-            button.disabled = false;
+            btn.disabled = false;
         }
-    });
+    }
 
-    async function verifyPasscode(code) {
+    async function handleStatusChange(id, newStatus, select) {
+        select.disabled = true;
         try {
-            const response = await fetch(`${API_BASE_URL}/api/admin/verify`, {
-                headers: { 'x-admin-passcode': code }
-            });
-            return response.ok;
-        } catch (err) {
-            return false;
-        }
-    }
-
-    // Navigation
-    navItems.forEach(item => {
-        item.addEventListener('click', () => {
-            const target = item.getAttribute('data-target');
-            switchSection(target);
-
-            if (window.innerWidth <= 1024) {
-                sidebar.classList.remove('active');
-            }
-        });
-    });
-
-    function switchSection(targetId) {
-        navItems.forEach(i => i.classList.remove('active'));
-        const activeNav = document.querySelector(`[data-target="${targetId}"]`);
-        if (activeNav) activeNav.classList.add('active');
-
-        sections.forEach(s => s.classList.remove('active'));
-        const activeSec = document.getElementById(targetId);
-        if (activeSec) activeSec.classList.add('active');
-
-        state.activeSection = targetId;
-
-        const names = {
-            'dashboard-home': 'Dashboard',
-            'bookings-section': 'Event Bookings',
-            'reviews-section': 'Customer Reviews',
-            'custom-menu-section': 'Custom Menu Requests',
-            'live-stalls-section': 'Live Stall Enquiries'
-        };
-        pageTitle.innerText = names[targetId] || 'Admin Panel';
-
-        if (targetId === 'bookings-section') loadBookings();
-        if (targetId === 'reviews-section') loadReviews();
-        if (targetId === 'custom-menu-section') loadCustomRequests();
-        if (targetId === 'live-stalls-section') loadLiveStalls();
-    }
-
-    // Sidebar Mobile Toggle
-    if (sidebarToggle) {
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
-        });
-    }
-
-    // Logout
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-            localStorage.removeItem('seisuvai_admin_passcode');
-            location.reload();
-        });
-    }
-
-    // Dashboard Initialization
-    function initDashboard() {
-        fetchEnquiries();
-        fetchData(`${API_BASE_URL}/api/reviews`, 'reviews');
-    }
-
-    async function fetchEnquiries() {
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/enquiries`, {
-                headers: { 'x-admin-passcode': state.passcode }
-            });
-            const result = await response.json();
-            if (result.success) {
-                state.enquiries = result.data;
-                renderRecentTable(state.enquiries.slice(0, 5));
-                updateStats();
-                // Refresh active section if needed
-                if (state.activeSection === 'bookings-section') loadBookings();
-                if (state.activeSection === 'custom-menu-section') loadCustomRequests();
-                if (state.activeSection === 'live-stalls-section') loadLiveStalls();
-            }
-        } catch (err) {
-            console.error('Error fetching enquiries:', err);
-        }
-    }
-
-    async function fetchData(url, stateKey) {
-        try {
-            const response = await fetch(url, {
-                headers: { 'x-admin-passcode': state.passcode }
-            });
-            const result = await response.json();
-            if (result.success) {
-                state[stateKey] = result.data;
-                updateStats();
-                return result.data;
-            }
-        } catch (err) {
-            console.error(`Error fetching ${stateKey}:`, err);
-        }
-        return null;
-    }
-
-    function updateStats() {
-        const stats = {
-            'total': state.enquiries.length,
-            'pending': state.enquiries.filter(e => e.status === 'pending').length,
-            'reviews': state.reviews.filter(r => r.status === 'pending').length,
-            'today': state.enquiries.filter(e => new Date(e.createdAt).toDateString() === new Date().toDateString()).length
-        };
-
-        const valEls = document.querySelectorAll('.stat-value');
-        if (valEls.length >= 4) {
-            valEls[0].innerText = stats.total;
-            valEls[1].innerText = stats.pending;
-            valEls[2].innerText = stats.reviews;
-            valEls[3].innerText = stats.today;
-        }
-    }
-
-    // Rendering Functions
-    function renderRecentTable(data) {
-        const tbody = document.getElementById('recentBookingsTable');
-        if (!tbody) return;
-
-        if (!data || data.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">No recent enquiries</td></tr>';
-            return;
-        }
-
-        tbody.innerHTML = data.map(e => `
-            <tr>
-                <td>${new Date(e.createdAt).toLocaleDateString()}</td>
-                <td>${e.name}</td>
-                <td style="text-transform: capitalize">${(e.enquiryType || '').replace('_', ' ')}</td>
-                <td>${e.paxCount || 'N/A'}</td>
-                <td><span class="badge ${e.status === 'pending' ? 'badge-warning' : 'badge-success'}">
-                    ${e.status}
-                </span></td>
-            </tr>
-        `).join('');
-    }
-
-    const getLoadingTemplate = () => '<div class="loading-skeleton" style="grid-column: 1/-1; padding: 2rem; text-align: center; background: white; border-radius: 12px;">Loading data...</div>';
-
-    async function loadBookings() {
-        const grid = document.getElementById('bookingsGrid');
-        if (!grid) return;
-
-        const data = state.enquiries.filter(e => e.enquiryType === 'booking');
-        if (data.length === 0) {
-            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem;">No booking enquiries found.</div>';
-            return;
-        }
-
-        grid.innerHTML = data.map(e => `
-            <div class="data-card">
-                <div class="card-top">
-                    <span class="card-title">${e.name}</span>
-                    <span class="card-date">${new Date(e.createdAt).toLocaleDateString()}</span>
-                </div>
-                <div class="card-details">
-                    <div class="detail-item"><i class="fas fa-users"></i> ${e.paxCount || 'N/A'} Pax</div>
-                    <div class="detail-item"><i class="fas fa-phone"></i> ${e.phone}</div>
-                </div>
-                <p class="card-msg">"${e.message || 'No message'}"</p>
-                <div class="card-actions">
-                    <button class="btn btn-outline" onclick="viewDetail('enquiry', '${e._id}')">Details</button>
-                    <a href="https://wa.me/${e.phone.startsWith('91') ? e.phone : '91' + e.phone}" target="_blank" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-                    <button class="btn btn-primary" onclick="updateEnquiryStatus('${e._id}', 'completed')">Close</button>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    async function loadReviews() {
-        const list = document.getElementById('reviewsList');
-        if (!list) return;
-        list.innerHTML = getLoadingTemplate();
-
-        const data = await fetchData(`${API_BASE_URL}/api/reviews`, 'reviews');
-        if (!data || data.length === 0) {
-            list.innerHTML = '<div style="text-align: center; padding: 3rem;">No reviews found.</div>';
-            return;
-        }
-
-        list.innerHTML = data.map(r => `
-            <div class="review-mgmt-card" id="review-${r._id}" style="${r.status === 'approved' ? 'border-left: 4px solid var(--success-soft)' : ''}">
-                <div class="review-content-box">
-                    <div class="review-author">${r.name} ${r.status === 'approved' ? '<span class="badge badge-success">Approved</span>' : ''}</div>
-                    <div class="star-rating">${'★'.repeat(r.rating || 5)}${'☆'.repeat(5 - (r.rating || 5))}</div>
-                    <div class="review-text">${r.comment || r.message}</div>
-                    <div class="card-date" style="margin-top: 0.5rem;">${new Date(r.createdAt).toLocaleDateString()}</div>
-                </div>
-                <div class="review-actions">
-                    <button class="btn btn-outline" onclick="deleteReview('${r._id}')">Delete</button>
-                    ${r.status === 'pending' ? `<button class="btn btn-primary" onclick="approveReview('${r._id}')">Approve</button>` : ''}
-                </div>
-            </div>
-        `).join('');
-    }
-
-    async function loadCustomRequests() {
-        const grid = document.getElementById('customRequestsGrid');
-        if (!grid) return;
-
-        const data = state.enquiries.filter(e => e.enquiryType === 'custom_menu');
-        if (data.length === 0) {
-            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem;">No custom menu requests found.</div>';
-            return;
-        }
-
-        grid.innerHTML = data.map(e => `
-            <div class="data-card">
-                <div class="card-top">
-                    <span class="card-title">${e.name}</span>
-                    <span class="badge badge-danger">Custom Menu</span>
-                </div>
-                <div class="card-details">
-                    <div class="detail-item"><i class="fas fa-users"></i> ${e.paxCount} Pax</div>
-                    <div class="detail-item"><i class="fas fa-phone"></i> ${e.phone}</div>
-                </div>
-                <div class="card-tags">
-                    ${(e.selectedItems || []).map(d => `<span class="tag">${d}</span>`).join('')}
-                </div>
-                <div class="card-actions">
-                    <button class="btn btn-outline" onclick="viewDetail('enquiry', '${e._id}')">Details</button>
-                    <a href="https://wa.me/${e.phone.startsWith('91') ? e.phone : '91' + e.phone}" target="_blank" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-                    <button class="btn btn-outline" onclick="updateEnquiryStatus('${e._id}', 'completed')">Handled</button>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    async function loadLiveStalls() {
-        const grid = document.getElementById('stallsGrid');
-        if (!grid) return;
-
-        const data = state.enquiries.filter(e => e.enquiryType === 'live_stall');
-        if (data.length === 0) {
-            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem;">No live stall enquiries found.</div>';
-            return;
-        }
-
-        grid.innerHTML = data.map(e => `
-            <div class="data-card">
-                <div class="card-top">
-                    <span class="card-title">${e.name}</span>
-                    <span class="card-date">${new Date(e.createdAt).toLocaleDateString()}</span>
-                </div>
-                <div class="card-details">
-                    <div class="detail-item"><i class="fas fa-users"></i> ${e.paxCount} Pax</div>
-                    <div class="detail-item"><i class="fas fa-phone"></i> ${e.phone}</div>
-                </div>
-                <div class="card-tags" style="margin-top: 0.5rem">
-                    ${(e.selectedItems || []).map(st => `<span class="tag" style="background:rgba(212, 175, 55, 0.1); color: #8a6d10;">${st}</span>`).join('')}
-                </div>
-                <div class="card-actions">
-                    <button class="btn btn-outline" onclick="viewDetail('enquiry', '${e._id}')">Details</button>
-                    <a href="https://wa.me/${e.phone.startsWith('91') ? e.phone : '91' + e.phone}" target="_blank" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> Contact</a>
-                    <button class="btn btn-outline" onclick="updateEnquiryStatus('${e._id}', 'completed')">Close</button>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    // Global Action Handlers
-    window.updateEnquiryStatus = async (id, status) => {
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/enquiries/${id}/status`, {
+            // Validate and send update
+            const res = await fetch(`${API_BASE_URL}/api/enquiries/${id}/status`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     'x-admin-passcode': state.passcode
                 },
-                body: JSON.stringify({ status })
+                body: JSON.stringify({ status: newStatus })
             });
-            if (response.ok) {
-                fetchEnquiries();
+
+            if (res.ok) {
+                await fetchEnquiries();
+                // Show toast or highlight
+            } else {
+                alert('Failed to update status');
+                // Revert selection?
+                await fetchEnquiries();
             }
         } catch (err) {
-            alert('Update failed');
+            console.error(err);
+            alert('Network Error');
+        } finally {
+            select.disabled = false;
         }
-    };
+    }
 
-    window.approveReview = async (id) => {
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/reviews/${id}/approve`, {
-                method: 'PUT',
-                headers: { 'x-admin-passcode': state.passcode }
-            });
-            if (response.ok) {
-                fetchData(`${API_BASE_URL}/api/reviews`, 'reviews');
-            }
-        } catch (err) {
-            alert('Approval failed');
-        }
-    };
+    // ... (Keep existing view details and whatsapp handlers, but update renderEnquiryCard below) ...
 
-    window.deleteReview = async (id) => {
-        if (!confirm('Are you sure you want to delete this review?')) return;
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/reviews/${id}`, {
-                method: 'DELETE',
-                headers: { 'x-admin-passcode': state.passcode }
-            });
-            if (response.ok) {
-                fetchData(`${API_BASE_URL}/api/reviews`, 'reviews');
-            }
-        } catch (err) {
-            alert('Delete failed');
-        }
-    };
+    function renderEnquiryCard(e) {
+        const isContacted = e.contacted === true;
+        const statusOptions = ['pending', 'confirmed', 'negotiation', 'closed'];
 
-    window.viewDetail = (type, id) => {
-        const modal = document.getElementById('detailsModal');
-        const content = document.getElementById('modalContent');
-        const item = state.enquiries.find(e => e._id === id);
-
-        if (item) {
-            content.innerHTML = `
-                <div style="display: grid; gap: 1rem;">
-                    <div><strong>Customer:</strong> ${item.name}</div>
-                    <div><strong>Phone:</strong> ${item.phone}</div>
-                    <div><strong>Email:</strong> ${item.email || 'N/A'}</div>
-                    <div><strong>Type:</strong> ${item.enquiryType.replace('_', ' ').toUpperCase()}</div>
-                    <div><strong>Pax:</strong> ${item.paxCount || 'N/A'}</div>
-                    <div><strong>Selected Items:</strong> ${item.selectedItems.join(', ') || 'None'}</div>
-                    <div><strong>Status:</strong> <span class="badge ${item.status === 'pending' ? 'badge-warning' : 'badge-success'}">${item.status}</span></div>
-                    <div><strong>Message/Details:</strong><br><p style="margin-top:0.5rem; background:#f9f9f9; padding: 1rem; border-radius: 8px;">${item.message || 'No additional details'}</p></div>
+        return `
+            <div class="enquiry-card" style="border-left: 5px solid ${getStatusColor(e.status)}">
+                <div class="enquiry-header">
+                    <div>
+                        <h3 style="color: var(--maroon-dark); margin-bottom: 0.2rem;">${e.name}</h3>
+                        <span class="badge badge-type">${formatType(e.enquiryType)}</span>
+                        <select class="status-select" data-id="${e._id}" style="padding: 2px 8px; border-radius: 4px; border: 1px solid #ccc; margin-left: 10px;">
+                            ${statusOptions.map(opt => `
+                                <option value="${opt}" ${e.status === opt ? 'selected' : ''}>
+                                    ${opt.charAt(0).toUpperCase() + opt.slice(1)}
+                                </option>
+                            `).join('')}
+                        </select>
+                    </div>
+                    <button class="btn-action btn-status" data-action="view-details" data-id="${e._id}" style="width: auto; padding: 5px 10px; font-size: 0.8rem;">
+                        <i class="fas fa-eye"></i> Requirements
+                    </button>
                 </div>
-            `;
-            modal.style.display = 'flex';
-        }
-    };
+                
+                <div class="enquiry-details">
+                    <p><i class="fas fa-phone"></i> ${e.phone}</p>
+                    <p><i class="fas fa-calendar"></i> ${new Date(e.createdAt).toLocaleDateString()}</p>
+                    <p><i class="fas fa-users"></i> ${e.paxCount || 'N/A'} Pax</p>
+                </div>
 
-    // Close Modals
-    document.querySelectorAll('.modal-close, #modalCloseBtn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+                <div class="enquiry-actions" style="margin-top: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <!-- 1. WhatsApp -->
+                    <button class="btn-action btn-whatsapp" data-action="reply-whatsapp" data-id="${e._id}">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </button>
+                    
+                    <!-- 2. Contacted Toggle -->
+                    <button class="btn-action" data-action="toggle-contacted" data-id="${e._id}" 
+                        style="background: ${isContacted ? '#4CAF50' : '#f0f0f0'}; color: ${isContacted ? 'white' : '#333'};">
+                        <i class="fas ${isContacted ? 'fa-check-circle' : 'fa-times-circle'}"></i> 
+                        ${isContacted ? 'Contacted' : 'Not Contacted'}
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    function getStatusColor(status) {
+        switch (status) {
+            case 'confirmed': return '#4CAF50'; // Green
+            case 'negotiation': return '#2196F3'; // Blue
+            case 'closed': return '#9E9E9E'; // Grey
+            default: return '#FFC107'; // Amber (Pending)
+        }
+    }
+
+    function renderReviews() {
+        const list = document.getElementById('reviewsList');
+        if (!list) return;
+
+        if (state.reviews.length === 0) {
+            list.innerHTML = '<p style="text-align:center; grid-column: 1/-1;">No reviews found.</p>';
+            return;
+        }
+
+        list.innerHTML = state.reviews.map(r => `
+            <div class="stat-card" style="border-left-color: ${r.status === 'approved' ? 'green' : 'orange'}">
+                <div style="display: flex; justify-content: space-between;">
+                    <strong>${r.name}</strong>
+                    <span style="color: gold;">${'★'.repeat(r.rating || 5)}</span>
+                </div>
+                <p style="margin: 1rem 0; color: #555;">"${r.comment || r.message}"</p>
+                <div style="display: flex; gap: 1rem;">
+                    ${r.status === 'pending' ? `
+                        <button class="btn-action btn-status" style="background: #e8f5e9; color: green;" data-action="approve-review" data-id="${r._id}">
+                            Approve
+                        </button>
+                    ` : ''}
+                    <button class="btn-action btn-status" style="background: #ffebee; color: red;" data-action="delete-review" data-id="${r._id}">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // --- Helpers ---
+    function formatType(type) {
+        return type ? type.replace('_', ' ').toUpperCase() : 'UNKNOWN';
+    }
+
+    function formatPhone(phone) {
+        if (!phone) return '';
+        const p = phone.replace(/\D/g, ''); // strip non-digits
+        return p.startsWith('91') ? p : '91' + p;
+    }
+
+    // --- Tab Navigation ---
+    const navItems = document.querySelectorAll('.nav-item[data-tab]');
+    const sections = document.querySelectorAll('.section');
+    const pageTitle = document.getElementById('pageTitle');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', () => {
+            if (sidebar) sidebar.classList.toggle('active');
+        });
+    }
+
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const tab = item.dataset.tab;
+
+            // Switch UI
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            item.classList.add('active');
+
+            sections.forEach(s => s.classList.remove('active'));
+            const activeSection = document.getElementById(tab);
+            if (activeSection) activeSection.classList.add('active');
+
+            // Update Header
+            if (pageTitle) pageTitle.innerText = item.innerText.trim();
+
+            // Mobile close sidebar
+            if (window.innerWidth <= 1024 && sidebar) {
+                sidebar.classList.remove('active');
+            }
         });
     });
 
-    // Run Init
+    // --- Authentication Logic (Restored) ---
+    async function verifySession() {
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/admin/verify`, {
+                headers: { 'x-admin-passcode': state.passcode }
+            });
+            if (res.ok) {
+                showDashboard();
+            } else {
+                logout();
+            }
+        } catch (err) {
+            console.error('Auth Check Failed', err);
+            // On network error with stored passcode, we might want to let them see cached view or retry
+            // For now, fail safe.
+            loginError.innerText = 'Network connection failed. Backend offline?';
+            loginError.style.display = 'block';
+            showLogin();
+        }
+    }
+
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const code = document.getElementById('passcode').value;
+            const btn = loginForm.querySelector('button');
+
+            btn.innerText = 'Verifying...';
+            btn.disabled = true;
+            loginError.style.display = 'none';
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ passcode: code })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    state.passcode = code;
+                    localStorage.setItem('seisuvai_admin_passcode', code);
+                    showDashboard();
+                } else {
+                    loginError.innerText = data.message || 'Invalid Passcode';
+                    loginError.style.display = 'block';
+                }
+            } catch (err) {
+                loginError.innerText = 'Connection Error: Is server running?';
+                loginError.style.display = 'block';
+            } finally {
+                btn.innerText = 'Unlock Dashboard';
+                btn.disabled = false;
+            }
+        });
+    }
+
+    function showLogin() {
+        if (loginGate) loginGate.style.display = 'flex';
+        if (dashboard) dashboard.style.display = 'none';
+    }
+
+    function showDashboard() {
+        if (loginGate) loginGate.style.display = 'none';
+        if (dashboard) dashboard.style.display = 'flex';
+        loadData();
+    }
+
+    function logout() {
+        state.passcode = null;
+        localStorage.removeItem('seisuvai_admin_passcode');
+        showLogin();
+    }
+
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) logoutBtn.addEventListener('click', logout);
+
+    // --- Data Loading ---
+    async function loadData() {
+        await Promise.all([fetchEnquiries(), fetchReviews()]);
+        renderDashboard();
+    }
+
+    async function fetchEnquiries() {
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/enquiries`, {
+                headers: { 'x-admin-passcode': state.passcode }
+            });
+            const json = await res.json();
+            if (json.success) {
+                state.enquiries = json.data;
+                renderEnquiries();
+            }
+        } catch (err) {
+            console.error('Failed to load enquiries', err);
+        }
+    }
+
+    async function fetchReviews() {
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/reviews`, {
+                headers: { 'x-admin-passcode': state.passcode }
+            });
+            const json = await res.json();
+            if (json.success) {
+                state.reviews = json.data;
+                renderReviews();
+            }
+        } catch (err) {
+            console.error('Failed to load reviews', err);
+        }
+    }
+
+    // Start
     init();
 });

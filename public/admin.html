@@ -4,273 +4,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel | Seisuvai Catering</title>
-    <meta name="description" content="Secure Admin Dashboard for Seisuvai Catering.">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
+    <title>Seisuvai Admin Dashboard</title>
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Outfit:wght@300;400;600&display=swap"
         rel="stylesheet">
-    <!-- Custom Style -->
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS -->
     <link rel="stylesheet" href="css/admin.css">
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="images/seisuvai-logo.png" type="image/x-icon">
 </head>
 
 <body>
-    <!-- Login Gate -->
-    <div id="loginGate" class="login-overlay">
+
+    <!-- 1. LOGIN GATE -->
+    <div id="loginGate" class="login-gate">
         <div class="login-card">
-            <div class="login-header">
-                <img src="images/seisuvai-logo.png" alt="Seisuvai Logo" class="login-logo">
-                <h1>Admin Access</h1>
-                <p>Please enter the passcode to continue</p>
-            </div>
-            <form id="loginForm" class="login-form">
-                <div class="form-group">
-                    <input type="password" id="passcode" name="passcode" placeholder="••••••" required
-                        autocomplete="current-password">
-                    <small id="loginError" class="error-text">Access denied. Please try again.</small>
-                </div>
-                <button type="submit" class="btn btn-primary btn-full">Enter Dashboard</button>
+            <img src="images/seisuvai-logo.png" alt="Logo" class="login-logo">
+            <h1 class="login-title">Admin Access</h1>
+            <form id="loginForm">
+                <input type="password" id="passcode" class="login-input" placeholder="Enter Passcode" required>
+                <button type="submit" class="btn-login">Unlock Dashboard</button>
             </form>
+            <p id="loginError" class="login-error">Invalid passcode</p>
         </div>
     </div>
 
-    <!-- Admin Dashboard (Initially Hidden) -->
-    <div id="adminDashboard" class="admin-container" style="display: none;">
-        <!-- Mobile Header -->
-        <header class="mobile-header">
-            <button id="sidebarToggle" class="sidebar-toggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="mobile-logo">
-                <span class="cinzel">Seisuvai Admin</span>
-            </div>
-        </header>
+    <!-- 2. DASHBOARD CONTAINER -->
+    <div id="dashboard" class="dashboard-container">
 
         <!-- Sidebar -->
-        <aside id="sidebar" class="sidebar">
-            <div class="sidebar-brand">
-                <img src="images/seisuvai-logo.png" alt="Logo">
-                <div class="brand-text">
-                    <span class="main">Seisuvai Admin</span>
-                    <span class="sub">The Crafted Flavour</span>
-                </div>
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="images/seisuvai-logo.png" alt="Logo" class="sidebar-logo">
+                <h2>SEISUVAI<br>ADMIN</h2>
             </div>
 
-            <nav class="sidebar-nav">
-                <ul>
-                    <li class="nav-item active" data-target="dashboard-home">
-                        <i class="fas fa-th-large"></i>
-                        <span>Dashboard</span>
-                    </li>
-                    <li class="nav-item" data-target="bookings-section">
-                        <i class="fas fa-calendar-check"></i>
-                        <span>Bookings</span>
-                    </li>
-                    <li class="nav-item" data-target="reviews-section">
-                        <i class="fas fa-star"></i>
-                        <span>Reviews</span>
-                    </li>
-                    <li class="nav-item" data-target="custom-menu-section">
-                        <i class="fas fa-utensils"></i>
-                        <span>Custom Menus</span>
-                    </li>
-                    <li class="nav-item" data-target="live-stalls-section">
-                        <i class="fas fa-store"></i>
-                        <span>Live Stalls</span>
-                    </li>
-                </ul>
+            <nav style="flex: 1;">
+                <div class="nav-item active" data-tab="overview">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </div>
+                <div class="nav-item" data-tab="bookings">
+                    <i class="fas fa-calendar-check"></i> Bookings
+                </div>
+                <div class="nav-item" data-tab="custom-menus">
+                    <i class="fas fa-utensils"></i> Custom Menus
+                </div>
+                <div class="nav-item" data-tab="live-stalls">
+                    <i class="fas fa-store"></i> Live Stalls
+                </div>
+                <div class="nav-item" data-tab="reviews">
+                    <i class="fas fa-star"></i> Reviews
+                </div>
             </nav>
 
-            <div class="sidebar-footer">
-                <button id="logoutBtn" class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Logout</span>
-                </button>
+            <div class="nav-item logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Logout
             </div>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Header for desktop -->
-            <header class="content-header">
-                <h2 id="pageTitle">Dashboard</h2>
-                <div class="user-info">
-                    <span class="date-today" id="currentDate">Wednesday, Jan 14</span>
-                    <div class="admin-avatar">A</div>
-                </div>
-            </header>
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <button class="mobile-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+                <h1 class="page-title" id="pageTitle">Overview</h1>
+                <div class="date-display" id="currentDate">Mock Date</div>
+            </div>
 
-            <!-- Dashboard Home Section -->
-            <section id="dashboard-home" class="content-section active">
+            <!-- SECTION: Overview -->
+            <div id="overview" class="section active">
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-icon bg-maroon">
-                            <i class="fas fa-list-alt"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3>Total Enquiries</h3>
-                            <p class="stat-value">0</p>
-                            <span class="stat-sub">Across all types</span>
-                        </div>
+                        <div class="stat-label">Total Enquiries</div>
+                        <div class="stat-value" id="statTotal">0</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon bg-gold">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3>Pending Followup</h3>
-                            <p class="stat-value">0</p>
-                            <span class="stat-sub">Awaiting response</span>
-                        </div>
+                    <div class="stat-card gold">
+                        <div class="stat-label">Pending</div>
+                        <div class="stat-value" id="statPending">0</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon bg-success">
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3>Reviews Pending</h3>
-                            <p class="stat-value">0</p>
-                            <span class="stat-sub">To be approved</span>
-                        </div>
+                    <div class="stat-card blue">
+                        <div class="stat-label">This Month</div>
+                        <div class="stat-value" id="statMonth">0</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon bg-info">
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                        <div class="stat-info">
-                            <h3>Today's Leads</h3>
-                            <p class="stat-value">0</p>
-                            <span class="stat-sub">Fresh enquiries</span>
-                        </div>
+                    <div class="stat-card green">
+                        <div class="stat-label">Reviews</div>
+                        <div class="stat-value" id="statReviews">0</div>
                     </div>
                 </div>
 
-                <div class="recent-grid">
-                    <div class="recent-card wide">
-                        <div class="card-header">
-                            <h3>Upcoming Bookings</h3>
-                            <button class="btn-text">View All</button>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-container">
-                                <table class="admin-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Event Date</th>
-                                            <th>Customer</th>
-                                            <th>Type</th>
-                                            <th>Pax</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="recentBookingsTable">
-                                        <!-- Will be loaded via JS -->
-                                        <tr>
-                                            <td>Jan 20, 2026</td>
-                                            <td>Kiran Kumar</td>
-                                            <td>Wedding</td>
-                                            <td>350</td>
-                                            <td><span class="badge badge-success">Confirmed</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Jan 25, 2026</td>
-                                            <td>Ananya Rao</td>
-                                            <td>Birthday</td>
-                                            <td>100</td>
-                                            <td><span class="badge badge-warning">Pending</span></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                <h3 style="margin-bottom: 1rem; color: var(--maroon-dark);">Recent Activity</h3>
+                <div class="table-container">
+                    <table id="recentTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentTableBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
                 </div>
-            </section>
+            </div>
 
-            <!-- Bookings Section -->
-            <section id="bookings-section" class="content-section">
-                <div class="section-actions">
-                    <div class="search-bar">
-                        <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Search bookings...">
-                    </div>
-                    <div class="filter-group">
-                        <select>
-                            <option>All Dates</option>
-                            <option>This Week</option>
-                            <option>This Month</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="bookings-grid" id="bookingsGrid">
-                    <!-- Cards will be injected here -->
-                </div>
-            </section>
+            <!-- SECTION: Bookings -->
+            <div id="bookings" class="section">
+                <div id="bookingsList"></div>
+            </div>
 
-            <!-- Reviews Section -->
-            <section id="reviews-section" class="content-section">
-                <div class="reviews-list" id="reviewsList">
-                    <!-- Review cards -->
-                </div>
-            </section>
+            <!-- SECTION: Custom Menus -->
+            <div id="custom-menus" class="section">
+                <div id="customMenusList"></div>
+            </div>
 
-            <!-- Custom Menu Section -->
-            <section id="custom-menu-section" class="content-section">
-                <div class="custom-requests-grid" id="customRequestsGrid">
-                    <!-- Custom menu cards -->
-                </div>
-            </section>
+            <!-- SECTION: Live Stalls -->
+            <div id="live-stalls" class="section">
+                <div id="liveStallsList"></div>
+            </div>
 
-            <!-- Live Stalls Section -->
-            <section id="live-stalls-section" class="content-section">
-                <div class="stalls-grid" id="stallsGrid">
-                    <!-- Stall enquiry cards -->
+            <!-- SECTION: Reviews -->
+            <div id="reviews" class="section">
+                <div id="reviewsList"
+                    style="display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
                 </div>
-            </section>
+            </div>
+
         </main>
     </div>
 
-    <!-- Modal for details -->
-    <div id="detailsModal" class="modal-overlay">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h3>Request Details</h3>
-                <button class="modal-close"><i class="fas fa-times"></i></button>
-            </div>
-            <div id="modalContent" class="modal-body">
+    <!-- Details Modal -->
+    <div id="detailsModal" class="login-gate" style="display: none; background: rgba(0,0,0,0.8);">
+        <div class="login-card" style="max-width: 600px; text-align: left; position: relative;">
+            <button id="closeModal"
+                style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+            <h2 id="modalTitle" style="font-family: 'Cinzel', serif; margin-bottom: 1rem; color: var(--maroon-dark);">
+                Details</h2>
+            <div id="modalContent" style="max-height: 70vh; overflow-y: auto;">
                 <!-- Content injected via JS -->
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" id="modalCloseBtn">Close</button>
-                <div class="action-btns">
-                    <button class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> Reply</button>
-                    <button class="btn btn-primary"><i class="fas fa-envelope"></i> Email</button>
-                </div>
+            <div style="margin-top: 1.5rem; text-align: right;">
+                <button class="btn-login" style="width: auto; padding: 0.5rem 1.5rem;"
+                    onclick="document.getElementById('detailsModal').style.display='none'">Close</button>
             </div>
         </div>
     </div>
 
-    <!-- Confirmation Modal -->
-    <div id="confirmModal" class="modal-overlay">
-        <div class="modal-card small">
-            <div class="modal-body text-center">
-                <div class="warning-icon"><i class="fas fa-exclamation-triangle"></i></div>
-                <h3>Are you sure?</h3>
-                <p>This action cannot be undone.</p>
-                <div class="confirm-btns">
-                    <button class="btn btn-outline" id="confirmCancel">Cancel</button>
-                    <button class="btn btn-danger" id="confirmAction">Delete</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    <!-- Script -->
     <script src="js/admin.js"></script>
 </body>
 

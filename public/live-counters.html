@@ -724,6 +724,10 @@
                     body: JSON.stringify(data)
                 });
 
+                if (!response.ok) {
+                    throw new Error(`Server request failed with status ${response.status}`);
+                }
+
                 const result = await response.json();
 
                 if (result.success) {
@@ -755,11 +759,11 @@ Please share availability and pricing details.`;
                     // Remove selected classes from cards
                     document.querySelectorAll('.glass-card').forEach(card => card.classList.remove('selected'));
                 } else {
-                    alert('Submission failed: ' + (result.message || 'Unknown error'));
+                    throw new Error(result.message || 'Submission failed');
                 }
             } catch (err) {
                 console.error('Submission Error:', err);
-                alert('Connection error. Please try again later.');
+                alert('Something went wrong. Please try again later.');
             } finally {
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;

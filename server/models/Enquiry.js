@@ -27,9 +27,13 @@ const EnquirySchema = new mongoose.Schema({
     message: {
         type: String
     },
+    contacted: {
+        type: Boolean,
+        default: false
+    },
     status: {
         type: String,
-        enum: ['pending', 'contacted', 'completed'],
+        enum: ['pending', 'confirmed', 'negotiation', 'closed'],
         default: 'pending'
     },
     createdAt: {

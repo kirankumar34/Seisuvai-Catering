@@ -3,74 +3,63 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="google-site-verification" content="ul7Poc-GWpgS9nxFdONUgTXglxMZanhIgx6lfUvWVaQ" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="ul7Poc-GWpgS9nxFdONUgTXglxMZanhIgx6lfUvWVaQ" />
 
-    <head>
-        <meta charset="UTF-8">
+    <!-- SEO Meta Tags -->
+    <title>Seisuvai Catering | Premium South Indian Catering for Weddings & Events | Chennai</title>
+    <meta name="description" content="Seisuvai Catering offers authentic, hygienic South Indian catering for weddings, corporate events, birthdays & family functions in Chennai. Starting from ₹250/plate. Call 9788313225 for a free quote." />
+    <meta name="keywords" content="Seisuvai Catering, South Indian Catering Chennai, Wedding Catering Chennai, Corporate Catering, Birthday Catering, FSSAI Certified Catering, Traditional Catering, Veg Non-Veg Catering Chennai" />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Seisuvai Catering" />
 
-        <title>Seisuvai Catering | Traditional South Indian Catering Service</title>
+    <!-- Open Graph -->
+    <meta property="og:title" content="Seisuvai Catering | Premium South Indian Catering" />
+    <meta property="og:description" content="Authentic traditional South Indian catering for weddings, corporate, and all events. Starting ₹250/plate. Book now!" />
+    <meta property="og:url" content="https://seisuvaicatering.netlify.app/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://seisuvaicatering.netlify.app/images/hero-south-indian.png" />
 
-        <meta name="description"
-            content="Seisuvai Catering provides authentic traditional South Indian catering services for weddings, events, and family functions." />
-
-        <meta name="keywords" content="Seisuvai Catering, South Indian Catering, Wedding Catering" />
-
-        <meta name="robots" content="index, follow" />
-
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-        <meta name="google-site-verification" content="ul7Poc-GWpgS9nxFdONUgTXglxMZanhIgx6lfUvWVaQ" />
-
-        <!-- Open Graph -->
-        <meta property="og:title" content="Seisuvai Catering | Traditional South Indian Catering" />
-        <meta property="og:description" content="Authentic South Indian catering services for all events." />
-        <meta property="og:url" content="https://seisuvaicatering.netlify.app/" />
-        <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://seisuvaicatering.netlify.app/images/og-image.jpg" />
-    </head>
-
-    <title>Seisuvai Catering | Traditional & Premium Catering</title>
-    <meta name="description"
-        content="Experience high-quality catering with Seisuvai Catering. We bring traditional excellence to your weddings, corporate events, and private gatherings.">
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-    <!-- Custom Style -->
-    <link rel="stylesheet" href="css/style.css">
     <!-- Favicon -->
     <link rel="shortcut icon" href="images/seisuvai-logo.png" type="image/x-icon">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts: Poppins + Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-    <!-- Header -->
-    <header class="header">
+    <!-- ===== HEADER ===== -->
+    <header class="header" id="header">
         <div class="container nav-wrapper">
-            <button class="mobile-nav-toggle" id="menuOpen">
+            <button class="mobile-nav-toggle" id="menuOpen" aria-label="Open menu">
                 <i class="fas fa-bars"></i>
             </button>
 
             <a href="index.html" class="logo">
+                <img src="images/seisuvai-logo.png" alt="Seisuvai Catering Logo">
                 <div class="logo-text">
                     SEISUVAI CATERING
                     <span>THE CRAFTED FLAVOUR</span>
                 </div>
             </a>
 
-            <nav class="desktop-nav">
-                <a href="#home" class="active">Home</a>
+            <nav class="desktop-nav" aria-label="Main navigation">
+                <a href="#home">Home</a>
                 <a href="#services">Services</a>
                 <a href="menu.html">Menu</a>
                 <a href="custom-menu.html">Custom Menu</a>
                 <a href="live-counters.html">Live Stalls</a>
-                <a href="index.html#gallery">Gallery</a>
-                <a href="#contact" class="btn btn-primary">Book Now</a>
+                <a href="#gallery">Gallery</a>
+                <a href="#contact" class="btn btn-primary nav-book-btn">Book Now</a>
             </nav>
         </div>
     </header>
@@ -78,242 +67,956 @@
     <!-- Mobile Sidebar -->
     <div class="overlay" id="navOverlay"></div>
     <div class="mobile-sidebar" id="mobileSidebar">
-        <div class="sidebar-header" style="margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem;">
-            <img src="images/seisuvai-logo.png" alt="Logo"
-                style="width: 50px; height: 50px; border-radius: 50%; border: 1px solid var(--primary);">
-            <div class="logo-text"
-                style="font-family: 'Cinzel', serif; color: var(--primary); font-size: 0.8rem; font-weight: 700;">
+        <div class="sidebar-header">
+            <img src="images/seisuvai-logo.png" alt="Logo">
+            <div class="sidebar-brand">
                 SEISUVAI CATERING
-                <span style="display: block; color: var(--white); font-size: 0.45rem; letter-spacing: 1px;">THE CRAFTED
-                    FLAVOUR</span>
+                <span>THE CRAFTED FLAVOUR</span>
             </div>
-            <div class="sidebar-close" id="menuClose" style="margin-left: auto; margin-bottom: 0;">
-                <i class="fas fa-times"></i>
-            </div>
+            <div class="sidebar-close" id="menuClose"><i class="fas fa-times"></i></div>
         </div>
         <div class="sidebar-links">
-            <a href="#home">Home</a>
-            <a href="#services">Services</a>
-            <a href="menu.html">Menu</a>
-            <a href="custom-menu.html">Custom Menu</a>
-            <a href="live-counters.html">Live Stalls</a>
-            <a href="#gallery">Gallery</a>
-            <a href="#contact">Contact</a>
-            <a href="#contact" class="btn btn-primary">Booking Details</a>
+            <a href="#home"><i class="fas fa-home"></i> Home</a>
+            <a href="#services"><i class="fas fa-concierge-bell"></i> Services</a>
+            <a href="menu.html"><i class="fas fa-scroll"></i> Menu</a>
+            <a href="custom-menu.html"><i class="fas fa-utensils"></i> Custom Menu</a>
+            <a href="live-counters.html"><i class="fas fa-fire"></i> Live Stalls</a>
+            <a href="#gallery"><i class="fas fa-images"></i> Gallery</a>
+            <a href="#contact"><i class="fas fa-envelope"></i> Contact</a>
+            <a href="#contact" class="btn btn-primary">📅 Book Now</a>
         </div>
     </div>
 
-    <!-- Hero Section -->
+    <!-- ===== HERO SECTION ===== -->
     <section class="hero" id="home">
-        <div class="container text-center">
-            <div class="hero-content">
-                <div class="hero-brand-wrapper" data-reveal>
-                    <img src="images/seisuvai-logo.png" alt="Seisuvai Logo" class="hero-logo">
-                    <span class="hero-logo-text">SEISUVAI CATERING</span>
+        <div class="hero-bg-overlay"></div>
+        <div class="container hero-inner">
+            <div class="hero-content" data-reveal>
+                <div class="hero-badge">
+                    <i class="fas fa-award"></i> Trusted by 500+ Families Across Chennai
                 </div>
-                <h1 data-reveal>Delicious <span>Catering</span> for Every Special Occasion</h1>
-                <p data-reveal>We provide fresh, hygienic food and complete catering service for weddings, family
-                    functions, and all special occasions.</p>
-                <div class="hero-btns" data-reveal>
-                    <a href="menu.html" class="btn btn-primary">Explore Full Menu</a>
-                    <a href="#contact" class="btn btn-outline">Get Quote</a>
+                <h1>Delicious Catering for <span class="accent-text">Every Occasion</span></h1>
+                <p class="hero-sub">From intimate family gatherings to grand royal weddings — we bring <strong>authentic South Indian flavours</strong>, impeccable hygiene, and passionate service to your special day.</p>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <strong>500+</strong>
+                        <span>Events Served</span>
+                    </div>
+                    <div class="hero-stat-divider"></div>
+                    <div class="hero-stat">
+                        <strong>₹250</strong>
+                        <span>Starting / Plate</span>
+                    </div>
+                    <div class="hero-stat-divider"></div>
+                    <div class="hero-stat">
+                        <strong>100%</strong>
+                        <span>Hygienic</span>
+                    </div>
+                </div>
+                <div class="hero-btns">
+                    <a href="#contact" id="hero-book-btn" class="btn btn-primary btn-lg">
+                        <i class="fas fa-calendar-check"></i> Book Now
+                    </a>
+                    <a href="#quote" id="hero-quote-btn" class="btn btn-outline btn-lg">
+                        <i class="fas fa-file-invoice"></i> Get Free Quote
+                    </a>
+                </div>
+                <div class="hero-trust">
+                    <i class="fas fa-shield-alt"></i> FSSAI Certified &nbsp;|&nbsp;
+                    <i class="fas fa-check-circle"></i> Hygienic &nbsp;|&nbsp;
+                    <i class="fas fa-star"></i> 4.9★ Rated
                 </div>
             </div>
-            <div class="hero-image" data-reveal>
-                <img src="images/hero-south-indian.png" alt="Traditional South Indian Banquet Service">
+            <div class="hero-image-wrapper" data-reveal>
+                <div class="hero-image-card">
+                    <img src="images/hero-south-indian.png" alt="Traditional South Indian Banquet — Seisuvai Catering" loading="eager">
+                    <div class="hero-image-badge">
+                        <i class="fas fa-leaf"></i>
+                        <span>Fresh & Hygienic</span>
+                    </div>
+                </div>
             </div>
+        </div>
+        <div class="hero-scroll-indicator">
+            <a href="#nav-cards"><i class="fas fa-chevron-down"></i></a>
         </div>
     </section>
 
-    <!-- Navigation Cards (Replacement for Slider) -->
-    <section class="section">
+    <!-- ===== QUICK NAVIGATION CARDS ===== -->
+    <section class="section section-light" id="nav-cards">
         <div class="container">
             <div class="nav-cards">
-                <a href="#services" class="nav-card" data-reveal>
-                    <i class="fas fa-concierge-bell"></i>
-                    <h3>Services</h3>
-                    <p>Holistic catering solutions for weddings, corporate, and private events.</p>
-                    <span style="color: var(--primary); font-weight: 600;">Learn More →</span>
+                <a href="#services" class="nav-card" data-reveal id="nav-services">
+                    <div class="nav-card-icon"><i class="fas fa-concierge-bell"></i></div>
+                    <h3>Our Services</h3>
+                    <p>Weddings, Corporate, Birthday & more.</p>
+                    <span class="nav-card-link">Learn More <i class="fas fa-arrow-right"></i></span>
                 </a>
-                <a href="menu.html" class="nav-card" data-reveal>
-                    <i class="fas fa-scroll"></i>
-                    <h3>Menu</h3>
-                    <p>Explore our curated collections of veg and non-veg delicacies.</p>
-                    <span style="color: var(--primary); font-weight: 600;">View Menus →</span>
+                <a href="menu.html" class="nav-card" data-reveal id="nav-menu">
+                    <div class="nav-card-icon"><i class="fas fa-scroll"></i></div>
+                    <h3>Explore Menu</h3>
+                    <p>Curated Veg & Non-Veg delicacies.</p>
+                    <span class="nav-card-link">View Menus <i class="fas fa-arrow-right"></i></span>
                 </a>
-                <a href="custom-menu.html" class="nav-card" data-reveal>
-                    <i class="fas fa-utensils"></i>
+                <a href="custom-menu.html" class="nav-card" data-reveal id="nav-custom">
+                    <div class="nav-card-icon"><i class="fas fa-sliders-h"></i></div>
                     <h3>Custom Menu</h3>
-                    <p>Take control and design your perfect feast with our menu builder.</p>
-                    <span style="color: var(--primary); font-weight: 600;">Build Now →</span>
+                    <p>Design your perfect feast with our builder.</p>
+                    <span class="nav-card-link">Build Now <i class="fas fa-arrow-right"></i></span>
+                </a>
+                <a href="#contact" class="nav-card nav-card-cta" data-reveal id="nav-quote">
+                    <div class="nav-card-icon"><i class="fas fa-phone-alt"></i></div>
+                    <h3>Get a Quote</h3>
+                    <p>Free personalised quote within 2 hours.</p>
+                    <span class="nav-card-link">Contact Us <i class="fas fa-arrow-right"></i></span>
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Events Section -->
-    <section class="section" id="services" style="background: white;">
+    <!-- ===== SERVICES SECTION ===== -->
+    <section class="section" id="services" style="background: #fff;">
         <div class="container">
             <div class="section-header" data-reveal>
-                <h2>Catering For Every Occasion</h2>
-                <p>We bring passion, hygiene, and professional excellence to every event we serve.</p>
+                <p class="section-label">What We Offer</p>
+                <h2>Catering For <span class="accent-text">Every Occasion</span></h2>
+                <p>We bring passion, hygiene, and professional excellence to every event we serve — big or small.</p>
             </div>
 
-            <div class="events-card-grid">
-                <div class="event-card" data-reveal>
-                    <img src="images/wedding.png" alt="Weddings">
-                    <div class="event-card-overlay">
-                        <h3>Weddings</h3>
-                        <p>Royal banquets for your special milestones.</p>
+            <div class="services-grid">
+                <div class="service-card" data-reveal id="service-wedding">
+                    <div class="service-img-wrap">
+                        <img src="images/wedding.png" alt="Wedding Catering — Seisuvai" loading="lazy">
+                        <div class="service-overlay">
+                            <a href="#contact" class="btn btn-primary btn-sm">Book for Wedding</a>
+                        </div>
+                    </div>
+                    <div class="service-body">
+                        <div class="service-icon"><i class="fas fa-rings-wedding"></i></div>
+                        <h3>Royal Weddings</h3>
+                        <p>Grand multi-course banquets with live counters, sadhya setups, and royal hospitality for your most memorable day.</p>
+                        <a href="#contact" class="service-link">Get Quote <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
-                <!-- ... other event cards ... -->
-                <div class="event-card" data-reveal>
-                    <img src="images/corporate.png" alt="Corporate">
-                    <div class="event-card-overlay">
-                        <h3>Corporate</h3>
-                        <p>Professional catering for business impressions.</p>
+
+                <div class="service-card" data-reveal id="service-corporate">
+                    <div class="service-img-wrap">
+                        <img src="images/corporate.png" alt="Corporate Catering — Seisuvai" loading="lazy">
+                        <div class="service-overlay">
+                            <a href="#contact" class="btn btn-primary btn-sm">Book for Event</a>
+                        </div>
+                    </div>
+                    <div class="service-body">
+                        <div class="service-icon"><i class="fas fa-briefcase"></i></div>
+                        <h3>Corporate Events</h3>
+                        <p>Professional, punctual catering for business meets, product launches, office parties, and conferences.</p>
+                        <a href="#contact" class="service-link">Get Quote <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
-                <div class="event-card" data-reveal>
-                    <img src="images/family.png" alt="Family Functions">
-                    <div class="event-card-overlay">
+
+                <div class="service-card" data-reveal id="service-birthday">
+                    <div class="service-img-wrap">
+                        <img src="images/baby-shower-1.png" alt="Birthday & Baby Shower — Seisuvai" loading="lazy">
+                        <div class="service-overlay">
+                            <a href="#contact" class="btn btn-primary btn-sm">Book for Party</a>
+                        </div>
+                    </div>
+                    <div class="service-body">
+                        <div class="service-icon"><i class="fas fa-birthday-cake"></i></div>
+                        <h3>Birthdays & Baby Showers</h3>
+                        <p>Heartwarming flavors and joyful spreads to make every birthday, anniversary, and baby shower truly special.</p>
+                        <a href="#contact" class="service-link">Get Quote <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="service-card" data-reveal id="service-family">
+                    <div class="service-img-wrap">
+                        <img src="images/family.png" alt="Family Function Catering — Seisuvai" loading="lazy">
+                        <div class="service-overlay">
+                            <a href="#contact" class="btn btn-primary btn-sm">Book for Function</a>
+                        </div>
+                    </div>
+                    <div class="service-body">
+                        <div class="service-icon"><i class="fas fa-home"></i></div>
                         <h3>Family Functions</h3>
-                        <p>Heartwarming meals for birthdays and more.</p>
+                        <p>Authentic home-style catering for Seemantham, Puberty functions, House Warming, and all family milestones.</p>
+                        <a href="#contact" class="service-link">Get Quote <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
-                <div class="event-card" data-reveal>
-                    <img src="images/outdoor.png" alt="Large Scale">
-                    <div class="event-card-overlay">
-                        <h3>Large Scale</h3>
-                        <p>Expert logistics for massive crowds.</p>
+
+                <div class="service-card" data-reveal id="service-outdoor">
+                    <div class="service-img-wrap">
+                        <img src="images/outdoor.png" alt="Large Scale Catering — Seisuvai" loading="lazy">
+                        <div class="service-overlay">
+                            <a href="#contact" class="btn btn-primary btn-sm">Book for Event</a>
+                        </div>
+                    </div>
+                    <div class="service-body">
+                        <div class="service-icon"><i class="fas fa-users"></i></div>
+                        <h3>Large Scale Events</h3>
+                        <p>Expert logistics, skilled staff, and scalable operations for 500 to 5000+ guests with seamless delivery.</p>
+                        <a href="#contact" class="service-link">Get Quote <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="service-card service-card-live" data-reveal id="service-live">
+                    <div class="service-img-wrap">
+                        <img src="images/dinner-1.png" alt="Live Food Counters — Seisuvai" loading="lazy">
+                        <div class="service-overlay">
+                            <a href="live-counters.html" class="btn btn-primary btn-sm">Explore Live Stalls</a>
+                        </div>
+                    </div>
+                    <div class="service-body">
+                        <div class="service-icon"><i class="fas fa-fire"></i></div>
+                        <h3>Live Food Counters</h3>
+                        <p>From Dosa & Chaat to Biryani live counters — wow your guests with freshly prepared interactive cooking stations.</p>
+                        <a href="live-counters.html" class="service-link">Explore Stalls <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-cta" data-reveal>
+                <p>Not sure what you need? Let us help you plan the perfect catering experience.</p>
+                <a href="#contact" class="btn btn-primary btn-lg">Request a Consultation</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== WHY CHOOSE US ===== -->
+    <section class="section why-section" id="why">
+        <div class="container">
+            <div class="why-inner">
+                <div class="why-image" data-reveal>
+                    <img src="images/gallery-1-south-indian.png" alt="Why Choose Seisuvai Catering" loading="lazy">
+                    <div class="why-image-badge">
+                        <div class="why-badge-number">500+</div>
+                        <div class="why-badge-text">Happy Clients</div>
+                    </div>
+                </div>
+                <div class="why-content" data-reveal>
+                    <p class="section-label">Our Promise</p>
+                    <h2>Why Chennai Chooses <span class="accent-text">Seisuvai</span></h2>
+                    <p class="why-intro">We don't just serve food — we craft experiences that your guests talk about for years.</p>
+
+                    <div class="usp-grid">
+                        <div class="usp-item" id="usp-hygiene">
+                            <div class="usp-icon"><i class="fas fa-shield-alt"></i></div>
+                            <div class="usp-text">
+                                <h4>FSSAI Certified & Hygienic</h4>
+                                <p>Strict hygiene protocols, fresh ingredients, and certified kitchen operations.</p>
+                            </div>
+                        </div>
+                        <div class="usp-item" id="usp-authentic">
+                            <div class="usp-icon"><i class="fas fa-leaf"></i></div>
+                            <div class="usp-text">
+                                <h4>Authentic Traditional Flavours</h4>
+                                <p>Recipes passed through generations — the taste of home on your grandest day.</p>
+                            </div>
+                        </div>
+                        <div class="usp-item" id="usp-pricing">
+                            <div class="usp-icon"><i class="fas fa-tag"></i></div>
+                            <div class="usp-text">
+                                <h4>Transparent & Fair Pricing</h4>
+                                <p>No hidden charges. Starting at ₹250/plate with customisable packages.</p>
+                            </div>
+                        </div>
+                        <div class="usp-item" id="usp-team">
+                            <div class="usp-icon"><i class="fas fa-user-tie"></i></div>
+                            <div class="usp-text">
+                                <h4>Trained & Professional Staff</h4>
+                                <p>Dedicated serving team, event coordinators, and experienced chefs.</p>
+                            </div>
+                        </div>
+                        <div class="usp-item" id="usp-ontime">
+                            <div class="usp-icon"><i class="fas fa-clock"></i></div>
+                            <div class="usp-text">
+                                <h4>Always On Time</h4>
+                                <p>We reach the venue early, set up perfectly, and start serving on schedule.</p>
+                            </div>
+                        </div>
+                        <div class="usp-item" id="usp-custom">
+                            <div class="usp-icon"><i class="fas fa-sliders-h"></i></div>
+                            <div class="usp-text">
+                                <h4>100% Customisable Menus</h4>
+                                <p>Build your perfect menu with our custom menu builder or speak to our team.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="#contact" class="btn btn-primary" id="why-cta-btn">Get Your Free Quote Today</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PRICING SECTION ===== -->
+    <section class="section section-light" id="pricing">
+        <div class="container">
+            <div class="section-header" data-reveal>
+                <p class="section-label">Transparent Pricing</p>
+                <h2>Packages That Fit <span class="accent-text">Every Budget</span></h2>
+                <p>Quality catering doesn't have to be expensive. Choose a plan or get a custom quote.</p>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card" data-reveal id="pricing-basic">
+                    <div class="pricing-header">
+                        <div class="pricing-icon"><i class="fas fa-leaf"></i></div>
+                        <h3>Essential</h3>
+                        <div class="pricing-price">₹250 <span>/ plate</span></div>
+                        <p>Perfect for small family gatherings</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> 5–8 Course Meal</li>
+                        <li><i class="fas fa-check"></i> Veg or Non-Veg</li>
+                        <li><i class="fas fa-check"></i> Basic Setup</li>
+                        <li><i class="fas fa-check"></i> Serving Staff Included</li>
+                        <li><i class="fas fa-check"></i> Minimum 50 guests</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-outline" id="pricing-basic-cta">Get Quote</a>
+                </div>
+
+                <div class="pricing-card pricing-card-featured" data-reveal id="pricing-premium">
+                    <div class="pricing-badge">Most Popular</div>
+                    <div class="pricing-header">
+                        <div class="pricing-icon"><i class="fas fa-crown"></i></div>
+                        <h3>Premium</h3>
+                        <div class="pricing-price">₹400 <span>/ plate</span></div>
+                        <p>Ideal for weddings & big functions</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> 12–15 Course Sadhya</li>
+                        <li><i class="fas fa-check"></i> Veg + Non-Veg Combo</li>
+                        <li><i class="fas fa-check"></i> 1 Live Counter</li>
+                        <li><i class="fas fa-check"></i> Decorated Setup</li>
+                        <li><i class="fas fa-check"></i> Dedicated Coordinator</li>
+                        <li><i class="fas fa-check"></i> Minimum 100 guests</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-primary" id="pricing-premium-cta">Book This Plan</a>
+                </div>
+
+                <div class="pricing-card" data-reveal id="pricing-royal">
+                    <div class="pricing-header">
+                        <div class="pricing-icon"><i class="fas fa-gem"></i></div>
+                        <h3>Royal</h3>
+                        <div class="pricing-price">₹600+ <span>/ plate</span></div>
+                        <p>Grand events & large-scale banquets</p>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Full Sadhya + Grand Menu</li>
+                        <li><i class="fas fa-check"></i> Multiple Live Counters</li>
+                        <li><i class="fas fa-check"></i> Premium Decor Setup</li>
+                        <li><i class="fas fa-check"></i> Full Event Coordination</li>
+                        <li><i class="fas fa-check"></i> Custom Menu Building</li>
+                        <li><i class="fas fa-check"></i> 500–5000+ guests</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-outline" id="pricing-royal-cta">Get Custom Quote</a>
+                </div>
+            </div>
+
+            <p class="pricing-note" data-reveal>
+                <i class="fas fa-info-circle"></i> All prices are indicative. Final price depends on menu selection, guest count, and event type.
+                <a href="#contact">Contact us</a> for a free, personalised quote.
+            </p>
+        </div>
+    </section>
+
+    <!-- ===== SAMPLE MENU PREVIEW ===== -->
+    <section class="section" id="menu-preview" style="background: #fff;">
+        <div class="container">
+            <div class="section-header" data-reveal>
+                <p class="section-label">A Taste of Our Work</p>
+                <h2>Our <span class="accent-text">Signature Dishes</span></h2>
+                <p>Every dish is crafted with fresh ingredients and time-honored recipes that celebrate South Indian culinary heritage.</p>
+            </div>
+
+            <div class="menu-preview-grid">
+                <div class="menu-preview-card" data-reveal id="dish-biryani">
+                    <div class="menu-preview-img">
+                        <img src="images/nizam_mutton_biryani.png" alt="Nizam Mutton Biryani" loading="lazy">
+                        <span class="menu-tag">Non-Veg</span>
+                    </div>
+                    <div class="menu-preview-body">
+                        <h4>Nizam Mutton Biryani</h4>
+                        <p>Slow-cooked dum biryani with tender mutton, aromatic spices, and saffron rice.</p>
+                    </div>
+                </div>
+                <div class="menu-preview-card" data-reveal id="dish-pongal">
+                    <div class="menu-preview-img">
+                        <img src="images/imperial_ghee_pongal.png" alt="Imperial Ghee Pongal" loading="lazy">
+                        <span class="menu-tag menu-tag-veg">Veg</span>
+                    </div>
+                    <div class="menu-preview-body">
+                        <h4>Imperial Ghee Pongal</h4>
+                        <p>Rich, creamy pongal made with pure ghee, cashews, and black pepper — a classic comfort dish.</p>
+                    </div>
+                </div>
+                <div class="menu-preview-card" data-reveal id="dish-sandwich">
+                    <div class="menu-preview-img">
+                        <img src="images/shahi_malai_sandwich.png" alt="Shahi Malai Sandwich" loading="lazy">
+                        <span class="menu-tag menu-tag-veg">Veg</span>
+                    </div>
+                    <div class="menu-preview-body">
+                        <h4>Shahi Malai Sandwich</h4>
+                        <p>A premium snack with creamy malai filling — a crowd-favourite for all events.</p>
+                    </div>
+                </div>
+                <div class="menu-preview-card" data-reveal id="dish-menu1">
+                    <div class="menu-preview-img">
+                        <img src="images/gallery-2-south-indian.png" alt="South Indian Sadhya Spread" loading="lazy">
+                        <span class="menu-tag menu-tag-veg">Veg</span>
+                    </div>
+                    <div class="menu-preview-body">
+                        <h4>Grand Sadhya Spread</h4>
+                        <p>Traditional 15-course feast served on banana leaf — the pride of South Indian hospitality.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-cta" data-reveal>
+                <p>Explore our complete menu including veg, non-veg, and special dietary options.</p>
+                <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+                    <a href="menu.html" class="btn btn-primary">View Full Menu</a>
+                    <a href="custom-menu.html" class="btn btn-outline">Build Custom Menu</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== GALLERY SECTION ===== -->
+    <section class="section" id="gallery" style="background: var(--bg-cream);">
+        <div class="container">
+            <div class="section-header" data-reveal>
+                <p class="section-label">Our Work In Action</p>
+                <h2>Events We've <span class="accent-text">Catered</span></h2>
+                <p>A glimpse into the beautiful events and memorable meals we've delivered across Chennai.</p>
+            </div>
+
+            <div class="gallery-grid" data-reveal>
+                <div class="gallery-item gallery-item-large" id="gallery-1">
+                    <img src="images/gallery-1-south-indian.png" alt="South Indian Banquet Setup" loading="lazy">
+                    <div class="gallery-overlay"><span>South Indian Banquet</span></div>
+                </div>
+                <div class="gallery-item" id="gallery-2">
+                    <img src="images/gallery-2-south-indian.png" alt="Traditional Sadhya" loading="lazy">
+                    <div class="gallery-overlay"><span>Traditional Sadhya</span></div>
+                </div>
+                <div class="gallery-item" id="gallery-3">
+                    <img src="images/gallery-3.png" alt="Wedding Catering" loading="lazy">
+                    <div class="gallery-overlay"><span>Wedding Spread</span></div>
+                </div>
+                <div class="gallery-item" id="gallery-4">
+                    <img src="images/gallery-4.png" alt="Event Setup" loading="lazy">
+                    <div class="gallery-overlay"><span>Elegant Setup</span></div>
+                </div>
+                <div class="gallery-item" id="gallery-5">
+                    <img src="images/dinner-2.png" alt="Dinner Service" loading="lazy">
+                    <div class="gallery-overlay"><span>Dinner Service</span></div>
+                </div>
+                <div class="gallery-item" id="gallery-6">
+                    <img src="images/dinner-3.png" alt="Special Menu" loading="lazy">
+                    <div class="gallery-overlay"><span>Special Menu</span></div>
+                </div>
+                <div class="gallery-item" id="gallery-7">
+                    <img src="images/dinner-4.png" alt="Grand Event" loading="lazy">
+                    <div class="gallery-overlay"><span>Grand Event</span></div>
+                </div>
+                <div class="gallery-item" id="gallery-8">
+                    <img src="images/dinner-5.png" alt="Live Counter" loading="lazy">
+                    <div class="gallery-overlay"><span>Live Counter</span></div>
+                </div>
+            </div>
+
+            <div class="section-cta" data-reveal>
+                <a href="https://www.instagram.com/seisuvai_catering_?igsh=N2pjY21sdmo4MzJq" target="_blank" rel="noopener" class="btn btn-outline" id="gallery-instagram-btn">
+                    <i class="fab fa-instagram"></i> Follow us on Instagram for More
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TESTIMONIALS ===== -->
+    <section class="section testimonials-section" id="testimonials">
+        <div class="container">
+            <div class="section-header" data-reveal>
+                <p class="section-label">What Our Clients Say</p>
+                <h2>Real Stories, <span class="accent-text">Real Happiness</span></h2>
+                <p>Don't just take our word for it — hear from the families and businesses we've served.</p>
+            </div>
+
+            <div class="testimonials-grid">
+                <div class="testimonial-card" data-reveal id="testimonial-1">
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">"Seisuvai Catering made our wedding truly unforgettable. The food was absolutely divine — every guest complimented the sadhya. Highly professional team!"</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">RK</div>
+                        <div>
+                            <strong>Ramesh Kumar</strong>
+                            <span>Wedding — 400 Guests</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card testimonial-card-featured" data-reveal id="testimonial-2">
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">"We hired Seisuvai for our company's annual day and the response was phenomenal. On-time, perfectly organised, and the live dosa counter was a huge hit with 250 employees!"</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">PS</div>
+                        <div>
+                            <strong>Priya Sharma</strong>
+                            <span>Corporate Event — 250 Guests</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card" data-reveal id="testimonial-3">
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">"Best catering service in Chennai! They handled everything for my mother's 60th birthday. The ghee pongal and biryani were absolutely restaurant-quality. Will book again!"</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">AM</div>
+                        <div>
+                            <strong>Anitha Mohan</strong>
+                            <span>Birthday Celebration — 120 Guests</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card" data-reveal id="testimonial-4">
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <p class="testimonial-text">"Exceptional value for money. Our house warming went beautifully — the food was fresh, staff were polite, and cleanup was spotless. Very satisfied!"</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">SN</div>
+                        <div>
+                            <strong>Suresh Nair</strong>
+                            <span>House Warming — 80 Guests</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card" data-reveal id="testimonial-5">
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">"We've used Seisuvai 3 times now for different events — and every time they exceed expectations. The team is polite, flexible, and the food is consistently amazing."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">MV</div>
+                        <div>
+                            <strong>Meena Venkatesh</strong>
+                            <span>Multiple Events — Loyal Customer</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card" data-reveal id="testimonial-6">
+                    <div class="testimonial-rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">"The custom menu builder is a game-changer! I curated exactly what my family loves and Seisuvai delivered it perfectly. The Mutton Biryani live counter was a showstopper!"</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">KR</div>
+                        <div>
+                            <strong>Karthik Raj</strong>
+                            <span>Family Function — 200 Guests</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="google-rating" data-reveal>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" width="28" height="28">
+                <div>
+                    <strong>4.9 ★ on Google</strong>
+                    <span>Based on 100+ reviews</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CHECK AVAILABILITY / QUOTE FORM ===== -->
+    <section class="section" id="quote" style="background: #fff;">
+        <div class="container">
+            <div class="section-header" data-reveal>
+                <p class="section-label">Quick Check</p>
+                <h2>Check <span class="accent-text">Availability</span></h2>
+                <p>Tell us your event date and details — we'll confirm availability and send you a quote within 2 hours.</p>
+            </div>
+            <div class="availability-form-wrapper" data-reveal>
+                <form class="availability-form" id="availabilityForm">
+                    <div class="avail-form-grid">
+                        <div class="form-field">
+                            <label for="avail-name">Your Name</label>
+                            <input type="text" id="avail-name" name="avail-name" placeholder="e.g., Ramesh Kumar" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="avail-phone">Phone Number</label>
+                            <input type="tel" id="avail-phone" name="avail-phone" placeholder="e.g., 9876543210" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="avail-date">Event Date</label>
+                            <input type="date" id="avail-date" name="avail-date" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="avail-event">Event Type</label>
+                            <select id="avail-event" name="avail-event">
+                                <option value="">Select Event Type</option>
+                                <option value="wedding">Wedding</option>
+                                <option value="corporate">Corporate</option>
+                                <option value="birthday">Birthday</option>
+                                <option value="family">Family Function</option>
+                                <option value="baby-shower">Baby Shower</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="avail-guests">No. of Guests</label>
+                            <input type="number" id="avail-guests" name="avail-guests" placeholder="e.g., 150" min="10" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="avail-budget">Budget (per plate approx.)</label>
+                            <select id="avail-budget" name="avail-budget">
+                                <option value="">Select Budget Range</option>
+                                <option value="250-350">₹250 – ₹350 / plate</option>
+                                <option value="350-500">₹350 – ₹500 / plate</option>
+                                <option value="500-700">₹500 – ₹700 / plate</option>
+                                <option value="700+">₹700+ / plate (Premium)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg" id="availability-submit-btn" style="width:100%; margin-top:1rem;">
+                        <i class="fas fa-search"></i> Check Availability & Get Quote
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FAQ SECTION ===== -->
+    <section class="section faq-section" id="faq">
+        <div class="container">
+            <div class="section-header" data-reveal>
+                <p class="section-label">Common Questions</p>
+                <h2>Frequently Asked <span class="accent-text">Questions</span></h2>
+                <p>Got questions? We've got answers. If you don't see yours here, just call or WhatsApp us.</p>
+            </div>
+
+            <div class="faq-grid">
+                <div class="faq-item" data-reveal id="faq-1">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>What is the minimum guest count for catering?</span>
+                        <i class="fas fa-plus faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Our minimum guest count is 50 for the Essential plan. For Premium and Royal plans, the minimum is 100 guests. We can accommodate up to 5000+ guests for large-scale events.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" data-reveal id="faq-2">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>How far in advance should I book?</span>
+                        <i class="fas fa-plus faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>We recommend booking at least 2–4 weeks in advance for smaller events and 1–3 months for weddings or large events to ensure availability and proper planning.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" data-reveal id="faq-3">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>Do you provide both Veg and Non-Veg options?</span>
+                        <i class="fas fa-plus faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes! We offer a wide range of both Veg and Non-Veg menus. You can choose from standard packages or use our Custom Menu Builder to create your perfect combination.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" data-reveal id="faq-4">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>Are you FSSAI certified?</span>
+                        <i class="fas fa-plus faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes. Seisuvai Catering is FSSAI certified and follows strict food safety and hygiene standards at every stage — from preparation to serving.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" data-reveal id="faq-5">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>Do you provide serving staff and equipment?</span>
+                        <i class="fas fa-plus faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Absolutely! All our packages include trained serving staff. We also bring all necessary equipment — chafing dishes, serving vessels, tables, and more — so you don't have to worry about a thing.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" data-reveal id="faq-6">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>What are your payment terms?</span>
+                        <i class="fas fa-plus faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>We typically require a 30–50% advance to confirm the booking, with the balance due on the event day or the day before. We accept UPI, bank transfer, and cash.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" data-reveal id="faq-7">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>Can you handle outdoor or destination events?</span>
+                        <i class="fas fa-plus faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes! We cater to outdoor venues, marriage halls, open grounds, and destination events within Chennai and surrounding areas. Travel arrangements are discussed during booking.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" data-reveal id="faq-8">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>How do I get a custom quote?</span>
+                        <i class="fas fa-plus faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Simply fill out our booking form below, call us at <a href="tel:+919788313225">+91 9788313225</a>, or WhatsApp us directly. We'll respond within 2 hours with a personalised quote.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Booking Section -->
+    <!-- ===== BOOKING / CONTACT SECTION ===== -->
     <section class="section booking-section" id="contact">
         <div class="container booking-wrapper">
-            <div class="booking-image" data-reveal>
-                <img src="images/contact.png" alt="Chef Seisuvai">
-            </div>
-            <div class="booking-form-container">
-                <div class="section-header text-left" style="text-align: left; margin-left: 0; color: white;"
-                    data-reveal>
-                    <h2 style="color: white;">Book Your Experience</h2>
-                    <p style="color: rgba(255,255,255,0.7);">Tell us about your event and our concierge will get in
-                        touch.</p>
+            <div class="booking-info" data-reveal>
+                <p class="section-label" style="color: var(--primary-light);">Let's Connect</p>
+                <h2 style="color: #fff;">Book Your <span class="accent-text">Experience</span></h2>
+                <p style="color: rgba(255,255,255,0.75);">Tell us about your event and our team will contact you within 2 hours with a personalised quote and availability confirmation.</p>
+
+                <div class="contact-details">
+                    <a href="tel:+919788313225" class="contact-item" id="contact-phone">
+                        <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+                        <div>
+                            <strong>Call / WhatsApp</strong>
+                            <span>+91 97883 13225</span>
+                        </div>
+                    </a>
+                    <a href="https://wa.me/919788313225" target="_blank" class="contact-item" id="contact-whatsapp">
+                        <div class="contact-icon whatsapp-icon"><i class="fab fa-whatsapp"></i></div>
+                        <div>
+                            <strong>WhatsApp Us</strong>
+                            <span>Quick reply within minutes</span>
+                        </div>
+                    </a>
+                    <a href="https://maps.app.goo.gl/aMj2cG6WjZfRk5GA7?g_st=iw" target="_blank" class="contact-item" id="contact-map">
+                        <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div>
+                            <strong>Our Location</strong>
+                            <span>5/7 Ethiraj Garden Street, Chennai - 12</span>
+                        </div>
+                    </a>
+                    <a href="https://www.instagram.com/seisuvai_catering_?igsh=N2pjY21sdmo4MzJq" target="_blank" class="contact-item" id="contact-instagram">
+                        <div class="contact-icon insta-icon"><i class="fab fa-instagram"></i></div>
+                        <div>
+                            <strong>Instagram</strong>
+                            <span>@seisuvai_catering_</span>
+                        </div>
+                    </a>
                 </div>
-                <form class="booking-form" id="bookingForm" data-reveal>
+
+                <div class="map-embed">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.5!2d80.2707!3d13.0827!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDA1JzE2LjciTiA4MMKwMTYnMTQuNSJF!5e0!3m2!1sen!2sin!4v1!5m2!1sen!2sin"
+                        width="100%" height="200" style="border:0; border-radius:12px;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        title="Seisuvai Catering Location Map">
+                    </iframe>
+                </div>
+            </div>
+
+            <div class="booking-form-container" data-reveal>
+                <div class="booking-form-header">
+                    <h3>Send an Inquiry</h3>
+                    <p>Fill in details and we'll get back to you within 2 hours.</p>
+                </div>
+                <form class="booking-form" id="bookingForm">
                     <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" name="name" placeholder="Full Name" required>
+                        <label for="name"><i class="fas fa-user"></i> Full Name</label>
+                        <input type="text" id="name" name="name" placeholder="Your full name" required>
                     </div>
                     <div class="form-group">
-                        <label for="phone">Phone</label>
-                        <input type="tel" id="phone" name="phone" placeholder="Phone Number" required>
+                        <label for="phone"><i class="fas fa-phone"></i> Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="e.g., 9876543210" required>
                     </div>
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" placeholder="Email Address" required>
+                        <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="your@email.com" required>
                     </div>
                     <div class="form-group">
-                        <label for="eventDate">Event Date</label>
+                        <label for="eventDate"><i class="fas fa-calendar"></i> Event Date</label>
                         <input type="date" id="eventDate" name="eventDate" required>
                     </div>
                     <div class="form-group">
-                        <label for="guests">Guests</label>
-                        <input type="number" id="guests" name="guests" placeholder="Approx count" required>
+                        <label for="guests"><i class="fas fa-users"></i> Number of Guests</label>
+                        <input type="number" id="guests" name="guests" placeholder="Approximate count" min="10" required>
                     </div>
                     <div class="form-group">
-                        <label for="eventType">Event Type</label>
+                        <label for="eventType"><i class="fas fa-tag"></i> Event Type</label>
                         <select id="eventType" name="eventType">
                             <option value="wedding">Wedding</option>
                             <option value="corporate">Corporate</option>
-                            <option value="birthday">Birthday</option>
+                            <option value="birthday">Birthday / Party</option>
+                            <option value="family">Family Function</option>
+                            <option value="baby-shower">Baby Shower</option>
                             <option value="other">Other</option>
                         </select>
                     </div>
-                    <div class="form-group full">
-                        <label for="message">Message</label>
-                        <textarea id="message" name="message" rows="4" placeholder="Event details..."></textarea>
+                    <div class="form-group">
+                        <label for="budget"><i class="fas fa-rupee-sign"></i> Budget / Plate</label>
+                        <select id="budget" name="budget">
+                            <option value="250-350">₹250 – ₹350 / plate</option>
+                            <option value="350-500">₹350 – ₹500 / plate</option>
+                            <option value="500-700">₹500 – ₹700 / plate</option>
+                            <option value="700+">₹700+ / plate</option>
+                        </select>
                     </div>
-                    <div class="form-group full">
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">Send Inquiry</button>
+                    <div class="form-group form-group-full">
+                        <label for="message"><i class="fas fa-comment"></i> Additional Details</label>
+                        <textarea id="message" name="message" rows="3" placeholder="Any special requirements, menu preferences, venue details..."></textarea>
+                    </div>
+                    <div class="form-group form-group-full">
+                        <button type="submit" class="btn btn-primary btn-lg" id="booking-submit-btn" style="width: 100%;">
+                            <i class="fas fa-paper-plane"></i> Send My Inquiry
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- ===== FOOTER ===== -->
     <footer>
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-about">
-                    <a href="#" class="logo">
+                    <a href="#home" class="logo footer-logo">
                         <img src="images/seisuvai-logo.png" alt="Seisuvai Catering Logo">
                         <div class="logo-text">
                             SEISUVAI CATERING
                             <span>THE CRAFTED FLAVOUR</span>
                         </div>
                     </a>
-                    <p>Crafting unforgettable culinary journeys with authentic flavors. We believe every meal is an
-                        opportunity to create a memory.</p>
+                    <p>Crafting unforgettable culinary journeys with authentic South Indian flavours since years. Every meal is an opportunity to create a lasting memory.</p>
                     <div class="social-links">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="https://www.instagram.com/seisuvai_catering_?igsh=N2pjY21sdmo4MzJq" target="_blank" rel="noopener" aria-label="Instagram" id="footer-instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://wa.me/919788313225" target="_blank" rel="noopener" aria-label="WhatsApp" id="footer-whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="tel:+919788313225" aria-label="Call us" id="footer-phone-link">
+                            <i class="fas fa-phone-alt"></i>
+                        </a>
+                    </div>
+                    <div class="footer-cert">
+                        <span><i class="fas fa-shield-alt"></i> FSSAI Certified</span>
+                        <span><i class="fas fa-star"></i> 4.9★ Rated</span>
                     </div>
                 </div>
+
                 <div class="footer-links">
                     <h4>Quick Links</h4>
                     <ul>
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#services">Services</a></li>
-                        <li><a href="menu.html">Menu</a></li>
-                        <li><a href="live-counters.html">Live Stalls</a></li>
+                        <li><a href="#home"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="#services"><i class="fas fa-chevron-right"></i> Services</a></li>
+                        <li><a href="menu.html"><i class="fas fa-chevron-right"></i> Menu</a></li>
+                        <li><a href="custom-menu.html"><i class="fas fa-chevron-right"></i> Custom Menu</a></li>
+                        <li><a href="live-counters.html"><i class="fas fa-chevron-right"></i> Live Stalls</a></li>
+                        <li><a href="#gallery"><i class="fas fa-chevron-right"></i> Gallery</a></li>
+                        <li><a href="#faq"><i class="fas fa-chevron-right"></i> FAQ</a></li>
                     </ul>
                 </div>
+
                 <div class="footer-links">
-                    <h4>Services</h4>
+                    <h4>Our Services</h4>
                     <ul>
-                        <li><a href="#">Royal Weddings</a></li>
-                        <li><a href="#">Corporate Galas</a></li>
-                        <li><a href="#">Family Functions</a></li>
-                        <li><a href="#">Private Parties</a></li>
+                        <li><a href="#services"><i class="fas fa-chevron-right"></i> Royal Weddings</a></li>
+                        <li><a href="#services"><i class="fas fa-chevron-right"></i> Corporate Events</a></li>
+                        <li><a href="#services"><i class="fas fa-chevron-right"></i> Birthday Parties</a></li>
+                        <li><a href="#services"><i class="fas fa-chevron-right"></i> Family Functions</a></li>
+                        <li><a href="#services"><i class="fas fa-chevron-right"></i> Baby Showers</a></li>
+                        <li><a href="live-counters.html"><i class="fas fa-chevron-right"></i> Live Food Counters</a></li>
                     </ul>
                 </div>
-                <div class="footer-links">
-                    <h4>Contact</h4>
+
+                <div class="footer-contact">
+                    <h4>Contact Us</h4>
                     <ul>
-                        <li style="color: var(--text-gray); font-size: 0.9rem;">
-                            <i class="fas fa-map-marker-alt" style="color: var(--primary); margin-right: 0.5rem;"></i>
-                            5/7 Ethiraj Garden Street, Chennai - 12
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>
+                            5/7 Ethiraj Garden Street,<br>Chennai - 600 012
                         </li>
-                        <li style="color: var(--text-gray); font-size: 0.9rem;">
-                            <i class="fas fa-phone" style="color: var(--primary); margin-right: 0.5rem;"></i>
-                            +91 9788313225
+                        <li>
+                            <a href="tel:+919788313225">
+                                <i class="fas fa-phone-alt"></i> +91 97883 13225
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://wa.me/919788313225" target="_blank">
+                                <i class="fab fa-whatsapp"></i> WhatsApp Chat
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://maps.app.goo.gl/aMj2cG6WjZfRk5GA7?g_st=iw" target="_blank">
+                                <i class="fas fa-directions"></i> Get Directions
+                            </a>
                         </li>
                     </ul>
+                    <a href="#contact" class="btn btn-primary btn-sm footer-cta" style="margin-top: 1.5rem; width: 100%;">
+                        📅 Book Now
+                    </a>
                 </div>
             </div>
+
             <div class="footer-bottom">
-                <p>&copy; 2026 Seisuvai Catering. All Rights Reserved.</p>
+                <p>© 2026 Seisuvai Catering. All Rights Reserved. | Crafted with ❤️ for every occasion.</p>
             </div>
         </div>
     </footer>
 
-    <!-- WhatsApp Floating Button -->
-    <a href="https://wa.me/919788313225" class="whatsapp-float" target="_blank">
+    <!-- ===== STICKY FLOATING BUTTONS ===== -->
+    <!-- WhatsApp Float -->
+    <a href="https://wa.me/919788313225" class="whatsapp-float" target="_blank" rel="noopener" id="whatsapp-float-btn" aria-label="Chat on WhatsApp">
         <i class="fab fa-whatsapp"></i>
         <span>Chat with us</span>
     </a>
 
-    <!-- Custom Script -->
+    <!-- Call Float -->
+    <a href="tel:+919788313225" class="call-float" id="call-float-btn" aria-label="Call us now">
+        <i class="fas fa-phone-alt"></i>
+        <span>Call Now</span>
+    </a>
+
+    <!-- Booking Confirmation Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-box">
+            <div class="modal-icon"><i class="fas fa-check-circle"></i></div>
+            <h3>Inquiry Sent! 🎉</h3>
+            <p>Thank you! Your inquiry has been received. Our team will contact you within <strong>2 hours</strong>.</p>
+            <p style="font-size:0.9rem; margin-top:0.5rem; color: var(--text-gray);">We're also opening WhatsApp for a faster response.</p>
+            <button class="btn btn-primary" id="modalCloseBtn" style="margin-top:1.5rem; width:100%;">Got it, Thank You!</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
     <script src="js/main.js"></script>
+    <script src="js/enhancements.js"></script>
 </body>
 
 </html>
