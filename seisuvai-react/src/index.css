@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* Enable class-based dark mode for Tailwind v4 */
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Inter', 'Poppins', ui-sans-serif, system-ui, sans-serif;
+
+  /* Brand Colors */
+  --color-brand-500: #f97316;
+  --color-brand-600: #ea580c;
+  --color-gold-400: #fbbf24;
+  --color-gold-500: #f59e0b;
+}
+
+/* -----------------------------------------------
+   Base overrides inside @layer base so Tailwind
+   utility classes (mx-auto, etc.) always win.
+----------------------------------------------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-family: 'Inter', 'Poppins', sans-serif;
+    width: 100%;
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  #root {
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #f1f1f1; }
+  ::-webkit-scrollbar-thumb { background: #f97316; border-radius: 3px; }
+
+  /* scroll offset for fixed nav */
+  section[id] { scroll-margin-top: 80px; }
+
+  input:focus, select:focus, textarea:focus { outline: none; }
+
+  /* Text selection */
+  ::selection { background: #f97316; color: white; }
+}
+
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #f97316; border-radius: 3px; }
+.dark ::-webkit-scrollbar-track { background: #1e1e2e; }
+
+/* Hide scrollbar utility */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #f97316, #fbbf24);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.animate-float { animation: float 4s ease-in-out infinite; }
+
+/* scroll offset for fixed nav */
+section[id] { scroll-margin-top: 80px; }
+
+input:focus, select:focus, textarea:focus { outline: none; }
+
+/* Modal backdrop */
+.modal-backdrop {
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(6px);
+}
+
+/* Gallery hover zoom */
+.gallery-img { transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+.gallery-img:hover { transform: scale(1.08); }
+
+/* WhatsApp float shadow */
+.whatsapp-btn { background: #25D366; }
+.whatsapp-btn:hover { background: #128C7E; }
+
+/* Selection */
+::selection { background: #f97316; color: white; }
