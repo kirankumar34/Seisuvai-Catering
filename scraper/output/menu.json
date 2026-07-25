@@ -1,0 +1,75 @@
+{
+  "caterer_name": "Madurai Muniyandi Catering",
+  "location": "Madurai",
+  "event_type": "Wedding",
+  "menu_type": "Banana Leaf Serving",
+  "page_number": "1",
+  "total_items_per_leaf": 22,
+  "breakfast": [
+    "Idli",
+    "Vada"
+  ],
+  "lunch": {
+    "starters": [
+      "Chicken 65",
+      "Kola Urundai",
+      "Fish Fry",
+      "Samosa"
+    ],
+    "rice_items": [
+      "Chicken Biryani",
+      "Mutton Curry"
+    ],
+    "gravies": [
+      "Sambar",
+      "Rasam",
+      "Kootu"
+    ],
+    "side_dishes": [
+      "Onion Raitha",
+      "Appalam",
+      "Potato Poriyal"
+    ],
+    "desserts": [],
+    "beverages": [
+      "Badam Milk",
+      "Rose Milk"
+    ]
+  },
+  "snacks": [],
+  "dinner": {
+    "starters": [
+      "Chicken 65",
+      "Kola Urundai",
+      "Fish Fry",
+      "Samosa"
+    ],
+    "main_course": [
+      "Idli",
+      "Vada",
+      "Mutton Curry"
+    ],
+    "rice_items": [
+      "Chicken Biryani"
+    ],
+    "desserts": [],
+    "beverages": [
+      "Badam Milk",
+      "Rose Milk"
+    ]
+  },
+  "live_counters": [
+    "Live Dosa Counter",
+    "Live Appam Counter"
+  ],
+  "sweets": [
+    "Bread Halwa",
+    "Kesari",
+    "Pineapple Kesari"
+  ],
+  "ice_cream": [
+    "Vanilla Ice Cream"
+  ],
+  "veg_or_nonveg": "Mixed",
+  "source_url": "https://facebook.com/maduraimuniyandi"
+}

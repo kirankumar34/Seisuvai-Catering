@@ -19,13 +19,19 @@ const app = express();
 // Connect to Database
 connectDB();
 
+// Health check endpoint (placed before wildcard SPA routing)
+app.use('/api/health', (req, res) => {
+    res.json({ status: 'API is running' });
+});
+
 // Middleware
 const allowedOrigins = [
     'http://localhost:5000',
     'http://localhost:5500',
-    'https://seisuvai-catering.netlify.app', // Example Netlify domain
-    'https://seisuvai-admin.netlify.app'    // Example Netlify Admin domain
-];
+    'http://localhost:5173',
+    process.env.FRONTEND_URL,
+    ...(process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [])
+].filter(Boolean);
 
 app.use(cors({
     origin: function (origin, callback) {
@@ -57,16 +63,11 @@ app.use('/api/live-stalls', require('./routes/liveStallRoutes'));
 
 // Serve static assets in production (and development)
 const path = require('path');
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../seisuvai-react/dist')));
 
-// Fallback (Temporarily disabled for Express 5 compatibility investigation)
-// app.get('(.*)', (req, res) => {
-//     res.sendFile(path.join(__dirname, '../public/index.html'));
-// });
-
-// Health check endpoint (moved or kept)
-app.use('/api/health', (req, res) => {
-    res.json({ status: 'API is running' });
+// Fallback to serve the React app index.html for client-side routing/SPA
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../seisuvai-react/dist/index.html'));
 });
 
 const PORT = process.env.PORT || 5000;

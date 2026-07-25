@@ -1,7 +1,7 @@
 // WhatsApp integration utility
 const WHATSAPP_NUMBER = '919788313225';
 
-export const buildWhatsAppMessage = ({ name, phone, eventType, guests, date, menuItems, budget, message, menuType, selectedPackage }) => {
+export const buildWhatsAppMessage = ({ name, phone, eventType, guests, date, menuItems, message, menuType, selectedPackage }) => {
   let menuText = '';
 
   if (menuType === 'Standard' && selectedPackage) {
@@ -29,7 +29,6 @@ export const buildWhatsAppMessage = ({ name, phone, eventType, guests, date, men
 🎉 *Event Type:* ${eventType || 'Not specified'}
 👥 *Guests:* ${guests || 'Not specified'}
 📅 *Event Date:* ${formattedDate}
-💰 *Budget:* ${budget ? `₹${budget}/plate` : 'To be discussed'}
 
 🍛 *Selected Menu (${menuType || 'Custom'}):*
 ${menuText}
@@ -39,6 +38,7 @@ ${message ? `📝 *Additional Notes:*\n${message}` : ''}
 ━━━━━━━━━━━━━━━━━━━
 Hello! I am interested in catering service. Please get back to me with availability and a quote. Thank you!
   `.trim();
+
 
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 };

@@ -1,4 +1,7 @@
 // All site data centralized here for easy updates
+import { MENU_DATA } from './menuData';
+import { CUSTOM_MENU_VEG, CUSTOM_MENU_NONVEG } from './customMenuData';
+import { LIVE_COUNTERS_DATA as LIVE_COUNTERS_REAL } from './liveCountersData';
 
 export const COMPANY = {
   name: 'Seisuvai Catering',
@@ -16,18 +19,19 @@ export const COMPANY = {
 
 export const STATS = [
   { value: '500+', label: 'Events Served' },
-  { value: '₹250', label: 'Starting / Plate' },
+  { value: '15+', label: 'Years Experience' },
   { value: '4.9★', label: 'Google Rating' },
   { value: '100%', label: 'Hygienic' },
 ];
 
+// ─── Humanized Services ───────────────────────────────────────
 export const SERVICES = [
   {
     id: 'wedding',
     icon: '💍',
-    title: 'Royal Weddings',
-    description: 'Grand multi-course banquets with live counters, sadhya setups, and royal hospitality for your most memorable day.',
-    image: '/images/wedding.png',
+    title: 'Weddings',
+    description: 'We handle full wedding catering — from the morning breakfast sadhya to the evening dinner. Our team sets up, serves, and cleans up so your family can enjoy the day without worrying about the food.',
+    image: '/images/about/wedding.png',
     alt: 'Wedding Catering — Seisuvai',
     cta: 'Book for Wedding',
   },
@@ -35,8 +39,8 @@ export const SERVICES = [
     id: 'corporate',
     icon: '💼',
     title: 'Corporate Events',
-    description: 'Professional, punctual catering for business meets, product launches, office parties, and conferences.',
-    image: '/images/corporate.png',
+    description: 'We serve office events on time, set up properly, and make sure there is enough food for everyone. Whether it\'s a small team lunch or a 500-person annual day, we handle it professionally.',
+    image: '/images/about/corporate.png',
     alt: 'Corporate Catering — Seisuvai',
     cta: 'Book for Event',
   },
@@ -44,8 +48,8 @@ export const SERVICES = [
     id: 'birthday',
     icon: '🎂',
     title: 'Birthdays & Baby Showers',
-    description: 'Heartwarming flavors and joyful spreads to make every birthday, anniversary, and baby shower truly special.',
-    image: '/images/baby-shower-1.png',
+    description: 'Good food makes a birthday more memorable. We set up a spread that guests genuinely enjoy — whether it\'s a small family gathering or a big celebration with 200+ people.',
+    image: '/images/about/baby-shower-1.png',
     alt: 'Birthday Catering — Seisuvai',
     cta: 'Book for Party',
   },
@@ -53,8 +57,8 @@ export const SERVICES = [
     id: 'family',
     icon: '🏠',
     title: 'Family Functions',
-    description: 'Authentic home-style catering for Seemantham, Puberty functions, House Warming, and all family milestones.',
-    image: '/images/family.png',
+    description: 'For Seemantham, house warming, puberty function, or any family milestone — we prepare traditional home-style food that feels right for the occasion. Fresh, tasty, and served properly.',
+    image: '/images/about/family.png',
     alt: 'Family Function — Seisuvai',
     cta: 'Book for Function',
   },
@@ -62,8 +66,8 @@ export const SERVICES = [
     id: 'outdoor',
     icon: '👥',
     title: 'Large Scale Events',
-    description: 'Expert logistics, skilled staff, and scalable operations for 500 to 5000+ guests with seamless delivery.',
-    image: '/images/outdoor.png',
+    description: 'We regularly cook for 500 to 5000+ guests. We bring our own equipment, serving staff, and do everything on site. You tell us the guest count and we make sure no one goes hungry.',
+    image: '/images/about/outdoor.png',
     alt: 'Large Scale Catering — Seisuvai',
     cta: 'Book for Event',
   },
@@ -71,229 +75,94 @@ export const SERVICES = [
     id: 'live',
     icon: '🔥',
     title: 'Live Food Counters',
-    description: 'From Dosa & Chaat to Biryani live counters — wow your guests with freshly prepared interactive cooking stations.',
-    image: '/images/dinner-1.png',
+    description: 'Add a live dosa counter, chaat station, biryani counter, or mocktail bar to your event. Guests love watching their food being made fresh right in front of them.',
+    image: '/images/about/dinner-1.png',
     alt: 'Live Food Counters — Seisuvai',
-    cta: 'Explore Live Stalls',
+    cta: 'See Live Counters',
   },
 ];
 
-export const MENU_CATEGORIES = [
-  {
-    id: 'starters',
-    label: 'Starters',
-    icon: '🥗',
-    items: [
-      { id: 's1', name: 'Veg Spring Roll', tag: 'Veg', price: '₹80/plate', image: '/images/gallery-1.png' },
-      { id: 's2', name: 'Shahi Malai Sandwich', tag: 'Veg', price: '₹90/plate', image: '/images/shahi_malai_sandwich.png' },
-      { id: 's3', name: 'Chicken 65', tag: 'Non-Veg', price: '₹120/plate', image: '/images/menu-1.png' },
-      { id: 's4', name: 'Crispy Paneer Tikka', tag: 'Veg', price: '₹110/plate', image: '/images/menu-2.png' },
-      { id: 's5', name: 'Prawn Fry', tag: 'Non-Veg', price: '₹150/plate', image: '/images/gallery-2.png' },
-    ],
-  },
-  {
-    id: 'maincourse',
-    label: 'Main Course',
-    icon: '🍛',
-    items: [
-      { id: 'm1', name: 'Nizam Mutton Biryani', tag: 'Non-Veg', price: '₹200/plate', image: '/images/nizam_mutton_biryani.png' },
-      { id: 'm2', name: 'Imperial Ghee Pongal', tag: 'Veg', price: '₹120/plate', image: '/images/imperial_ghee_pongal.png' },
-      { id: 'm3', name: 'Grand Sadhya Spread', tag: 'Veg', price: '₹250/plate', image: '/images/gallery-2-south-indian.png' },
-      { id: 'm4', name: 'Chettinad Chicken Curry', tag: 'Non-Veg', price: '₹160/plate', image: '/images/menu-1-south-indian.png' },
-      { id: 'm5', name: 'Veg Kothu Parotta', tag: 'Veg', price: '₹110/plate', image: '/images/menu-3.png' },
-    ],
-  },
-  {
-    id: 'desserts',
-    label: 'Desserts',
-    icon: '🍮',
-    items: [
-      { id: 'd1', name: 'Kesari Bath', tag: 'Veg', price: '₹60/plate', image: '/images/gallery-3.png' },
-      { id: 'd2', name: 'Gulab Jamun', tag: 'Veg', price: '₹70/plate', image: '/images/gallery-4.png' },
-      { id: 'd3', name: 'Payasam', tag: 'Veg', price: '₹80/plate', image: '/images/dinner-2.png' },
-      { id: 'd4', name: 'Rasgulla', tag: 'Veg', price: '₹65/plate', image: '/images/dinner-3.png' },
-    ],
-  },
-  {
-    id: 'drinks',
-    label: 'Drinks',
-    icon: '🥤',
-    items: [
-      { id: 'dr1', name: 'Filter Coffee', tag: 'Veg', price: '₹30/cup', image: '/images/dinner-4.png' },
-      { id: 'dr2', name: 'Masala Chai', tag: 'Veg', price: '₹25/cup', image: '/images/dinner-5.png' },
-      { id: 'dr3', name: 'Rose Sherbet', tag: 'Veg', price: '₹40/glass', image: '/images/menu-3-south-indian.png' },
-      { id: 'dr4', name: 'Fresh Lime Soda', tag: 'Veg', price: '₹35/glass', image: '/images/menu-2-south-indian.png' },
-    ],
-  },
-];
-
-export const STANDARD_MENUS = {
-  Breakfast: [
-    {
-      id: 'bf-veg-1',
-      name: 'Classic South Indian Breakfast',
-      type: 'Veg',
-      price: '₹150',
-      popular: true,
-      items: ['Idli', 'Medu Vada', 'Pongal', 'Mini Masala Dosa', 'Sambar', 'Coconut Chutney', 'Tomato Chutney', 'Filter Coffee'],
-    },
-    {
-      id: 'bf-nonveg-1',
-      name: 'Special Non-Veg Breakfast',
-      type: 'Non-Veg',
-      price: '₹220',
-      popular: false,
-      items: ['Idiyappam', 'Aapam', 'Mutton Paya', 'Chicken Stew', 'Boiled Egg', 'Filter Coffee'],
-    }
+// ─── Humanized About Content ─────────────────────────────────
+export const ABOUT_CONTENT = {
+  tagline: 'Good food, prepared with care, served on time.',
+  story: [
+    'We started Seisuvai Catering in 2011 because we wanted families in Chennai to have reliable, good-quality catering they could actually trust. Back then, it was just a small team with a big passion for traditional South Indian cooking.',
+    'Over the past 15+ years, we have cooked for more than 500 events — weddings, office parties, house warmings, birthdays, and everything in between. Our kitchen uses fresh ingredients every single day, and we still follow the same traditional recipes that made our food popular in the first place.',
+    'We are FSSAI certified. Our chefs are experienced. Our staff is trained. And we genuinely care about making your event a success.',
   ],
-  Lunch: [
-    {
-      id: 'lu-veg-1',
-      name: 'Traditional Banana Leaf Meal',
-      type: 'Veg',
-      price: '₹250',
-      popular: true,
-      items: ['White Rice', 'Sambar', 'Rasam', 'Kootu', 'Poriyal', 'Aviyal', 'Payasam', 'Appalam', 'Pickle', 'Buttermilk'],
-    },
-    {
-      id: 'lu-nonveg-1',
-      name: 'Chettinad Non-Veg Feast',
-      type: 'Non-Veg',
-      price: '₹350',
-      popular: true,
-      items: ['Chicken Biryani', 'Mutton Chukka', 'Fish Fry', 'White Rice', 'Chicken Kulambu', 'Rasam', 'Curd', 'Dessert'],
-    }
+  promise: 'We won\'t overcharge you, we won\'t be late, and the food will be good. That\'s our commitment to every customer.',
+  values: [
+    { icon: '🥬', title: 'Fresh Every Day', desc: 'We buy fresh vegetables and ingredients daily. Nothing is carried over from the previous day.' },
+    { icon: '👨‍🍳', title: 'Experienced Chefs', desc: 'Our chefs have been cooking traditional South Indian food for over 10 years. They know what good food tastes like.' },
+    { icon: '✅', title: 'FSSAI Certified', desc: 'We follow all food safety guidelines. Our kitchen is clean, and our staff practises proper hygiene at every step.' },
+    { icon: '⏰', title: 'Always On Time', desc: 'We understand that your event has a schedule. We arrive early, set up quietly, and have everything ready before guests arrive.' },
+    { icon: '📋', title: 'Custom Menus', desc: 'You pick exactly what you want. We don\'t force a fixed package. Use our custom menu builder to choose only what your family likes.' },
+    { icon: '🤝', title: 'Transparent Pricing', desc: 'We give you a clear quote upfront. No hidden charges. What we quote is what you pay.' },
   ],
-  Dinner: [
-    {
-      id: 'dn-veg-1',
-      name: 'Light Veg Dinner / Tiffin',
-      type: 'Veg',
-      price: '₹180',
-      popular: false,
-      items: ['Chappati', 'Veg Kurma', 'Idiyappam', 'Coconut Milk', 'Mini Dosa', 'Onion Raita', 'Sweet Kesari'],
-    },
-    {
-      id: 'dn-nonveg-1',
-      name: 'Grand Non-Veg Dinner',
-      type: 'Non-Veg',
-      price: '₹400',
-      popular: true,
-      items: ['Mutton Biryani', 'Grill Chicken', 'Parotta', 'Mutton Salna', 'Chicken 65', 'Bread Halwa', 'Ice Cream'],
-    }
-  ]
+  whyUs: [
+    { icon: '⭐', stat: '4.9★', label: 'Google Rating', sub: 'From 100+ verified reviews' },
+    { icon: '🎉', stat: '500+', label: 'Events Catered', sub: 'Weddings, corporates, birthdays' },
+    { icon: '📅', stat: '15+', label: 'Years in Chennai', sub: 'Trusted by local families' },
+    { icon: '🛡️', stat: 'FSSAI', label: 'Food Safety Certified', sub: 'Licensed & inspected kitchen' },
+  ],
 };
 
-export const LIVE_COUNTERS_DATA = [
-  {
-    id: 'lc-1',
-    name: 'Live Dosa Station',
-    description: 'Crispy hot dosas served with 3 types of chutneys and sambar. Varieties: Masala, Podi, Onion, Ghee Roast.',
-    icon: '🥞',
-    tag: 'Veg'
-  },
-  {
-    id: 'lc-2',
-    name: 'Delhi Chaat Counter',
-    description: 'Pani Puri, Bhel Puri, Sev Puri, and Aloo Tikki prepared fresh with sweet and spicy chutneys.',
-    icon: '🍘',
-    tag: 'Veg'
-  },
-  {
-    id: 'lc-3',
-    name: 'Tandoori & BBQ Station',
-    description: 'Live grilling of Chicken Tikka, Malai Kebab, Paneer Tikka, and Fish BBQ.',
-    icon: '🍢',
-    tag: 'Both'
-  },
-  {
-    id: 'lc-4',
-    name: 'Live Pasta & Noodles',
-    description: 'Custom made Pasta (White/Red sauce) and Hakka Noodles tossed with fresh veggies & sauces.',
-    icon: '🍝',
-    tag: 'Veg'
-  },
-  {
-    id: 'lc-5',
-    name: 'Fresh Juice & Mocktail Bar',
-    description: 'Refreshing welcome drinks, fresh fruit juices, and custom mocktails mixed live.',
-    icon: '🍹',
-    tag: 'Veg'
-  },
-  {
-    id: 'lc-6',
-    name: 'Jalebi & Rabdi Counter',
-    description: 'Hot crispy jalebis fried live and served with thick creamy rabdi.',
-    icon: '🍯',
-    tag: 'Veg'
+export const CUSTOM_MENU_VEG_DATA = CUSTOM_MENU_VEG;
+export const CUSTOM_MENU_NONVEG_DATA = CUSTOM_MENU_NONVEG;
+export const MENU_CATEGORIES = CUSTOM_MENU_VEG;
+
+// Group the 16 extracted menus by category for V2 tab mapping
+export const STANDARD_MENUS = MENU_DATA.cateringMenus.reduce((acc, menu) => {
+  const cat = menu.category;
+  if (!acc[cat]) {
+    acc[cat] = [];
   }
-];
+  
+  const flatItems = menu.sections.reduce((items, section) => {
+    return [...items, ...section.items];
+  }, []);
 
-export const PRICING_PLANS = [
-  {
-    id: 'essential',
-    icon: '🌿',
-    name: 'Essential',
-    price: '₹250',
-    unit: '/ plate',
-    tagline: 'Perfect for small family gatherings',
-    featured: false,
-    features: [
-      '5–8 Course Meal',
-      'Veg or Non-Veg',
-      'Basic Setup',
-      'Serving Staff Included',
-      'Minimum 50 guests',
-    ],
-  },
-  {
-    id: 'premium',
-    icon: '👑',
-    name: 'Premium',
-    price: '₹400',
-    unit: '/ plate',
-    tagline: 'Ideal for weddings & big functions',
-    featured: true,
-    badge: 'Most Popular',
-    features: [
-      '12–15 Course Sadhya',
-      'Veg + Non-Veg Combo',
-      '1 Live Counter',
-      'Decorated Setup',
-      'Dedicated Coordinator',
-      'Minimum 100 guests',
-    ],
-  },
-  {
-    id: 'royal',
-    icon: '💎',
-    name: 'Royal',
-    price: '₹600+',
-    unit: '/ plate',
-    tagline: 'Grand events & large-scale banquets',
-    featured: false,
-    features: [
-      'Full Sadhya + Grand Menu',
-      'Multiple Live Counters',
-      'Premium Decor Setup',
-      'Full Event Coordination',
-      'Custom Menu Building',
-      '500–5000+ guests',
-    ],
-  },
-];
+  const popular = MENU_DATA.highlightedMenus.some(hm => hm.menuId === menu.key);
 
+  acc[cat].push({
+    id: menu.id,
+    name: menu.subtitle,
+    mainTitle: menu.mainTitle,
+    type: menu.type,
+    popular,
+    items: flatItems,
+    sections: menu.sections,
+    image: menu.image
+  });
+  
+  return acc;
+}, {});
+
+export const LIVE_COUNTERS_DATA = LIVE_COUNTERS_REAL;
+
+// ─── Gallery Images (with category tags for filter UI) ────────
 export const GALLERY_IMAGES = [
-  { id: 1, src: '/images/gallery-1-south-indian.png', alt: 'South Indian Banquet Setup', label: 'South Indian Banquet', large: true },
-  { id: 2, src: '/images/gallery-2-south-indian.png', alt: 'Traditional Sadhya', label: 'Traditional Sadhya' },
-  { id: 3, src: '/images/gallery-3.png', alt: 'Wedding Catering', label: 'Wedding Spread' },
-  { id: 4, src: '/images/gallery-4.png', alt: 'Event Setup', label: 'Elegant Setup' },
-  { id: 5, src: '/images/dinner-2.png', alt: 'Dinner Service', label: 'Dinner Service' },
-  { id: 6, src: '/images/dinner-3.png', alt: 'Special Menu', label: 'Special Menu' },
-  { id: 7, src: '/images/dinner-4.png', alt: 'Grand Event', label: 'Grand Event' },
-  { id: 8, src: '/images/dinner-5.png', alt: 'Live Counter', label: 'Live Counter' },
+  { id: 1, src: '/images/gallery-1-south-indian.png', alt: 'South Indian Banquet Setup', label: 'South Indian Banquet', category: 'wedding', large: true },
+  { id: 2, src: '/images/gallery-2-south-indian.png', alt: 'Traditional Sadhya Setup', label: 'Traditional Sadhya', category: 'wedding' },
+  { id: 3, src: '/images/gallery-3.png', alt: 'Wedding Catering Spread', label: 'Wedding Spread', category: 'wedding' },
+  { id: 4, src: '/images/gallery-4.png', alt: 'Elegant Event Setup', label: 'Elegant Setup', category: 'corporate' },
+  { id: 5, src: '/images/dinner-2.png', alt: 'Dinner Service', label: 'Dinner Service', category: 'food' },
+  { id: 6, src: '/images/dinner-3.png', alt: 'Special Menu Spread', label: 'Special Menu', category: 'food' },
+  { id: 7, src: '/images/dinner-4.png', alt: 'Grand Event Catering', label: 'Grand Event', category: 'birthday' },
+  { id: 8, src: '/images/dinner-5.png', alt: 'Live Food Counter', label: 'Live Counter', category: 'live' },
 ];
 
+// ─── Gallery filter categories ────────────────────────────────
+export const GALLERY_FILTERS = [
+  { value: 'all', label: 'All Photos' },
+  { value: 'wedding', label: 'Weddings' },
+  { value: 'birthday', label: 'Birthdays' },
+  { value: 'corporate', label: 'Corporate' },
+  { value: 'food', label: 'Food' },
+  { value: 'live', label: 'Live Counters' },
+];
+
+// ─── Testimonials ─────────────────────────────────────────────
 export const TESTIMONIALS = [
   {
     id: 1,
@@ -301,7 +170,7 @@ export const TESTIMONIALS = [
     event: 'Wedding — 400 Guests',
     initials: 'RK',
     rating: 5,
-    text: 'Seisuvai Catering made our wedding truly unforgettable. The food was absolutely divine — every guest complimented the sadhya. Highly professional team!',
+    text: 'Seisuvai Catering handled our entire wedding — from morning breakfast to dinner. The food was really good and every guest enjoyed the sadhya. The team was professional and everything was on time.',
     featured: false,
   },
   {
@@ -310,7 +179,7 @@ export const TESTIMONIALS = [
     event: 'Corporate Event — 250 Guests',
     initials: 'PS',
     rating: 5,
-    text: 'We hired Seisuvai for our company\'s annual day and the response was phenomenal. On-time, perfectly organised, and the live dosa counter was a huge hit with 250 employees!',
+    text: 'We hired Seisuvai for our company\'s annual day. They set up everything on time and the live dosa counter was a big hit with the employees. Everyone kept talking about it.',
     featured: true,
   },
   {
@@ -319,7 +188,7 @@ export const TESTIMONIALS = [
     event: 'Birthday Celebration — 120 Guests',
     initials: 'AM',
     rating: 5,
-    text: 'Best catering service in Chennai! They handled everything for my mother\'s 60th birthday. The ghee pongal and biryani were absolutely restaurant-quality. Will book again!',
+    text: 'Best catering service in Chennai. They took care of everything for my mother\'s 60th birthday. The ghee pongal and biryani were really good — everyone asked for seconds. Will definitely book again.',
     featured: false,
   },
   {
@@ -328,7 +197,7 @@ export const TESTIMONIALS = [
     event: 'House Warming — 80 Guests',
     initials: 'SN',
     rating: 4.5,
-    text: 'Exceptional value for money. Our house warming went beautifully — the food was fresh, staff were polite, and cleanup was spotless. Very satisfied!',
+    text: 'Very good value for money. The food was fresh, staff were polite, and they cleaned up after the function without any fuss. My family was very happy with everything.',
     featured: false,
   },
   {
@@ -337,7 +206,7 @@ export const TESTIMONIALS = [
     event: 'Multiple Events — Loyal Customer',
     initials: 'MV',
     rating: 5,
-    text: 'We\'ve used Seisuvai 3 times now for different events — and every time they exceed expectations. The team is polite, flexible, and the food is consistently amazing.',
+    text: 'We have used Seisuvai 3 times now for different events — and every time the food is consistently good. The team is flexible and easy to work with.',
     featured: false,
   },
   {
@@ -346,46 +215,48 @@ export const TESTIMONIALS = [
     event: 'Family Function — 200 Guests',
     initials: 'KR',
     rating: 5,
-    text: 'The custom menu builder is a game-changer! I curated exactly what my family loves and Seisuvai delivered it perfectly. The Mutton Biryani live counter was a showstopper!',
-    featured: false,
+    text: 'The custom menu builder is really helpful. I selected exactly what my family likes and they delivered it perfectly. The Mutton Biryani live counter was the highlight of the evening.',
+    featured: true,
   },
 ];
 
+// ─── FAQs ─────────────────────────────────────────────────────
 export const FAQS = [
   {
-    q: 'What is the minimum guest count for catering?',
-    a: 'Our minimum guest count is 50 for the Essential plan. For Premium and Royal plans, the minimum is 100 guests. We can accommodate up to 5000+ guests for large-scale events.',
+    q: 'How many guests is the minimum for catering?',
+    a: 'Our minimum is 50 guests for the Economy plan. For Premium and Royal plans, the minimum is 100 guests. We can handle up to 5000+ guests for large events.',
   },
   {
     q: 'How far in advance should I book?',
-    a: 'We recommend booking at least 2–4 weeks in advance for smaller events and 1–3 months for weddings or large events to ensure availability and proper planning.',
+    a: 'For smaller events, 2–3 weeks notice is usually enough. For weddings or events with 300+ guests, we recommend booking 1–3 months in advance so we can plan properly.',
   },
   {
-    q: 'Do you provide both Veg and Non-Veg options?',
-    a: 'Yes! We offer a wide range of both Veg and Non-Veg menus. Choose from standard packages or use our Custom Menu Selector to create your perfect combination.',
+    q: 'Do you have both Veg and Non-Veg options?',
+    a: 'Yes. We have a wide range of both. You can choose from our ready-made packages or build your own menu using our Custom Menu Builder.',
   },
   {
     q: 'Are you FSSAI certified?',
-    a: 'Yes. Seisuvai Catering is FSSAI certified and follows strict food safety and hygiene standards at every stage — from preparation to serving.',
+    a: 'Yes. Seisuvai Catering is FSSAI certified. We follow proper food safety and hygiene at every stage — from preparation to serving.',
   },
   {
-    q: 'Do you provide serving staff and equipment?',
-    a: 'Absolutely! All packages include trained serving staff. We also bring all necessary equipment — chafing dishes, serving vessels, tables, and more.',
+    q: 'Do you bring serving staff and equipment?',
+    a: 'Yes. All our packages include trained serving staff. We also bring chafing dishes, serving vessels, tables, and other necessary equipment.',
   },
   {
     q: 'What are your payment terms?',
-    a: 'We require a 30–50% advance to confirm the booking, with the balance due on the event day. We accept UPI, bank transfer, and cash.',
+    a: 'We ask for a 30–50% advance to confirm the booking. The remaining amount is due on the event day. We accept UPI, bank transfer, and cash.',
   },
   {
-    q: 'Can you handle outdoor or destination events?',
-    a: 'Yes! We cater to outdoor venues, marriage halls, open grounds, and destination events within Chennai and surrounding areas.',
+    q: 'Can you cater to outdoor or destination events?',
+    a: 'Yes. We cater to outdoor venues, marriage halls, open grounds, and locations within Chennai and nearby areas.',
   },
   {
-    q: 'How do I get a custom quote?',
-    a: 'Fill out our booking form, call us at +91 9788313225, or WhatsApp us directly. We\'ll respond within 2 hours with a personalised quote.',
+    q: 'How do I get a quote?',
+    a: 'Fill out our contact form, call us at +91 9788313225, or WhatsApp us. We will send you a quote within 2 hours.',
   },
 ];
 
+// ─── Event Types (form dropdown) ─────────────────────────────
 export const EVENT_TYPES = [
   { value: 'wedding', label: 'Wedding' },
   { value: 'corporate', label: 'Corporate Event' },
@@ -394,11 +265,4 @@ export const EVENT_TYPES = [
   { value: 'baby-shower', label: 'Baby Shower' },
   { value: 'house-warming', label: 'House Warming' },
   { value: 'other', label: 'Other' },
-];
-
-export const BUDGET_RANGES = [
-  { value: '250-350', label: '₹250 – ₹350 / plate' },
-  { value: '350-500', label: '₹350 – ₹500 / plate' },
-  { value: '500-700', label: '₹500 – ₹700 / plate' },
-  { value: '700+', label: '₹700+ / plate (Premium)' },
 ];

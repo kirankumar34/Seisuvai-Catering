@@ -1,42 +1,29 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sun, Moon, Menu, X, Phone, MessageCircle } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Sun, Moon, Phone, ShoppingCart, Calendar, X } from 'lucide-react';
 import { useThemeStore, useMenuStore } from '../store/useStore';
 import { COMPANY } from '../data/siteData';
 
 const NAV_LINKS = [
-  { id: 'home', label: 'Home' },
-  { id: 'services', label: 'Services' },
-  { id: 'menu', label: 'Menu' },
-  { id: 'pricing', label: 'Pricing' },
-  { id: 'gallery', label: 'Gallery' },
-  { id: 'contact', label: 'Contact' },
+  { to: '/', label: 'Home', exact: true },
+  { to: '/menus', label: 'Menus' },
+  { to: '/custom-menu', label: 'Custom Menu' },
+  { to: '/live-counters', label: 'Live Counters' },
+  { to: '/gallery', label: 'Gallery' },
+  { to: '/about', label: 'About Us' },
+  { to: '/contact', label: 'Contact' },
 ];
 
 export default function Navbar() {
   const { isDark, toggle } = useThemeStore();
   const { selectedItems, openEnquiry } = useMenuStore();
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
   const [mobileOpen, setMobileOpen] = useState(false);
-  const observerRef = useRef(null);
+  const { pathname } = useLocation();
 
-  // Scroll spy
-  useEffect(() => {
-    const sections = document.querySelectorAll('section[id]');
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: '-80px 0px -60% 0px', threshold: 0 }
-    );
-    sections.forEach((s) => observerRef.current.observe(s));
-    return () => observerRef.current?.disconnect();
-  }, []);
+  const isActive = (link) =>
+    link.exact ? pathname === link.to : pathname.startsWith(link.to);
 
   // Navbar background on scroll
   useEffect(() => {
@@ -52,86 +39,122 @@ export default function Navbar() {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  const scrollTo = (id) => {
-    setMobileOpen(false);
-    const el = document.getElementById(id);
-    if (el) {
-      const y = el.getBoundingClientRect().top + window.scrollY - 78;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    }
-  };
+  // Close mobile menu on route change
+  useEffect(() => { setMobileOpen(false); }, [pathname]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
 
   return (
     <>
-      {/* Main Navbar */}
+      {/* ─── Main Navbar ─── */}
       <motion.header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
             ? isDark
-              ? 'bg-gray-900/95 backdrop-blur-lg shadow-lg shadow-black/20'
-              : 'bg-white/95 backdrop-blur-lg shadow-lg shadow-black/10'
-            : isDark
-            ? 'bg-gray-900/70 backdrop-blur-sm'
-            : 'bg-white/80 backdrop-blur-sm'
+              ? 'shadow-[0_4px_30px_rgba(0,0,0,0.5)] border-b border-[#c8a24b]/10'
+              : 'shadow-[0_4px_30px_rgba(0,0,0,0.08)] border-b border-[#c8a24b]/15'
+            : ''
         }`}
+        style={{
+          background: scrolled
+            ? isDark
+              ? 'rgba(10, 10, 10, 0.92)'
+              : 'rgba(253, 248, 240, 0.92)'
+            : 'transparent',
+          backdropFilter: scrolled ? 'blur(20px) saturate(1.8)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(20px) saturate(1.8)' : 'none',
+        }}
         initial={{ y: -80 }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.5, ease: 'easeOut' }}
+        transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-[72px]">
+        {/* Gold top accent line */}
+        <div
+          className="absolute top-0 left-0 right-0 h-[2px]"
+          style={{ background: 'linear-gradient(90deg, transparent, #c8a24b 30%, #e6c878 50%, #c8a24b 70%, transparent)' }}
+        />
 
-            {/* Logo */}
-            <button onClick={() => scrollTo('home')} className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-xl overflow-hidden ring-2 ring-orange-500/30 group-hover:ring-orange-500 transition-all">
-                <img src={COMPANY.logo} alt="Logo" className="w-full h-full object-cover" />
+        <div className="container-luxury">
+          <div
+            className="flex items-center justify-between"
+            style={{ height: scrolled ? '60px' : '72px', transition: 'height 0.4s ease' }}
+          >
+            {/* ── Logo ── */}
+            <Link to="/" className="flex items-center gap-3 group flex-shrink-0">
+              <div
+                className="rounded-xl overflow-hidden transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(200,162,75,0.4)]"
+                style={{
+                  width: scrolled ? '36px' : '42px',
+                  height: scrolled ? '36px' : '42px',
+                  transition: 'all 0.4s ease',
+                  border: '1.5px solid rgba(200, 162, 75, 0.3)',
+                }}
+              >
+                <img src={COMPANY.logo} alt="Seisuvai Logo" className="w-full h-full object-cover" />
               </div>
               <div className="leading-tight">
-                <div className={`font-bold text-sm tracking-wide ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                <div
+                  className={`font-bold tracking-widest uppercase transition-all duration-400 ${isDark ? 'text-white' : 'text-gray-900'}`}
+                  style={{ fontSize: scrolled ? '0.75rem' : '0.8125rem', transition: 'font-size 0.4s ease' }}
+                >
                   SEISUVAI CATERING
                 </div>
-                <div className="text-[10px] text-orange-500 font-medium tracking-widest uppercase">
+                <div
+                  className="font-medium tracking-[0.2em] uppercase"
+                  style={{ color: '#c8a24b', fontSize: '0.625rem' }}
+                >
                   The Crafted Flavour
                 </div>
               </div>
-            </button>
+            </Link>
 
-            {/* Desktop Nav */}
-            <nav className="hidden lg:flex items-center gap-1">
-              {NAV_LINKS.map((link) => (
-                <button
-                  key={link.id}
-                  onClick={() => scrollTo(link.id)}
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    activeSection === link.id
-                      ? 'text-orange-500 bg-orange-50 dark:bg-orange-500/10'
-                      : isDark
-                      ? 'text-gray-300 hover:text-white hover:bg-white/5'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                  }`}
-                >
-                  {link.label}
-                  {link.id === activeSection && (
-                    <motion.div
-                      layoutId="nav-indicator"
-                      className="h-0.5 w-full bg-orange-500 mt-0.5 rounded-full"
-                    />
-                  )}
-                </button>
-              ))}
+            {/* ── Desktop Nav ── */}
+            <nav className="hidden lg:flex items-center gap-0.5">
+              {NAV_LINKS.map((link) => {
+                const active = isActive(link);
+                return (
+                  <Link
+                    key={link.to}
+                    to={link.to}
+                    className={`relative px-3 py-2 text-sm font-medium transition-all duration-200 rounded-lg ${
+                      active
+                        ? ''
+                        : isDark
+                        ? 'text-gray-300 hover:text-white hover:bg-white/5'
+                        : 'text-gray-600 hover:text-gray-900 hover:bg-black/5'
+                    }`}
+                    style={{ color: active ? '#c8a24b' : undefined }}
+                  >
+                    {link.label}
+                    {active && (
+                      <motion.div
+                        layoutId="nav-indicator"
+                        className="absolute bottom-0.5 left-3 right-3 h-[2px] rounded-full"
+                        style={{ background: 'linear-gradient(90deg, #c8a24b, #e6c878)' }}
+                      />
+                    )}
+                  </Link>
+                );
+              })}
             </nav>
 
-            {/* Right Controls */}
+            {/* ── Right Controls ── */}
             <div className="flex items-center gap-2">
               {/* Cart badge */}
               {selectedItems.length > 0 && (
                 <motion.button
                   onClick={() => openEnquiry()}
                   whileTap={{ scale: 0.95 }}
-                  className="relative px-3 py-1.5 bg-orange-500 text-white rounded-lg text-xs font-semibold"
+                  className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-black"
+                  style={{ background: 'linear-gradient(135deg, #c8a24b, #e6c878)' }}
                 >
-                  🛒 {selectedItems.length} Selected
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[10px] flex items-center justify-center">
+                  <ShoppingCart size={12} />
+                  {selectedItems.length} Selected
+                  <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 rounded-full text-[9px] text-white flex items-center justify-center font-bold">
                     {selectedItems.length}
                   </span>
                 </motion.button>
@@ -141,119 +164,171 @@ export default function Navbar() {
               <motion.button
                 onClick={toggle}
                 whileTap={{ scale: 0.9 }}
-                className={`p-2 rounded-lg transition-colors ${
-                  isDark
-                    ? 'text-yellow-400 hover:bg-white/10'
-                    : 'text-gray-600 hover:bg-gray-100'
+                className={`p-2 rounded-xl transition-colors ${
+                  isDark ? 'text-amber-400 hover:bg-white/10' : 'text-gray-500 hover:bg-black/5'
                 }`}
                 aria-label="Toggle theme"
               >
                 {isDark ? <Sun size={18} /> : <Moon size={18} />}
               </motion.button>
 
-              {/* Book Now CTA */}
+              {/* Enquire Now CTA — Desktop */}
               <motion.button
-                onClick={() => scrollTo('contact')}
-                whileHover={{ scale: 1.03 }}
+                onClick={() => openEnquiry()}
+                whileHover={{ scale: 1.03, y: -1 }}
                 whileTap={{ scale: 0.97 }}
-                className="hidden sm:flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-sm font-semibold rounded-xl shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 transition-all duration-200"
+                className="hidden sm:flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-black rounded-xl btn-gold"
               >
-                📅 Book Now
+                <Calendar size={15} />
+                Enquire Now
               </motion.button>
 
-              {/* Mobile menu toggle */}
+              {/* ── Animated Hamburger — Mobile ── */}
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className={`lg:hidden p-2 rounded-lg transition-colors ${
-                  isDark ? 'text-white hover:bg-white/10' : 'text-gray-700 hover:bg-gray-100'
+                className={`lg:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 rounded-xl transition-colors ${
+                  isDark ? 'text-white hover:bg-white/10' : 'text-gray-700 hover:bg-black/5'
                 }`}
                 aria-label="Toggle menu"
               >
-                {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+                <motion.span
+                  animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="block h-[2px] w-5 rounded-full"
+                  style={{ background: mobileOpen ? '#c8a24b' : (isDark ? 'white' : '#1a1a1a') }}
+                />
+                <motion.span
+                  animate={mobileOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
+                  transition={{ duration: 0.2 }}
+                  className="block h-[2px] w-5 rounded-full"
+                  style={{ background: isDark ? 'white' : '#1a1a1a' }}
+                />
+                <motion.span
+                  animate={mobileOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="block h-[2px] w-5 rounded-full"
+                  style={{ background: mobileOpen ? '#c8a24b' : (isDark ? 'white' : '#1a1a1a') }}
+                />
               </button>
             </div>
           </div>
         </div>
       </motion.header>
 
-      {/* Mobile Sidebar */}
+      {/* ─── Mobile Drawer ─── */}
       <AnimatePresence>
         {mobileOpen && (
           <>
+            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
               onClick={() => setMobileOpen(false)}
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+              className="fixed inset-0 z-40 modal-backdrop lg:hidden"
             />
-            <motion.div
+
+            {/* Drawer */}
+            <motion.aside
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              className={`fixed top-0 right-0 bottom-0 z-50 w-72 flex flex-col shadow-2xl lg:hidden ${
-                isDark ? 'bg-gray-900' : 'bg-white'
-              }`}
+              transition={{ type: 'spring', stiffness: 280, damping: 28 }}
+              className="fixed top-0 right-0 bottom-0 z-50 flex flex-col lg:hidden"
+              style={{
+                width: 'min(85vw, 320px)',
+                background: isDark
+                  ? 'linear-gradient(180deg, #0e0e0e 0%, #111111 100%)'
+                  : 'linear-gradient(180deg, #fdf8f0 0%, #f8f4ec 100%)',
+                borderLeft: '1px solid rgba(200, 162, 75, 0.2)',
+                boxShadow: '-8px 0 60px rgba(0,0,0,0.4)',
+              }}
             >
-              {/* Sidebar header */}
-              <div className="flex items-center justify-between p-5 border-b border-gray-200 dark:border-gray-700">
+              {/* Gold top accent */}
+              <div className="h-[2px] w-full" style={{ background: 'linear-gradient(90deg, transparent, #c8a24b, #e6c878)' }} />
+
+              {/* Drawer Header */}
+              <div
+                className="flex items-center justify-between px-6 py-4"
+                style={{ borderBottom: '1px solid rgba(200, 162, 75, 0.15)' }}
+              >
                 <div className="flex items-center gap-3">
-                  <img src={COMPANY.logo} alt="Logo" className="w-8 h-8 rounded-lg object-cover" />
+                  <img
+                    src={COMPANY.logo}
+                    alt="Logo"
+                    className="w-9 h-9 rounded-lg object-cover"
+                    style={{ border: '1.5px solid rgba(200,162,75,0.3)' }}
+                  />
                   <div>
-                    <div className={`font-bold text-xs ${isDark ? 'text-white' : 'text-gray-900'}`}>SEISUVAI</div>
-                    <div className="text-orange-500 text-[9px] font-medium">THE CRAFTED FLAVOUR</div>
+                    <div className={`font-bold text-xs tracking-widest ${isDark ? 'text-white' : 'text-gray-900'}`}>SEISUVAI</div>
+                    <div className="text-[9px] font-bold tracking-[0.2em] uppercase" style={{ color: '#c8a24b' }}>
+                      The Crafted Flavour
+                    </div>
                   </div>
                 </div>
                 <button
                   onClick={() => setMobileOpen(false)}
-                  className={`p-1.5 rounded-lg ${isDark ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-gray-900'}`}
+                  className={`p-2 rounded-xl transition-colors ${isDark ? 'text-gray-400 hover:text-white hover:bg-white/10' : 'text-gray-500 hover:text-gray-900 hover:bg-black/5'}`}
+                  aria-label="Close menu"
                 >
                   <X size={20} />
                 </button>
               </div>
 
               {/* Nav links */}
-              <nav className="flex-1 overflow-y-auto py-4 px-4 space-y-1">
-                {NAV_LINKS.map((link, i) => (
-                  <motion.button
-                    key={link.id}
-                    onClick={() => scrollTo(link.id)}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    className={`w-full text-left px-4 py-3 rounded-xl font-medium transition-all ${
-                      activeSection === link.id
-                        ? 'bg-orange-500 text-white'
-                        : isDark
-                        ? 'text-gray-300 hover:bg-white/5 hover:text-white'
-                        : 'text-gray-700 hover:bg-orange-50 hover:text-orange-600'
-                    }`}
-                  >
-                    {link.label}
-                  </motion.button>
-                ))}
+              <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-1">
+                {NAV_LINKS.map((link, i) => {
+                  const active = isActive(link);
+                  return (
+                    <motion.div
+                      key={link.to}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.05, duration: 0.3 }}
+                    >
+                      <Link
+                        to={link.to}
+                        className={`block w-full px-4 py-3.5 rounded-xl font-medium transition-all duration-200 text-base ${
+                          active
+                            ? 'text-black font-bold'
+                            : isDark
+                            ? 'text-gray-300 hover:text-white hover:bg-white/8'
+                            : 'text-gray-700 hover:text-gray-900 hover:bg-black/5'
+                        }`}
+                        style={active ? { background: 'linear-gradient(135deg, #c8a24b, #e6c878)' } : {}}
+                      >
+                        {link.label}
+                      </Link>
+                    </motion.div>
+                  );
+                })}
               </nav>
 
+              {/* Divider */}
+              <div className="gold-divider mx-4" />
+
               {/* Bottom CTA */}
-              <div className="p-4 space-y-3 border-t border-gray-200 dark:border-gray-700">
+              <div className="p-4 space-y-3 pb-6">
                 <a
                   href={`tel:${COMPANY.phoneRaw}`}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium ${
-                    isDark ? 'bg-gray-800 text-gray-300' : 'bg-gray-50 text-gray-700'
+                  className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-sm font-semibold min-h-[52px] ${
+                    isDark ? 'bg-white/5 text-gray-300' : 'bg-black/5 text-gray-700'
                   }`}
                 >
-                  <Phone size={16} className="text-orange-500" />
+                  <div className="p-1.5 rounded-lg" style={{ background: 'rgba(200,162,75,0.15)' }}>
+                    <Phone size={15} style={{ color: '#c8a24b' }} />
+                  </div>
                   {COMPANY.phone}
                 </a>
                 <button
-                  onClick={() => { scrollTo('contact'); setMobileOpen(false); }}
-                  className="w-full py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-semibold rounded-xl text-sm"
+                  onClick={() => { openEnquiry(); setMobileOpen(false); }}
+                  className="w-full py-3.5 text-sm font-bold text-black rounded-xl btn-gold min-h-[52px]"
                 >
-                  📅 Book Now
+                  📅 Enquire Now
                 </button>
               </div>
-            </motion.div>
+            </motion.aside>
           </>
         )}
       </AnimatePresence>

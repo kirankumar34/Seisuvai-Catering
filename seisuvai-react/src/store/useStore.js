@@ -19,6 +19,9 @@ export const useMenuStore = create((set, get) => ({
   prefilledEvent: '',
   menuType: 'Custom',
   selectedPackage: null,
+  mobileDietaryFilter: 'Veg',
+
+  setMobileDietaryFilter: (val) => set({ mobileDietaryFilter: val }),
 
   addItem: (item) => {
     const exists = get().selectedItems.find((i) => i.id === item.id);

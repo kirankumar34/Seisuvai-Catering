@@ -1,35 +1,46 @@
-@import "tailwindcss";
+/* ============================================================
+   SEISUVAI CATERING — LUXURY DESIGN SYSTEM
+   Premium South Indian Catering Experience
+   ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+@import "tailwindcss";
 
 /* Enable class-based dark mode for Tailwind v4 */
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
   --font-sans: 'Inter', 'Poppins', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
 
   /* Brand Colors */
   --color-brand-500: #f97316;
   --color-brand-600: #ea580c;
-  --color-gold-400: #fbbf24;
-  --color-gold-500: #f59e0b;
+  --color-gold-300: #f0d68a;
+  --color-gold-400: #e6c878;
+  --color-gold-500: #c8a24b;
+  --color-gold-600: #a8852e;
+  --color-obsidian: #0a0a0a;
+  --color-cream: #fdf8f0;
+  --color-spice: #f97316;
 }
 
-/* -----------------------------------------------
-   Base overrides inside @layer base so Tailwind
-   utility classes (mx-auto, etc.) always win.
------------------------------------------------ */
+/* ============================================================
+   BASE LAYER
+   ============================================================ */
 @layer base {
   html {
     scroll-behavior: smooth;
     font-family: 'Inter', 'Poppins', sans-serif;
     width: 100%;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
+    overflow-x: clip;
     width: 100%;
     min-height: 100vh;
   }
@@ -37,84 +48,566 @@
   #root {
     width: 100%;
     min-height: 100vh;
+    overflow-x: clip;
   }
 
-  /* Custom scrollbar */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: #f1f1f1; }
-  ::-webkit-scrollbar-thumb { background: #f97316; border-radius: 3px; }
+  /* Prevent iOS zoom on input focus */
+  input, select, textarea {
+    font-size: max(16px, 1em);
+  }
 
   /* scroll offset for fixed nav */
   section[id] { scroll-margin-top: 80px; }
 
   input:focus, select:focus, textarea:focus { outline: none; }
 
-  /* Text selection */
-  ::selection { background: #f97316; color: white; }
+  /* Text selection — gold brand */
+  ::selection { background: #c8a24b; color: #0a0a0a; }
+
+  /* Custom scrollbar — luxury gold */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: #f1ece1; }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #c8a24b, #f97316);
+    border-radius: 10px;
+  }
+  .dark ::-webkit-scrollbar-track { background: #111111; }
+  .dark ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #c8a24b, #e6c878); }
 }
 
+/* ============================================================
+   CSS CUSTOM PROPERTIES — DESIGN TOKENS
+   ============================================================ */
+:root {
+  /* Gold palette */
+  --gold: #c8a24b;
+  --gold-light: #e6c878;
+  --gold-pale: #f0d68a;
+  --gold-dark: #a8852e;
 
-/* Custom scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #f1f1f1; }
-::-webkit-scrollbar-thumb { background: #f97316; border-radius: 3px; }
-.dark ::-webkit-scrollbar-track { background: #1e1e2e; }
+  /* Dark palette */
+  --obsidian: #0a0a0a;
+  --obsidian-2: #111111;
+  --obsidian-3: #1a1a1a;
+  --obsidian-card: #1c1c1c;
 
-/* Hide scrollbar utility */
-.hide-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  /* Light palette */
+  --cream: #fdf8f0;
+  --cream-2: #f8f4ec;
+  --cream-3: #ffebd8;
+
+  /* Spice/accent */
+  --spice: #f97316;
+  --spice-dark: #ea580c;
+
+  /* Greens / Reds for food indicators */
+  --veg-green: #16a34a;
+  --nonveg-red: #dc2626;
+
+  /* Shadows */
+  --shadow-gold: 0 4px 32px rgba(200, 162, 75, 0.25);
+  --shadow-gold-lg: 0 8px 48px rgba(200, 162, 75, 0.35);
+  --shadow-obsidian: 0 4px 32px rgba(0, 0, 0, 0.5);
+
+  /* Transitions */
+  --ease-luxury: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Fluid spacing */
+  --space-section: clamp(4rem, 8vw, 8rem);
+  --space-lg: clamp(1.5rem, 3vw, 3rem);
+  --space-md: clamp(1rem, 2vw, 2rem);
+  --space-sm: clamp(0.5rem, 1.5vw, 1rem);
+
+  /* Max content width */
+  --max-width: 1400px;
 }
-.hide-scrollbar::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
+
+/* ============================================================
+   TYPOGRAPHY SCALE
+   ============================================================ */
+
+/* Luxury serif headings */
+.font-luxury { font-family: 'Cormorant Garamond', Georgia, serif; }
+
+.text-hero {
+  font-size: clamp(2.5rem, 6vw + 1rem, 5.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 700;
+}
+.text-display {
+  font-size: clamp(2rem, 4vw + 0.5rem, 4rem);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 700;
+}
+.text-heading {
+  font-size: clamp(1.75rem, 3vw + 0.25rem, 3rem);
+  line-height: 1.15;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 600;
+}
+.text-subheading {
+  font-size: clamp(1.25rem, 2vw, 2rem);
+  line-height: 1.2;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 500;
+}
+.text-body {
+  font-size: clamp(0.9375rem, 1.5vw, 1.0625rem);
+  line-height: 1.7;
+}
+.text-caption {
+  font-size: clamp(0.75rem, 1.2vw, 0.875rem);
+  line-height: 1.5;
 }
 
-/* Gradient text */
+/* ============================================================
+   LUXURY UTILITY CLASSES
+   ============================================================ */
+
+/* Gradient text — gold */
 .gradient-text {
-  background: linear-gradient(135deg, #f97316, #fbbf24);
+  background: linear-gradient(135deg, #c8a24b 0%, #e6c878 50%, #f0d68a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.gradient-text-spice {
+  background: linear-gradient(135deg, #f97316, #c8a24b);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Glass effect */
+/* Glass effects */
 .glass {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.glass-dark {
+  background: rgba(10, 10, 10, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(200, 162, 75, 0.15);
+}
+.glass-gold {
+  background: rgba(200, 162, 75, 0.08);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(200, 162, 75, 0.25);
+}
+.glass-light {
+  background: rgba(253, 248, 240, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(200, 162, 75, 0.2);
 }
 
-/* Animations */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-12px); }
+/* Luxury card */
+.luxury-card {
+  border-radius: 1.25rem;
+  border: 1px solid rgba(200, 162, 75, 0.15);
+  transition: all 0.4s var(--ease-luxury);
+  overflow: hidden;
 }
-@keyframes pulse-slow {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
+.luxury-card:hover {
+  border-color: rgba(200, 162, 75, 0.4);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-gold);
 }
 
-.animate-float { animation: float 4s ease-in-out infinite; }
+/* Gold shimmer button effect */
+.gold-shimmer {
+  background: linear-gradient(135deg, #c8a24b 0%, #e6c878 50%, #c8a24b 100%);
+  background-size: 200% 100%;
+  transition: background-position 0.5s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+.gold-shimmer:hover {
+  background-position: 100% 0;
+  box-shadow: 0 6px 30px rgba(200, 162, 75, 0.5);
+  transform: translateY(-2px);
+}
+.gold-shimmer:active {
+  transform: translateY(0);
+}
 
-/* scroll offset for fixed nav */
-section[id] { scroll-margin-top: 80px; }
+/* Section padding — fluid */
+.section-pad,
+.section-gap {
+  padding-top: clamp(3.5rem, 7vw, 6.5rem);
+  padding-bottom: clamp(3.5rem, 7vw, 6.5rem);
+}
 
-input:focus, select:focus, textarea:focus { outline: none; }
+/* Container */
+.container-luxury {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(1rem, 4vw, 3rem);
+  padding-right: clamp(1rem, 4vw, 3rem);
+}
+
+/* Badge / label pill */
+.badge-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 1rem;
+  border-radius: 9999px;
+  background: rgba(200, 162, 75, 0.12);
+  border: 1px solid rgba(200, 162, 75, 0.3);
+  color: #c8a24b;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Gold divider line */
+.gold-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #c8a24b, transparent);
+  opacity: 0.4;
+}
+
+/* Hide scrollbar utility */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar { display: none; }
 
 /* Modal backdrop */
 .modal-backdrop {
-  background: rgba(0, 0, 0, 0.78);
-  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 /* Gallery hover zoom */
-.gallery-img { transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-.gallery-img:hover { transform: scale(1.08); }
+.gallery-img { transition: transform 0.6s var(--ease-luxury); }
+.gallery-img:hover { transform: scale(1.06); }
 
-/* WhatsApp float shadow */
+/* WhatsApp colors */
 .whatsapp-btn { background: #25D366; }
 .whatsapp-btn:hover { background: #128C7E; }
 
-/* Selection */
-::selection { background: #f97316; color: white; }
+/* ============================================================
+   ANIMATIONS & KEYFRAMES
+   ============================================================ */
+
+/* Float animation — for hero image */
+@keyframes float-3d {
+  0%, 100% {
+    transform: translateY(0px) rotateX(0deg) rotateY(0deg);
+  }
+  25% {
+    transform: translateY(-10px) rotateX(2deg) rotateY(-1deg);
+  }
+  75% {
+    transform: translateY(-6px) rotateX(-1deg) rotateY(2deg);
+  }
+}
+
+/* Gold shimmer sweep */
+@keyframes shimmer-sweep {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Pulse slow — background orbs */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.08); }
+}
+
+/* Subtle grain — luxury texture overlay */
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-1%, -2%); }
+  30% { transform: translate(2%, -1%); }
+  50% { transform: translate(-1%, 2%); }
+  70% { transform: translate(1%, 1%); }
+  90% { transform: translate(-2%, 0); }
+}
+
+/* Scroll reveal */
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Spin slow */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Glow pulse */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(200, 162, 75, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(200, 162, 75, 0.6), 0 0 80px rgba(200, 162, 75, 0.2); }
+}
+
+/* Animation utility classes */
+.animate-float-3d {
+  animation: float-3d 6s ease-in-out infinite;
+  will-change: transform;
+}
+.animate-float {
+  animation: float-3d 4s ease-in-out infinite;
+  will-change: transform;
+}
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+.animate-shimmer {
+  animation: shimmer-sweep 3s linear infinite;
+}
+.animate-glow {
+  animation: glow-pulse 2.5s ease-in-out infinite;
+}
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+/* ============================================================
+   GRAIN TEXTURE OVERLAY — luxury depth
+   ============================================================ */
+.grain-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  animation: grain 8s steps(10) infinite;
+}
+
+/* ============================================================
+   3D PERSPECTIVE EFFECTS
+   ============================================================ */
+.perspective-card {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+.tilt-card {
+  transition: transform 0.4s var(--ease-luxury);
+  will-change: transform;
+}
+.tilt-card:hover {
+  transform: perspective(1000px) rotateX(3deg) rotateY(-3deg) scale(1.02);
+}
+
+/* ============================================================
+   FORM INPUTS — LUXURY STYLE
+   ============================================================ */
+.input-luxury {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border-radius: 0.75rem;
+  border: 1.5px solid rgba(200, 162, 75, 0.2);
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.25s ease;
+  min-height: 52px;
+}
+.input-luxury:focus {
+  outline: none;
+  border-color: #c8a24b;
+  box-shadow: 0 0 0 3px rgba(200, 162, 75, 0.15);
+}
+.input-luxury::placeholder {
+  color: rgba(150, 130, 100, 0.6);
+}
+
+/* Light mode inputs */
+.input-luxury-light {
+  background: rgba(253, 248, 240, 0.8);
+  color: #1a1a1a;
+  border-color: rgba(200, 162, 75, 0.25);
+}
+
+/* Dark mode inputs */
+.input-luxury-dark {
+  background: rgba(26, 26, 26, 0.9);
+  color: #f0ead8;
+  border-color: rgba(200, 162, 75, 0.2);
+}
+
+/* ============================================================
+   BUTTON VARIANTS & COMPONENTS
+   ============================================================ */
+@layer components {
+  /* Primary — gold CTA */
+  .btn-gold {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: clamp(0.75rem, 1.5vw, 1rem) clamp(1.5rem, 3vw, 2.5rem);
+    min-height: 52px;
+    border-radius: 0.875rem;
+    font-weight: 700;
+    font-size: clamp(0.875rem, 1.5vw, 1rem);
+    cursor: pointer;
+    transition: all 0.3s var(--ease-luxury);
+    background: linear-gradient(135deg, #c8a24b 0%, #e6c878 50%, #c8a24b 100%);
+    background-size: 200% 100%;
+    color: #0a0a0a;
+    border: none;
+    box-shadow: 0 4px 20px rgba(200, 162, 75, 0.3);
+    letter-spacing: 0.01em;
+  }
+  .btn-gold:hover {
+    background-position: 100% 0;
+    box-shadow: 0 6px 32px rgba(200, 162, 75, 0.5);
+    transform: translateY(-2px);
+  }
+  .btn-gold:active {
+    transform: translateY(0);
+  }
+
+  /* Secondary — outline gold */
+  .btn-outline-gold {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: clamp(0.75rem, 1.5vw, 1rem) clamp(1.5rem, 3vw, 2.5rem);
+    min-height: 52px;
+    border-radius: 0.875rem;
+    font-weight: 700;
+    font-size: clamp(0.875rem, 1.5vw, 1rem);
+    cursor: pointer;
+    transition: all 0.3s var(--ease-luxury);
+    background: transparent;
+    color: #c8a24b;
+    border: 1.5px solid rgba(200, 162, 75, 0.5);
+  }
+  .btn-outline-gold:hover {
+    background: rgba(200, 162, 75, 0.1);
+    border-color: #c8a24b;
+    box-shadow: 0 0 20px rgba(200, 162, 75, 0.2);
+  }
+
+  /* WhatsApp CTA */
+  .btn-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 2rem;
+    min-height: 52px;
+    border-radius: 0.875rem;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
+  }
+  .btn-whatsapp:hover {
+    box-shadow: 0 6px 32px rgba(37, 211, 102, 0.5);
+    transform: translateY(-2px);
+  }
+}
+
+/* ============================================================
+   SECTION HEADER PATTERN
+   ============================================================ */
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 1rem;
+  border-radius: 9999px;
+  background: rgba(200, 162, 75, 0.1);
+  border: 1px solid rgba(200, 162, 75, 0.3);
+  color: #c8a24b;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+/* ============================================================
+   RESPONSIVE GRID UTILITIES
+   ============================================================ */
+.grid-cards-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  gap: clamp(1rem, 2.5vw, 2rem);
+}
+.grid-cards-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+.grid-cards-4 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+}
+
+/* ============================================================
+   IMAGE UTILITIES
+   ============================================================ */
+.img-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.img-responsive {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* ============================================================
+   LUXURY SECTION BACKGROUNDS
+   ============================================================ */
+.bg-luxury-dark {
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(200, 162, 75, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(249, 115, 22, 0.04) 0%, transparent 60%),
+    linear-gradient(135deg, #0a0a0a 0%, #111111 50%, #0e0a00 100%);
+}
+.bg-luxury-light {
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(200, 162, 75, 0.05) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(249, 115, 22, 0.04) 0%, transparent 60%),
+    linear-gradient(135deg, #fdf8f0 0%, #f8f4ec 50%, #ffebd8 100%);
+}
+
+/* ============================================================
+   TOUCH & ACCESSIBILITY
+   ============================================================ */
+/* Minimum touch target */
+button, a, [role="button"] {
+  min-height: 44px;
+}
+
+/* Remove tap highlight on mobile */
+* { -webkit-tap-highlight-color: transparent; }
+
+/* Focus visible styles */
+:focus-visible {
+  outline: 2px solid #c8a24b;
+  outline-offset: 2px;
+  border-radius: 4px;
+}

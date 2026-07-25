@@ -1,70 +1,116 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { useThemeStore } from '../store/useStore';
+import { motion } from 'framer-motion';
+import { useThemeStore, useMenuStore } from '../store/useStore';
 import { COMPANY } from '../data/siteData';
 import { quickWhatsApp } from '../utils/whatsapp';
 
 export default function StickyActions() {
   const { isDark } = useThemeStore();
-
-  const scrollTo = (id) => {
-    const el = document.getElementById(id);
-    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 78, behavior: 'smooth' });
-  };
+  const { openEnquiry } = useMenuStore();
 
   return (
     <>
-      {/* WhatsApp floating button */}
+      {/* ── WhatsApp FAB — desktop only (sm+) to avoid overlap with mobile bar ── */}
       <motion.button
         onClick={quickWhatsApp}
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 1.5, type: 'spring' }}
-        whileHover={{ scale: 1.12 }}
+        transition={{ delay: 1.5, type: 'spring', stiffness: 200 }}
+        whileHover={{ scale: 1.08, y: -2 }}
         whileTap={{ scale: 0.95 }}
-        className="fixed bottom-20 right-5 z-40 flex items-center gap-2 px-4 py-3 bg-[#25D366] hover:bg-[#128C7E] text-white rounded-full shadow-2xl shadow-green-500/40 font-semibold text-sm transition-colors"
+        className="hidden sm:flex fixed bottom-24 right-5 z-40 items-center gap-2 px-5 py-3 rounded-full font-semibold text-sm text-white shadow-2xl"
+        style={{
+          background: 'linear-gradient(135deg, #25D366, #128C7E)',
+          boxShadow: '0 8px 32px rgba(37,211,102,0.45)',
+          minHeight: '52px',
+          border: 'none',
+          cursor: 'pointer',
+        }}
         aria-label="Chat on WhatsApp"
       >
-        💬 <span className="hidden sm:inline">Chat with us</span>
+        💬 Chat with us
       </motion.button>
 
-      {/* Call floating button */}
+      {/* ── Call FAB — desktop only (sm+) ── */}
       <motion.a
         href={`tel:${COMPANY.phoneRaw}`}
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 1.7, type: 'spring' }}
-        whileHover={{ scale: 1.12 }}
+        transition={{ delay: 1.7, type: 'spring', stiffness: 200 }}
+        whileHover={{ scale: 1.08, y: -2 }}
         whileTap={{ scale: 0.95 }}
-        className="fixed bottom-5 right-5 z-40 flex items-center gap-2 px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-full shadow-2xl shadow-orange-500/40 font-semibold text-sm transition-colors"
+        className="hidden sm:flex fixed bottom-10 right-5 z-40 items-center gap-2 px-5 py-3 rounded-full font-semibold text-sm text-white"
+        style={{
+          background: 'linear-gradient(135deg, #f97316, #c8a24b)',
+          boxShadow: '0 8px 32px rgba(249,115,22,0.4)',
+          minHeight: '52px',
+          textDecoration: 'none',
+          border: 'none',
+        }}
         aria-label="Call us now"
       >
-        📞 <span className="hidden sm:inline">Call Now</span>
+        📞 Call Now
       </motion.a>
 
-      {/* Bottom sticky bar on mobile */}
-      <div className="fixed bottom-0 left-0 right-0 z-30 sm:hidden sticky-shadow">
-        <div className={`flex items-center ${isDark ? 'bg-gray-900' : 'bg-white'} border-t ${isDark ? 'border-gray-700' : 'border-gray-200'} px-4 py-3 gap-3`}>
+      {/* ── Mobile Bottom Sticky Bar (below sm hidden on desktop) ── */}
+      <div
+        className="fixed bottom-0 left-0 right-0 z-30 sm:hidden"
+        style={{
+          background: isDark
+            ? 'rgba(10,10,10,0.97)'
+            : 'rgba(253,248,240,0.97)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderTop: '1px solid rgba(200,162,75,0.2)',
+          boxShadow: '0 -4px 24px rgba(0,0,0,0.15)',
+          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+        }}
+      >
+        {/* Gold top accent line */}
+        <div
+          className="h-[1.5px] w-full"
+          style={{ background: 'linear-gradient(90deg, transparent, #c8a24b 30%, #e6c878 50%, #c8a24b 70%, transparent)' }}
+        />
+
+        <div className="grid grid-cols-3 gap-2 px-3 py-2.5">
           <a
             href={`tel:${COMPANY.phoneRaw}`}
-            className={`flex-1 py-2.5 rounded-xl text-center text-sm font-bold border-2 transition-colors ${
-              isDark
-                ? 'border-gray-600 text-gray-300 hover:border-orange-500 hover:text-orange-400'
-                : 'border-gray-200 text-gray-700'
-            }`}
+            className="flex flex-col items-center justify-center gap-0.5 py-2 rounded-xl font-bold text-xs"
+            style={{
+              color: isDark ? '#e6c878' : '#a8852e',
+              border: '1.5px solid rgba(200,162,75,0.3)',
+              background: 'transparent',
+              textDecoration: 'none',
+              minHeight: '52px',
+            }}
           >
-            📞 Call
+            <span className="text-base">📞</span>
+            <span>Call</span>
           </a>
           <button
             onClick={quickWhatsApp}
-            className="flex-1 py-2.5 rounded-xl text-center text-sm font-bold bg-[#25D366] text-white"
+            className="flex flex-col items-center justify-center gap-0.5 py-2 rounded-xl font-bold text-xs text-white"
+            style={{
+              background: 'linear-gradient(135deg, #25D366, #128C7E)',
+              border: 'none',
+              minHeight: '52px',
+              cursor: 'pointer',
+            }}
           >
-            💬 WhatsApp
+            <span className="text-base">💬</span>
+            <span>WhatsApp</span>
           </button>
           <button
-            onClick={() => scrollTo('contact')}
-            className="flex-1 py-2.5 rounded-xl text-center text-sm font-bold bg-orange-500 text-white"
+            onClick={() => openEnquiry()}
+            className="flex flex-col items-center justify-center gap-0.5 py-2 rounded-xl font-bold text-xs text-black"
+            style={{
+              background: 'linear-gradient(135deg, #c8a24b, #e6c878)',
+              border: 'none',
+              minHeight: '52px',
+              cursor: 'pointer',
+            }}
           >
-            📅 Book
+            <span className="text-base">📅</span>
+            <span>Enquire</span>
           </button>
         </div>
       </div>

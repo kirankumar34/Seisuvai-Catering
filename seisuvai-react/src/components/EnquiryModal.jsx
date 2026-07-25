@@ -4,7 +4,8 @@ import { useForm } from 'react-hook-form';
 import { X, MessageCircle, Trash2 } from 'lucide-react';
 import { useThemeStore, useMenuStore } from '../store/useStore';
 import { openWhatsApp } from '../utils/whatsapp';
-import { EVENT_TYPES, BUDGET_RANGES } from '../data/siteData';
+import { submitEnquiry } from '../utils/api';
+import { EVENT_TYPES } from '../data/siteData';
 
 export default function EnquiryModal() {
   const { isDark } = useThemeStore();
@@ -34,22 +35,79 @@ export default function EnquiryModal() {
     return () => { document.body.style.overflow = ''; };
   }, [isEnquiryOpen]);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    let selectedItemsList = [];
+    if (menuType === 'Standard' && selectedPackage) {
+      selectedItemsList = [selectedPackage.name];
+    } else if (menuType === 'Custom' || menuType === 'Live Counters') {
+      selectedItemsList = selectedItems.map(item => item.name);
+    }
+
+    const payload = {
+      name: data.name,
+      phone: data.phone,
+      email: data.email || '',
+      enquiryType: menuType === 'Live Counters' ? 'live_stall' : menuType === 'Custom' ? 'custom_menu' : 'booking',
+      selectedItems: selectedItemsList,
+      paxCount: parseInt(data.guests, 10),
+      message: `Event: ${data.eventType}, Date: ${data.date}. ${data.message || ''}`
+    };
+
+    await submitEnquiry(payload);
+
     openWhatsApp({
       ...data,
       menuItems: selectedItems,
       menuType,
       selectedPackage,
     });
+
     clearItems();
     closeEnquiry();
     reset();
+  };
+
+  const inputStyle = (hasError) => ({
+    width: '100%',
+    padding: '0.8125rem 1rem',
+    borderRadius: '0.75rem',
+    border: hasError
+      ? '1.5px solid #ef4444'
+      : isDark ? '1.5px solid rgba(200,162,75,0.2)' : '1.5px solid rgba(200,162,75,0.25)',
+    background: isDark ? 'rgba(20,18,12,0.9)' : 'rgba(253,248,240,0.8)',
+    color: isDark ? '#f0ead8' : '#1a1a1a',
+    fontSize: '1rem',
+    fontFamily: 'Inter, sans-serif',
+    transition: 'all 0.25s ease',
+    minHeight: '50px',
+    outline: 'none',
+    boxSizing: 'border-box',
+  });
+
+  const labelStyle = {
+    display: 'block',
+    fontSize: '0.6875rem',
+    fontWeight: 700,
+    letterSpacing: '0.1em',
+    textTransform: 'uppercase',
+    marginBottom: '0.4rem',
+    color: isDark ? 'rgba(200,180,140,0.7)' : 'rgba(100,75,40,0.7)',
+  };
+
+  const focusInput = (e) => {
+    e.target.style.borderColor = '#c8a24b';
+    e.target.style.boxShadow = '0 0 0 3px rgba(200,162,75,0.15)';
+  };
+  const blurInput = (e, hasError) => {
+    e.target.style.borderColor = hasError ? '#ef4444' : (isDark ? 'rgba(200,162,75,0.2)' : 'rgba(200,162,75,0.25)');
+    e.target.style.boxShadow = 'none';
   };
 
   return (
     <AnimatePresence>
       {isEnquiryOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -65,42 +123,72 @@ export default function EnquiryModal() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.88, y: 40 }}
             transition={{ type: 'spring', stiffness: 300, damping: 28 }}
-            className={`relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl shadow-2xl ${
-              isDark ? 'bg-gray-900' : 'bg-white'
-            }`}
+            className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl shadow-2xl"
+            style={{
+              background: isDark ? '#111111' : '#fff',
+              border: '1.5px solid rgba(200,162,75,0.2)',
+              boxShadow: '0 30px 80px rgba(0,0,0,0.6)',
+            }}
           >
+            {/* Gold top accent */}
+            <div
+              className="h-[2px] w-full rounded-t-3xl"
+              style={{ background: 'linear-gradient(90deg, transparent, #c8a24b, #e6c878, #c8a24b, transparent)' }}
+            />
+
             {/* Header */}
-            <div className="sticky top-0 z-10 flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-inherit rounded-t-3xl">
+            <div
+              className="sticky top-0 z-10 flex items-center justify-between px-6 py-5 rounded-t-3xl"
+              style={{
+                background: isDark ? 'rgba(17,17,17,0.95)' : 'rgba(255,255,255,0.95)',
+                borderBottom: '1px solid rgba(200,162,75,0.12)',
+                backdropFilter: 'blur(16px)',
+              }}
+            >
               <div>
-                <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                <h2
+                  className="font-luxury font-bold"
+                  style={{ fontSize: 'clamp(1.1rem, 2.5vw, 1.4rem)', color: isDark ? '#f0ead8' : '#1a1a1a' }}
+                >
                   📩 Send Enquiry via WhatsApp
                 </h2>
-                <p className={`text-sm mt-0.5 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                <p className="text-xs mt-0.5" style={{ color: isDark ? 'rgba(200,162,75,0.6)' : 'rgba(168,133,46,0.7)' }}>
                   We'll reply within minutes!
                 </p>
               </div>
               <button
                 onClick={closeEnquiry}
-                className={`p-2 rounded-xl transition-colors ${
-                  isDark ? 'hover:bg-gray-700 text-gray-400' : 'hover:bg-gray-100 text-gray-500'
-                }`}
+                className="p-2 rounded-xl transition-colors"
+                style={{ color: isDark ? 'rgba(200,180,140,0.6)' : 'rgba(100,80,50,0.6)' }}
+                aria-label="Close modal"
               >
                 <X size={20} />
               </button>
             </div>
 
-            <div className="p-6 space-y-6">
-              {/* Selected Items / Package Summary */}
+            <div className="p-6 space-y-5">
+
+              {/* Standard package summary */}
               {menuType === 'Standard' && selectedPackage && (
-                <div className={`p-4 rounded-2xl ${isDark ? 'bg-gray-800' : 'bg-orange-50'}`}>
-                  <div className={`text-sm font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                <div
+                  className="p-4 rounded-2xl"
+                  style={{
+                    background: isDark ? 'rgba(200,162,75,0.08)' : 'rgba(200,162,75,0.06)',
+                    border: '1px solid rgba(200,162,75,0.25)',
+                  }}
+                >
+                  <div className="text-sm font-bold mb-3" style={{ color: isDark ? '#f0ead8' : '#1a1a1a' }}>
                     📦 Selected Package: {selectedPackage.name}
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {selectedPackage.items.map((item, idx) => (
                       <span
                         key={idx}
-                        className="px-3 py-1.5 rounded-xl bg-orange-500/15 text-orange-700 dark:text-orange-300 text-xs font-semibold"
+                        className="px-3 py-1.5 rounded-xl text-xs font-semibold"
+                        style={{
+                          background: isDark ? 'rgba(200,162,75,0.12)' : 'rgba(200,162,75,0.1)',
+                          color: isDark ? '#e6c878' : '#a8852e',
+                        }}
                       >
                         {item}
                       </span>
@@ -109,22 +197,34 @@ export default function EnquiryModal() {
                 </div>
               )}
 
+              {/* Custom/Live items summary */}
               {(menuType === 'Custom' || menuType === 'Live Counters') && selectedItems.length > 0 && (
-                <div className={`p-4 rounded-2xl ${isDark ? 'bg-gray-800' : 'bg-orange-50'}`}>
-                  <div className={`text-sm font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-800'}`}>
+                <div
+                  className="p-4 rounded-2xl"
+                  style={{
+                    background: isDark ? 'rgba(200,162,75,0.08)' : 'rgba(200,162,75,0.06)',
+                    border: '1px solid rgba(200,162,75,0.25)',
+                  }}
+                >
+                  <div className="text-sm font-bold mb-3" style={{ color: isDark ? '#f0ead8' : '#1a1a1a' }}>
                     🍛 Selected {menuType === 'Live Counters' ? 'Counters' : 'Menu Items'} ({selectedItems.length})
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {selectedItems.map((item) => (
                       <div
                         key={item.id}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-orange-500/15 text-orange-700 dark:text-orange-300 text-xs font-semibold"
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold"
+                        style={{
+                          background: isDark ? 'rgba(200,162,75,0.12)' : 'rgba(200,162,75,0.1)',
+                          color: isDark ? '#e6c878' : '#a8852e',
+                        }}
                       >
                         {item.name}
                         <button
                           type="button"
                           onClick={() => removeItem(item.id)}
                           className="hover:text-red-500 transition-colors"
+                          aria-label={`Remove ${item.name}`}
                         >
                           <X size={12} />
                         </button>
@@ -135,32 +235,25 @@ export default function EnquiryModal() {
               )}
 
               {/* Form */}
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div className="grid sm:grid-cols-2 gap-4">
+
                   {/* Name */}
                   <div>
-                    <label className={`block text-sm font-semibold mb-1.5 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Full Name *
-                    </label>
+                    <label style={labelStyle}>Full Name *</label>
                     <input
                       {...register('name', { required: 'Name is required' })}
                       placeholder="e.g., Ramesh Kumar"
-                      className={`w-full px-4 py-3 rounded-xl border text-sm transition-all ${
-                        errors.name
-                          ? 'border-red-400 focus:ring-2 focus:ring-red-400/30'
-                          : isDark
-                          ? 'bg-gray-800 border-gray-600 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20'
-                          : 'bg-gray-50 border-gray-200 text-gray-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20'
-                      }`}
+                      style={inputStyle(errors.name)}
+                      onFocus={focusInput}
+                      onBlur={e => blurInput(e, errors.name)}
                     />
                     {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name.message}</p>}
                   </div>
 
                   {/* Phone */}
                   <div>
-                    <label className={`block text-sm font-semibold mb-1.5 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Phone Number *
-                    </label>
+                    <label style={labelStyle}>Phone Number *</label>
                     <input
                       {...register('phone', {
                         required: 'Phone is required',
@@ -168,29 +261,22 @@ export default function EnquiryModal() {
                       })}
                       placeholder="e.g., 9876543210"
                       type="tel"
-                      className={`w-full px-4 py-3 rounded-xl border text-sm transition-all ${
-                        errors.phone
-                          ? 'border-red-400 focus:ring-2 focus:ring-red-400/30'
-                          : isDark
-                          ? 'bg-gray-800 border-gray-600 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20'
-                          : 'bg-gray-50 border-gray-200 text-gray-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20'
-                      }`}
+                      inputMode="tel"
+                      style={inputStyle(errors.phone)}
+                      onFocus={focusInput}
+                      onBlur={e => blurInput(e, errors.phone)}
                     />
                     {errors.phone && <p className="text-red-400 text-xs mt-1">{errors.phone.message}</p>}
                   </div>
 
                   {/* Event Type */}
                   <div>
-                    <label className={`block text-sm font-semibold mb-1.5 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Event Type *
-                    </label>
+                    <label style={labelStyle}>Event Type *</label>
                     <select
                       {...register('eventType', { required: 'Please select event type' })}
-                      className={`w-full px-4 py-3 rounded-xl border text-sm transition-all ${
-                        isDark
-                          ? 'bg-gray-800 border-gray-600 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20'
-                          : 'bg-gray-50 border-gray-200 text-gray-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20'
-                      }`}
+                      style={inputStyle(false)}
+                      onFocus={focusInput}
+                      onBlur={e => blurInput(e, false)}
                     >
                       {EVENT_TYPES.map((et) => (
                         <option key={et.value} value={et.value}>{et.label}</option>
@@ -200,81 +286,47 @@ export default function EnquiryModal() {
 
                   {/* Guests */}
                   <div>
-                    <label className={`block text-sm font-semibold mb-1.5 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      No. of Guests *
-                    </label>
+                    <label style={labelStyle}>No. of Guests *</label>
                     <input
                       {...register('guests', {
                         required: 'Guest count is required',
                         min: { value: 10, message: 'Minimum 10 guests' },
                       })}
                       type="number"
+                      inputMode="numeric"
                       placeholder="e.g., 150"
-                      className={`w-full px-4 py-3 rounded-xl border text-sm transition-all ${
-                        errors.guests
-                          ? 'border-red-400 focus:ring-2 focus:ring-red-400/30'
-                          : isDark
-                          ? 'bg-gray-800 border-gray-600 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20'
-                          : 'bg-gray-50 border-gray-200 text-gray-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20'
-                      }`}
+                      style={inputStyle(errors.guests)}
+                      onFocus={focusInput}
+                      onBlur={e => blurInput(e, errors.guests)}
                     />
                     {errors.guests && <p className="text-red-400 text-xs mt-1">{errors.guests.message}</p>}
                   </div>
 
                   {/* Date */}
-                  <div>
-                    <label className={`block text-sm font-semibold mb-1.5 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Event Date *
-                    </label>
+                  <div className="sm:col-span-2">
+                    <label style={labelStyle}>Event Date *</label>
                     <input
                       {...register('date', { required: 'Event date is required' })}
                       type="date"
                       min={new Date().toISOString().split('T')[0]}
-                      className={`w-full px-4 py-3 rounded-xl border text-sm transition-all ${
-                        errors.date
-                          ? 'border-red-400 focus:ring-2 focus:ring-red-400/30'
-                          : isDark
-                          ? 'bg-gray-800 border-gray-600 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20'
-                          : 'bg-gray-50 border-gray-200 text-gray-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20'
-                      }`}
+                      style={inputStyle(errors.date)}
+                      onFocus={focusInput}
+                      onBlur={e => blurInput(e, errors.date)}
                     />
                     {errors.date && <p className="text-red-400 text-xs mt-1">{errors.date.message}</p>}
-                  </div>
-
-                  {/* Budget */}
-                  <div>
-                    <label className={`block text-sm font-semibold mb-1.5 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Budget / Plate
-                    </label>
-                    <select
-                      {...register('budget')}
-                      className={`w-full px-4 py-3 rounded-xl border text-sm transition-all ${
-                        isDark
-                          ? 'bg-gray-800 border-gray-600 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20'
-                          : 'bg-gray-50 border-gray-200 text-gray-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20'
-                      }`}
-                    >
-                      {BUDGET_RANGES.map((b) => (
-                        <option key={b.value} value={b.value}>{b.label}</option>
-                      ))}
-                    </select>
                   </div>
                 </div>
 
                 {/* Message */}
                 <div>
-                  <label className={`block text-sm font-semibold mb-1.5 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                    Additional Notes
-                  </label>
+                  <label style={labelStyle}>Additional Notes</label>
                   <textarea
                     {...register('message')}
                     rows={3}
                     placeholder="Any special requirements, dietary needs, venue details..."
-                    className={`w-full px-4 py-3 rounded-xl border text-sm resize-none transition-all ${
-                      isDark
-                        ? 'bg-gray-800 border-gray-600 text-white focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20'
-                        : 'bg-gray-50 border-gray-200 text-gray-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20'
-                    }`}
+                    style={{ ...inputStyle(false), resize: 'none', lineHeight: '1.6' }}
+                    onFocus={focusInput}
+                    onBlur={e => blurInput(e, false)}
                   />
                 </div>
 
@@ -283,13 +335,23 @@ export default function EnquiryModal() {
                   type="submit"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full py-4 bg-[#25D366] hover:bg-[#128C7E] text-white font-bold rounded-xl flex items-center justify-center gap-3 text-base shadow-lg shadow-green-500/25 transition-all"
+                  className="w-full flex items-center justify-center gap-3 font-bold rounded-xl text-white"
+                  style={{
+                    background: 'linear-gradient(135deg, #25D366, #128C7E)',
+                    boxShadow: '0 4px 24px rgba(37,211,102,0.3)',
+                    padding: '1rem 2rem',
+                    minHeight: '56px',
+                    fontSize: '1rem',
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                  }}
                 >
                   <MessageCircle size={20} />
                   Send Enquiry on WhatsApp
                 </motion.button>
 
-                <p className={`text-xs text-center ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+                <p className="text-xs text-center" style={{ color: isDark ? 'rgba(180,160,120,0.5)' : 'rgba(120,90,50,0.5)' }}>
                   You'll be redirected to WhatsApp with a pre-filled message. We respond within 2 hours! 🚀
                 </p>
               </form>
